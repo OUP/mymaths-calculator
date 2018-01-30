@@ -229,8 +229,9 @@ const pressDel = function recur(input, output, cursorPosition) {
     return buttonReturn(newInput, output, cursorPosition);
   }
 
-  newInput = input;
+  newInput = splitInput.start;
   newInput.pop();
+  newInput = newInput.concat(splitInput.end);
   if (cursorPosition > 0) {
     cursorPosition--;
   }
