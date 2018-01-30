@@ -84,7 +84,7 @@ export function buttonAction(
 
 const pressInputButton = function recur(
   button,
-  buttonType,
+  bType,
   input,
   output,
   cursorPosition
@@ -96,19 +96,14 @@ const pressInputButton = function recur(
   //Recursion to get inside brackets
   const funcArg = splitInput.arg;
   if (funcArg && button !== ')') {
-    const newFuncArg = recur(
-      button,
-      buttonType,
-      funcArg,
-      output,
-      funcArg.length
-    ).input;
+    const newFuncArg = recur(button, bType, funcArg, output, funcArg.length)
+      .input;
     splitInput.start[cursorPosition - 1].argument = newFuncArg;
     newInput = splitInput.start.concat(splitInput.end);
     return buttonReturn(newInput, output, cursorPosition);
   }
 
-  switch (buttonType) {
+  switch (bType) {
     case 'number':
       buttonOutput = pressNumber(button, splitInput.start, cursorPosition);
       break;
@@ -126,7 +121,7 @@ const pressInputButton = function recur(
       break;
 
     default:
-      console.error(buttonType + ' not defined correctly.');
+      console.error(bType + ' not defined correctly.');
       break;
   }
 
