@@ -3,14 +3,6 @@ import { buttonType } from '../Functionality/ButtonType';
 import './CalcButton.css';
 
 class CalcButton extends Component {
-  render(){
-    return (
-      <div>
-        <button className={buttonStyle(this.props.name)} onClick={this.press}>{this.props.name}</button>
-      </div>
-    );
-  }
-
   constructor(props) {
     super(props);
     this.press = this.press.bind(this);
@@ -19,19 +11,30 @@ class CalcButton extends Component {
   press() {
     this.props.press(this.props.name);
   }
+
+  render() {
+    return (
+      <div>
+        <button className={buttonStyle(this.props.name)} onClick={this.press}>
+          {this.props.name}
+        </button>
+      </div>
+    );
+  }
 }
 
-function buttonStyle (button) {
+function buttonStyle(button) {
   const type = buttonType(button);
-  if(type === 'AC' || button === 'DEL') {
+  if (type === 'AC' || button === 'DEL') {
     return 'DelButton';
-  } else if (type === 'number' 
-    || type === 'operator' 
-    || type === 'Ans'
-    || type === '='
+  } else if (
+    type === 'number' ||
+    type === 'operator' ||
+    type === 'Ans' ||
+    type === '='
   ) {
     return 'StandardButton';
-  } else if(type === 'mode') {
+  } else if (type === 'mode') {
     return 'ModeButton';
   } else {
     return 'SmallButton';

@@ -5,19 +5,7 @@ import { buttonAction } from '../Functionality/ButtonAction';
 import { parseToRender } from '../Functionality/ParseToRender';
 
 class Calculator extends Component {
-  render() {
-    return (
-      <div className="Calculator">
-        <div className="InputDisplay">{this.state.inputStr}</div>
-        <div className="OutputDisplay">{this.state.outputStr}</div>      
-        <ButtonsGrid press={this.press} position='top' />
-        <ButtonsGrid press={this.press} position='middle' />
-        <ButtonsGrid press={this.press} position='bottom' />
-      </div>
-    );
-  }
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.press = this.press.bind(this);
     this.state = {
@@ -31,7 +19,7 @@ class Calculator extends Component {
     };
   }
 
-  press(button){
+  press(button) {
     const buttonEffect = buttonAction(
       button,
       this.state.inputValue,
@@ -42,28 +30,42 @@ class Calculator extends Component {
     );
 
     //Show error in UI if the button press didn't do anything.
-    if(!buttonEffect) {
+    if (!buttonEffect) {
       this.setState({
         cursorPosition: 0,
         inputValue: [],
         inputStr: parseToRender([], 0),
-        outputValue: [button + ' is WIP'],               
+        outputValue: [button + ' is WIP'],
         outputStr: parseToRender([button + ' is WIP'])
       });
-      console.error(button + ' is a dead button.')
+      console.error(button + ' is a dead button.');
     } else {
-      
       this.setState({
         cursorPosition: buttonEffect.cursorPosition,
         inputValue: buttonEffect.input,
-        inputStr: parseToRender(buttonEffect.input, buttonEffect.cursorPosition),
+        inputStr: parseToRender(
+          buttonEffect.input,
+          buttonEffect.cursorPosition
+        ),
         outputValue: buttonEffect.output,
         outputStr: parseToRender(buttonEffect.output),
         storedInputs: buttonEffect.storedInputs,
         storePosition: buttonEffect.storePosition
       });
     }
-  };
+  }
+
+  render() {
+    return (
+      <div className="Calculator">
+        <div className="InputDisplay">{this.state.inputStr}</div>
+        <div className="OutputDisplay">{this.state.outputStr}</div>
+        <ButtonsGrid press={this.press} position="top" />
+        <ButtonsGrid press={this.press} position="middle" />
+        <ButtonsGrid press={this.press} position="bottom" />
+      </div>
+    );
+  }
 }
 
 export default Calculator;

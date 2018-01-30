@@ -1,29 +1,29 @@
 .Calculator {
-  text-align: center;
-  display: inline-block;
-  background: #ECEEF7;
-  border-radius: 5px;
-  border: #000066 solid; 
+    text-align: center;
+    display: inline-block;
+    background: #ECEEF7;
+    border-radius: 5px;
+    border: #000066 solid;
 }
 
 .InputDisplay {
-  border: 2px solid #CCCCCC;
-  text-align: left;
-  background: #ffffff;
-  color: #990000;
-  margin: 5px;
-  padding: 10px;
-  font-size: 24px;
-  height: 24px;
+    border: 2px solid #CCCCCC;
+    text-align: left;
+    background: #ffffff;
+    color: #990000;
+    margin: 5px;
+    padding: 10px;
+    font-size: 24px;
+    height: 24px;
 }
 
 .OutputDisplay {
-  border: 2px solid #CCCCCC;
-  text-align: right;
-  background: rgb(191, 240, 213);
-  color: #000000;
-  margin: 5px;
-  padding: 10px;
-  font-size: 24px;
-  height: 24px;
+    border: 2px solid #CCCCCC;
+    text-align: right;
+    background: rgb(191, 240, 213);
+    color: #000000;
+    margin: 5px;
+    padding: 10px;
+    font-size: 24px;
+    height: 24px;
 }

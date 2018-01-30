@@ -1,11 +1,12 @@
 //This will become more complicated to deal with fractions etc.
 export function parseToRender(arr, cursorPosition = -1) {
-  if(cursorPosition >= 0) {
+  if (cursorPosition >= 0) {
     arr = addCursor(arr, cursorPosition);
   }
-  
-  let i, str = '';
-  for(i = 0; i < arr.length; i++) {
+
+  let i,
+    str = '';
+  for (i = 0; i < arr.length; i++) {
     str += parseElement(arr[i]);
   }
 
@@ -19,7 +20,7 @@ function addCursor(arr, position) {
 }
 
 function parseElement(el) {
-  if(typeof el === 'string') {
+  if (typeof el === 'string') {
     return el;
   } else if (typeof el === 'number') {
     return el.toString();
@@ -33,30 +34,30 @@ function parseElement(el) {
 function funcToStringMap(func) {
   switch (func) {
     case '|x|':
-    return '|';
+      return '|';
 
     case 'log(x)':
-    return 'log(';
+      return 'log(';
 
     case 'ln(x)':
-    return 'ln(';
+      return 'ln(';
 
     case '√(x)':
-    return '√(';
+      return '√(';
 
     case 'sin(x)':
-    return 'sin(';
+      return 'sin(';
 
     case 'cos(x)':
-    return 'cos(';
+      return 'cos(';
 
     case 'tan(x)':
-    return 'tan(';
+      return 'tan(';
 
     case '(':
-    return '(';
+      return '(';
 
     default:
-    return 'didn\'t render';
+      return "didn't render";
   }
 }

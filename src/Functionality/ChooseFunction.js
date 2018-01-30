@@ -1,6 +1,6 @@
 export function pressFunction(button, input, cursorPosition) {
   let funcType = button;
-  if(
+  if (
     button === '|x|' ||
     button === 'log(x)' ||
     button === 'ln(x)' ||
@@ -15,36 +15,25 @@ export function pressFunction(button, input, cursorPosition) {
 
   switch (funcType) {
     case 'argAfter':
-    return pressArgAfter(button, input, cursorPosition);
+      return pressArgAfter(button, input, cursorPosition);
 
     case ')':
-    return pressCloseBracket(input, cursorPosition);
+      return pressCloseBracket(input, cursorPosition);
 
     default:
-    break;
+      break;
   }
 }
 
-function pressOpenBracket(input, cursorPosition) {
-  let newInput = input;
-  newInput.push({
-    type: 'function',
-    function: 'brackets',
-    argument: []
-  });
-  cursorPosition++;
-  return { newInput: newInput, newCursorPosition: cursorPosition };
-}
-
 function pressCloseBracket(input, cursorPosition) {
-  let newInput = input;
+  const newInput = input;
   newInput.push(')');
   cursorPosition++;
   return { newInput: newInput, newCursorPosition: cursorPosition };
 }
 
 function pressArgAfter(button, input, cursorPosition) {
-  let newInput = input;
+  const newInput = input;
   newInput.push({
     type: 'function',
     function: button,
@@ -52,7 +41,7 @@ function pressArgAfter(button, input, cursorPosition) {
   });
   cursorPosition++;
 
-  if(button === '|x|') {
+  if (button === '|x|') {
     newInput.push('|');
   }
   return { newInput: newInput, newCursorPosition: cursorPosition };

@@ -5,32 +5,26 @@ import './ButtonsColumn.css';
 import './CalcButton.css';
 
 class ButtonsColumn extends Component {
-  render(){
-    return (
-      <div className="ButtonsColumn">
-        {this.renderButtons()}
-      </div>
-    );
-  }
-
   constructor(props) {
     super(props);
-    this.state = {buttons: generateButtons(this.props.position, this.props.column)};
+    this.state = {
+      buttons: generateButtons(this.props.position, this.props.column)
+    };
     this.press = this.press.bind(this);
   }
 
   renderButtons() {
     return this.state.buttons.map(name => (
-      <CalcButton
-        key={name}
-        name={name}
-        press={this.press}
-      />
+      <CalcButton key={name} name={name} press={this.press} />
     ));
   }
 
   press(name) {
     this.props.press(name);
+  }
+
+  render() {
+    return <div className="ButtonsColumn">{this.renderButtons()}</div>;
   }
 }
 

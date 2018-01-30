@@ -10,25 +10,25 @@ export function calcEval(inputArray, oldOutput = '0') {
   outputArray = outputArray.filter(x => x !== ')');
   outputArray = outputArray.filter(x => x !== '|');
 
-  while(moreOpsToDo(outputArray)) {
+  while (moreOpsToDo(outputArray)) {
     outputArray = doNextOp(outputArray);
   }
 
   //Handle errors
-  if(!outputArray[0]) {
+  if (!outputArray[0]) {
     outputArray = new Array('0');
   }
-  
+
   //Handle = press with empty input
-  if(!outputArray[0].value) {
-    outputArray[0] = {value: outputArray[0]};
+  if (!outputArray[0].value) {
+    outputArray[0] = { value: outputArray[0] };
   }
 
   //Don't remove the old output if there's nothing to execute
-  if(outputArray.length === 0) {
+  if (outputArray.length === 0) {
     return oldOutput;
   }
-  
+
   console.log('outVal', outputArray[0].value);
   return outputArray[0].value.toString();
 }
@@ -42,10 +42,10 @@ function moreOpsToDo(inputArray) {
 }
 
 function replaceAns(inputArray, oldOutput) {
-  let ansReplaced = inputArray;
+  const ansReplaced = inputArray;
 
-  for(let i = 0; i < inputArray.length; i++) {
-    if(ansReplaced[i] === 'Ans') {
+  for (let i = 0; i < inputArray.length; i++) {
+    if (ansReplaced[i] === 'Ans') {
       ansReplaced[i] = oldOutput;
     }
   }
@@ -54,7 +54,7 @@ function replaceAns(inputArray, oldOutput) {
 
 function doNextOp(inputArray) {
   const nextOp = findNextOp(inputArray);
-  console.log('nextOp.position', nextOp.position)
+  console.log('nextOp.position', nextOp.position);
   const outputArray = executeOp(nextOp.array, nextOp.position);
   return outputArray;
 }
@@ -63,7 +63,7 @@ function findNextOp(inputArray) {
   let prioritisedArray;
 
   //Skip prioritise ops if already prioritised
-  if(!inputArray[0].priority && inputArray[0].priority !== 0) {
+  if (!inputArray[0].priority && inputArray[0].priority !== 0) {
     prioritisedArray = prioritiseOps(inputArray);
     console.log('gen prioritisedArray', prioritisedArray);
   } else {
@@ -71,18 +71,18 @@ function findNextOp(inputArray) {
     console.log('received prioritisedArray', prioritisedArray);
   }
 
-  let output = {};
+  const output = {};
   let i;
   let j;
 
-  for(i = 1; i <= 5; i++){
-    for(j = 0; j < prioritisedArray.length; j++) {
-      if(prioritisedArray[j].priority === i) {
+  for (i = 1; i <= 5; i++) {
+    for (j = 0; j < prioritisedArray.length; j++) {
+      if (prioritisedArray[j].priority === i) {
         output.array = prioritisedArray;
-        output.position = j; 
+        output.position = j;
         return output;
       }
-    }  
+    }
   }
 
   console.error('findNextOp expected an op.');
@@ -91,22 +91,25 @@ function findNextOp(inputArray) {
 
 function executeOp(inputArray, position) {
   let output = {};
-  let outputArray = inputArray;
+  const outputArray = inputArray;
 
   //Recursion to get inside brackets
-  if(inputArray[position].value) {
-    if(inputArray[position].value.argument) {
+  if (inputArray[position].value) {
+    if (inputArray[position].value.argument) {
       console.log('found argument', inputArray[position].value.argument);
       output = {
-        value: funcEval(inputArray[position].value.function, inputArray[position].value.argument).toString(),
+        value: funcEval(
+          inputArray[position].value.function,
+          inputArray[position].value.argument
+        ).toString(),
         priority: 0,
         type: 'number'
       };
       outputArray.splice(position, 1, output);
 
       //Catch infinite loops
-      if(outputArray[position].value) {
-        if(outputArray[position].value.argument) {
+      if (outputArray[position].value) {
+        if (outputArray[position].value.argument) {
           console.error('recursion error');
           return {
             value: 'recursion error',
@@ -121,12 +124,12 @@ function executeOp(inputArray, position) {
   }
 
   const operation = inputArray[position].value;
-  const numBefore = parseFloat(inputArray[position-1].value);
-  const numAfter = parseFloat(inputArray[position+1].value);
+  const numBefore = parseFloat(inputArray[position - 1].value);
+  const numAfter = parseFloat(inputArray[position + 1].value);
   const outputVal = robustOp(numBefore, operation, numAfter);
   output.value = outputVal.toString();
-  
-  if(output.value === 'NaN') {
+
+  if (output.value === 'NaN') {
     return ['syntax error'];
   }
 
@@ -137,7 +140,7 @@ function executeOp(inputArray, position) {
 }
 
 function prioritiseOps(inputArray) {
-  let prioritised = [];
+  const prioritised = [];
   let element = {};
   let i;
   console.log(inputArray);
@@ -154,28 +157,28 @@ function prioritiseOps(inputArray) {
 function opPriority(element) {
   if (element.type === 'function') {
     return 1;
-  } else if(element.type !== 'operator') {
+  } else if (element.type !== 'operator') {
     return 0;
   } else {
     switch (element.value) {
       case '÷':
-      return 2;
+        return 2;
 
       case '×':
-      return 3;
+        return 3;
 
       case '×10ⁿ':
-      return 3;
+        return 3;
 
       case '–':
-      return 4;
+        return 4;
 
       case '+':
-      return 5;
+        return 5;
 
       default:
-      console.error('Don\'t know the priority of ' + element.value);
-      break;
+        console.error("Don't know the priority of " + element.value);
+        break;
     }
   }
 }
