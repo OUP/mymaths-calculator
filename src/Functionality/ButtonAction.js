@@ -15,7 +15,14 @@ export function buttonAction(
 
   //Store input and clear on first button input after pressing =
   if (cursorPosition === -1 && button !== '=' && bType !== 'mode') {
-    storedInputs.push(currentInputValue);
+    if (currentInputValue !== []) {
+      if (!storedInputs.length) {
+        storedInputs.push(currentInputValue);
+      } else if (storedInputs[storedInputs.length - 1] !== currentInputValue) {
+        //Don't store if input is unchanged
+        storedInputs.push(currentInputValue);
+      }
+    }
     currentInputValue = [];
     cursorPosition = 0;
   } else if (storePosition === -1 && (button === '⬆' || button === '⬇')) {
@@ -273,7 +280,9 @@ function pressMode(
 
     case '⬆':
       if (storedInputs.length > 0 && cursorPosition < 0) {
-        if (storePosition > 0) {
+        if (storePosition === -1) {
+          storePosition = storedInputs.length - 2;
+        } else if (storePosition > 0) {
           storePosition--;
         } else {
           storePosition = storedInputs.length - 1;
