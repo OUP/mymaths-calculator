@@ -75,7 +75,7 @@ function findNextOp(inputArray) {
   let i;
   let j;
 
-  for (i = 1; i <= 5; i++) {
+  for (i = 1; i <= 6; i++) {
     for (j = 0; j < prioritisedArray.length; j++) {
       if (prioritisedArray[j].priority === i) {
         output.array = prioritisedArray;
@@ -161,20 +161,23 @@ function opPriority(element) {
     return 0;
   } else {
     switch (element.value) {
-      case '÷':
+      case 'xⁿ':
         return 2;
 
+      case '÷':
+        return 3;
+
       case '×':
-        return 3;
-
-      case '×10ⁿ':
-        return 3;
-
-      case '–':
         return 4;
 
-      case '+':
+      case '×10ⁿ':
+        return 4;
+
+      case '–':
         return 5;
+
+      case '+':
+        return 6;
 
       default:
         console.error("Don't know the priority of " + element.value);

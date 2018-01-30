@@ -1,6 +1,9 @@
 //Adds in some fixes to buggy js floating point arithmetic
 export function robustOp(v1, operation, v2) {
   switch (operation) {
+    case 'xⁿ':
+      return pow(v1, v2);
+
     case '÷':
       return divide(v1, v2);
 
@@ -132,6 +135,22 @@ function divide(v1, v2) {
   intResult.value = int1.value / int2.value;
   intResult.numDp = int1.numDp - int2.numDp;
   const result = intToFloat(intResult);
+  return result;
+}
+
+//v1 ^ v2
+function pow(v1, v2) {
+  let i;
+  let result = 1;
+  if (v2 > 0) {
+    for (i = 1; i <= v2; i++) {
+      result = multiply(result, v1);
+    }
+  } else {
+    for (i = -1; i >= v2; i--) {
+      result = divide(result, v1);
+    }
+  }
   return result;
 }
 

@@ -7,7 +7,14 @@ export function buttonType(b) {
 
   if (b === parseFloat(b).toString() || b.includes('.')) {
     return 'number';
-  } else if (b === '+' || b === '–' || b === '×' || b === '÷' || b === '×10ⁿ') {
+  } else if (
+    b === '+' ||
+    b === '–' ||
+    b === '×' ||
+    b === '÷' ||
+    b === '×10ⁿ' ||
+    b === 'xⁿ'
+  ) {
     return 'operator';
   } else if (
     b === 'shift' ||

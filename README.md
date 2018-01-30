@@ -1,4 +1,5 @@
 # mymaths-calculator
+
 This is an early prototype for a scientific calculator built in React, to go in the new MyMaths player.
 
 https://mymaths-calculator.herokuapp.com
@@ -13,7 +14,6 @@ The following buttons are still idle:
 `frac`
 `(-)`
 `x²`
-`xⁿ`
 `x!`
 `%`
 `ENG`
