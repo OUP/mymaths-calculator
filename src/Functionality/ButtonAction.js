@@ -223,10 +223,12 @@ const pressDel = function recur(input, output, cursorPosition) {
   //Recursion to get inside brackets
   const funcArg = splitInput.arg;
   if (funcArg) {
-    const newFuncArg = recur(funcArg, output, funcArg.length).input;
-    splitInput.start[cursorPosition - 1].argument = newFuncArg;
-    newInput = splitInput.start.concat(splitInput.end);
-    return buttonReturn(newInput, output, cursorPosition);
+    if (funcArg.length) {
+      const newFuncArg = recur(funcArg, output, funcArg.length).input;
+      splitInput.start[cursorPosition - 1].argument = newFuncArg;
+      newInput = splitInput.start.concat(splitInput.end);
+      return buttonReturn(newInput, output, cursorPosition);
+    }
   }
 
   newInput = splitInput.start;
