@@ -1,7 +1,9 @@
 # mymaths-calculator
 This is an early prototype for a scientific calculator built in React, to go in the new MyMaths player.
 
-To build, `yarn install` then `yarn start`. Open a browser at `http://localhost:3000` if one open doesn't automatically.
+https://mymaths-calculator.herokuapp.com
+
+To build locally, `yarn install` then `yarn start`. Open a browser at `http://localhost:3000` if one open doesn't automatically.
 Click buttons to make things happen. Caveats below.
 
 # Known errors
