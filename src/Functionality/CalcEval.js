@@ -3,8 +3,20 @@ import { robustOp, robustFunc } from './RobustMaths';
 
 //Do the calculation on pressing =
 export function calcEval(inputArray, oldOutput = '0') {
+  let outputArray = inputArray;
+  let i;
+
+  //Stitch together adjacent digits
+  for (i = 0; i < outputArray.length; i++) {
+    if (outputArray[i] === 'number') {
+      if (outputArray[i + 1] === 'number') {
+        outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);
+      }
+    }
+  }
+
   //Substitute in value for Ans
-  let outputArray = replaceAns(inputArray, oldOutput);
+  outputArray = replaceAns(outputArray, oldOutput);
 
   //Closed brackets are only used in organising the input, not to evaluate.
   outputArray = outputArray.filter(x => x !== ')');

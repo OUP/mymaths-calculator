@@ -28,8 +28,6 @@ Using multiple decimal points in a number will give weird outputs.
 
 Output values can be imprecise due to solvable errors with floating point arithmetic.
 
-Can't insert a number after an operator if the next character is a number.
-
 `×10ⁿ` buggy with negative exponents.
 
 # Compulsory improvements
