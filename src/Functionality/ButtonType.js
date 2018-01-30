@@ -12,7 +12,7 @@ export function buttonType(b) {
   } else if (
     b === 'shift' ||
     b === '⬅' ||
-    b === '⮕' ||
+    b === '➡' ||
     b === '⬆' ||
     b === '⬇'
   ) {

@@ -261,7 +261,7 @@ function pressMode(
       }
       break;
 
-    case '⮕':
+    case '➡':
       if (cursorPosition < input.length) {
         cursorPosition++;
       } else {

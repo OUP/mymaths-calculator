@@ -10,7 +10,7 @@ export function generateButtons(position, column) {
           return ['⬅'];
 
         case '2':
-          return ['⮕'];
+          return ['➡'];
 
         case '3':
           return ['⬆'];
