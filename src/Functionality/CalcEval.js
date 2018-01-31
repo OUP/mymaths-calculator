@@ -8,9 +8,10 @@ export function calcEval(inputArray, oldOutput = '0') {
 
   //Stitch together adjacent digits
   for (i = 0; i < outputArray.length; i++) {
-    if (outputArray[i] === 'number') {
-      if (outputArray[i + 1] === 'number') {
+    if (buttonType(outputArray[i]) === 'number') {
+      if (buttonType(outputArray[i + 1]) === 'number') {
         outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);
+        console.log('outputArray', outputArray);
       }
     }
   }
