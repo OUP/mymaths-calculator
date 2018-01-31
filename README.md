@@ -12,7 +12,6 @@ Click buttons to make things happen. Caveats below.
 The following buttons are still idle:
 `shift`
 `frac`
-`(-)`
 `x²`
 `x!`
 `%`
@@ -27,6 +26,8 @@ Nested brackets `(())` are buggy.
 Using multiple decimal points in a number will give weird outputs.
 
 Output values can be imprecise due to solvable errors with floating point arithmetic.
+
+-+3 gives an infinite loop.
 
 `×10ⁿ` buggy with negative exponents.
 

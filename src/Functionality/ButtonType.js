@@ -5,7 +5,12 @@ export function buttonType(b) {
     b = '';
   }
 
-  if (b === parseFloat(b).toString() || b.includes('.')) {
+  if (
+    b === parseFloat(b).toString() ||
+    b.includes('.') ||
+    b === '(-)' ||
+    b === '-'
+  ) {
     return 'number';
   } else if (
     b === '+' ||

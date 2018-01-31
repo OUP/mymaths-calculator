@@ -173,6 +173,15 @@ function buttonReturn(
 function pressNumber(button, input, cursorPosition) {
   const newInput = input;
   const lastBType = buttonType(input[cursorPosition - 1]);
+
+  if (button === '(-)') {
+    if (lastBType === 'number') {
+      return pressOperator('–', input, cursorPosition);
+    } else {
+      button = '-';
+    }
+  }
+
   if (lastBType !== 'number') {
     newInput.push(button.toString());
     cursorPosition++;

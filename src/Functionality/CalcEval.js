@@ -139,6 +139,9 @@ function executeOp(inputArray, position) {
   const operation = inputArray[position].value;
   const numBefore = parseFloat(inputArray[position - 1].value);
   const numAfter = parseFloat(inputArray[position + 1].value);
+  if (numBefore === '-' || numAfter === '-') {
+    return ['syntax error'];
+  }
   const outputVal = robustOp(numBefore, operation, numAfter);
   output.value = outputVal.toString();
 
