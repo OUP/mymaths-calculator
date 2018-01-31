@@ -161,7 +161,6 @@ function pow(v1, v2) {
 function pow10(v1, v2) {
   const int2 = floatToInt(v2);
   const intResult = floatToInt(v1);
-  let result;
   let i;
 
   if (v2 === int2.value) {
@@ -169,15 +168,14 @@ function pow10(v1, v2) {
       for (i = 0; i < v2; i++) {
         intResult.value *= 10;
       }
-      result = intToFloat(intResult);
     } else {
       for (i = 0; i > v2; i--) {
-        result /= 10;
+        console.log('intResult.value', intResult.value);
+        intResult.value /= 10;
       }
     }
+    return intToFloat(intResult);
   } else {
-    result = v1 * Math.pow(10, v2);
+    return v1 * Math.pow(10, v2);
   }
-
-  return result;
 }

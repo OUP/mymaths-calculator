@@ -29,8 +29,6 @@ Output values can be imprecise due to solvable errors with floating point arithm
 
 -+3 gives an infinite loop.
 
-`×10ⁿ` buggy with negative exponents.
-
 # Compulsory improvements
 
 Set rad, degrees, grad modes for trig functions.
