@@ -142,16 +142,20 @@ function divide(v1, v2) {
 function pow(v1, v2) {
   let i;
   let result = 1;
-  if (v2 > 0) {
-    for (i = 1; i <= v2; i++) {
-      result = multiply(result, v1);
+  if (Math.round(v2) === v2) {
+    if (v2 > 0) {
+      for (i = 1; i <= v2; i++) {
+        result = multiply(result, v1);
+      }
+    } else {
+      for (i = -1; i >= v2; i--) {
+        result = divide(result, v1);
+      }
     }
+    return result;
   } else {
-    for (i = -1; i >= v2; i--) {
-      result = divide(result, v1);
-    }
+    return Math.pow(v1, v2);
   }
-  return result;
 }
 
 function pow10(v1, v2) {
