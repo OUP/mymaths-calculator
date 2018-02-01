@@ -16,10 +16,10 @@
 .SmallButton {
     background-color: rgb(166, 188, 214);
     height: 30px;
-    width: 52px;
+    width: 58px;
     cursor: pointer;
-    margin: 5px;
-    font-size: 14px;
+    margin: 2px;
+    font-size: 13.5px;
     border-radius: 5px;
 }
 
