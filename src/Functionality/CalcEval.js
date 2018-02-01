@@ -11,6 +11,7 @@ export function calcEval(inputArray, oldOutput = '0') {
     if (buttonType(outputArray[i]) === 'number') {
       if (buttonType(outputArray[i + 1]) === 'number') {
         outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);
+        i--;
         console.log('outputArray', outputArray);
       }
     }

@@ -182,12 +182,9 @@ function pressNumber(button, input, cursorPosition) {
     }
   }
 
-  if (lastBType !== 'number') {
-    newInput.push(button.toString());
-    cursorPosition++;
-  } else {
-    newInput[cursorPosition - 1] += button.toString();
-  }
+  newInput.push(button.toString());
+  cursorPosition++;
+
   return { newInput: newInput, newCursorPosition: cursorPosition };
 }
 
