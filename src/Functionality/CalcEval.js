@@ -3,11 +3,12 @@ import { robustOp, robustFunc } from './RobustMaths';
 
 //Do the calculation on pressing =
 export function calcEval(inputArray, oldOutput = '0') {
-  let outputArray = inputArray;
-  let i;
+  //Pass input array by value not by reference
+  let outputArray = [];
+  outputArray = inputArray.slice(0);
 
   //Stitch together adjacent digits
-  for (i = 0; i < outputArray.length; i++) {
+  for (let i = 0; i < outputArray.length; i++) {
     if (buttonType(outputArray[i]) === 'number') {
       if (buttonType(outputArray[i + 1]) === 'number') {
         outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);

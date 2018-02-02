@@ -19,8 +19,6 @@ The following buttons are still idle:
 `S⇔D`
 `π`
 
-`Ans` gets replaced in input on pressing `=`
-
 Nested brackets `(())` are buggy.
 
 Using multiple decimal points in a number will give weird outputs.
@@ -45,7 +43,7 @@ Add in functionality to store variables.
 
 Add hotkeys.
 
-Bettor cursor.
+Better cursor.
 
 Improve design.
 
