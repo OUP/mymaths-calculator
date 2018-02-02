@@ -8,7 +8,8 @@ export function buttonAction(
   currentOutputValue,
   cursorPosition,
   storedInputs = [],
-  storePosition = -1
+  storePosition = -1,
+  shift = false
 ) {
   const bType = buttonType(button);
   let buttonOutput;
@@ -76,7 +77,8 @@ export function buttonAction(
         currentOutputValue,
         cursorPosition,
         storedInputs,
-        storePosition
+        storePosition,
+        shift
       );
       break;
 
@@ -157,7 +159,8 @@ function buttonReturn(
   newInput,
   output,
   cursorPosition = 0,
-  storePosition = -1
+  storePosition = -1,
+  shift
 ) {
   if (output.constructor !== Array) {
     output = [output];
@@ -166,7 +169,8 @@ function buttonReturn(
     input: newInput,
     output: output,
     cursorPosition: cursorPosition,
-    storePosition: storePosition
+    storePosition: storePosition,
+    shift: shift
   };
 }
 
@@ -265,9 +269,18 @@ function pressMode(
   output,
   cursorPosition,
   storedInputs = [],
-  storePosition = -1
+  storePosition = -1,
+  shift
 ) {
   switch (button) {
+    case 'shift':
+      if (shift === false) {
+        shift = true;
+      } else {
+        shift = false;
+      }
+      break;
+
     case '⬅':
       if (cursorPosition > 0) {
         cursorPosition--;
@@ -313,5 +326,5 @@ function pressMode(
       break;
     //TODO: shift, ⬆ and ⬇
   }
-  return buttonReturn(input, output, cursorPosition, storePosition);
+  return buttonReturn(input, output, cursorPosition, storePosition, shift);
 }

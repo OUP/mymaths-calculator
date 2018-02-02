@@ -9,6 +9,7 @@ class Calculator extends Component {
     super(props);
     this.press = this.press.bind(this);
     this.state = {
+      shift: false,
       inputValue: [],
       inputStr: '¦',
       outputValue: ['0'],
@@ -26,12 +27,14 @@ class Calculator extends Component {
       this.state.outputValue,
       this.state.cursorPosition,
       this.state.storedInputs,
-      this.state.storePosition
+      this.state.storePosition,
+      this.state.shift
     );
 
     //Show error in UI if the button press didn't do anything.
     if (!buttonEffect) {
       this.setState({
+        shift: false,
         cursorPosition: 0,
         inputValue: [],
         inputStr: parseToRender([], 0),
@@ -41,6 +44,7 @@ class Calculator extends Component {
       console.error(button + ' is a dead button.');
     } else {
       this.setState({
+        shift: buttonEffect.shift,
         cursorPosition: buttonEffect.cursorPosition,
         inputValue: buttonEffect.input,
         inputStr: parseToRender(
@@ -56,13 +60,26 @@ class Calculator extends Component {
   }
 
   render() {
+    //console.log('Calculator.state.shift:', this.state.shift);
     return (
       <div className="Calculator">
         <div className="InputDisplay">{this.state.inputStr}</div>
         <div className="OutputDisplay">{this.state.outputStr}</div>
-        <ButtonsGrid press={this.press} position="top" />
-        <ButtonsGrid press={this.press} position="middle" />
-        <ButtonsGrid press={this.press} position="bottom" />
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="top"
+        />
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="middle"
+        />
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="bottom"
+        />
       </div>
     );
   }
