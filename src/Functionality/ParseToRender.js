@@ -21,13 +21,23 @@ function addCursor(arr, position) {
 
 function parseElement(el) {
   if (typeof el === 'string') {
-    return el;
+    return opToStringMap(el);
   } else if (typeof el === 'number') {
     return el.toString();
   } else if (el.constructor === Array) {
     return el[0].toString();
   } else {
     return funcToStringMap(el.function) + parseToRender(el.argument);
+  }
+}
+
+function opToStringMap(op) {
+  switch (op) {
+    case 'x²':
+      return '²';
+
+    default:
+      return op;
   }
 }
 

@@ -27,7 +27,7 @@ function buttonStyle(button) {
   const type = buttonType(button);
   if (type === 'AC' || button === 'DEL') {
     return 'DelButton';
-  } else if (button === 'xⁿ' || button === '(-)') {
+  } else if (button === 'xⁿ' || button === '(-)' || button === 'x²') {
     return 'SmallButton';
   } else if (
     type === 'number' ||

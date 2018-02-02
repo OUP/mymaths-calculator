@@ -4,7 +4,7 @@ This is an early prototype for a scientific calculator built in React, to go in 
 
 https://mymaths-calculator.herokuapp.com
 
-To build locally, `yarn install` then `yarn start`. Open a browser at `http://localhost:3000` if one open doesn't automatically.
+To build locally, `yarn install` then `yarn start`. Open a browser at `http://localhost:3000` if one doesn't open automatically.
 Click buttons to make things happen. Caveats below.
 
 # Known errors
@@ -12,7 +12,6 @@ Click buttons to make things happen. Caveats below.
 The following buttons are still idle:
 `shift`
 `frac`
-`x²`
 `x!`
 `%`
 `ENG`
@@ -20,6 +19,8 @@ The following buttons are still idle:
 `π`
 
 Nested brackets `(())` are buggy.
+
+Cursor skips.
 
 Using multiple decimal points in a number will give weird outputs.
 

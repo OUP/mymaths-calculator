@@ -18,7 +18,8 @@ export function buttonType(b) {
     b === '×' ||
     b === '÷' ||
     b === '×10ⁿ' ||
-    b === 'xⁿ'
+    b === 'xⁿ' ||
+    b === 'x²'
   ) {
     return 'operator';
   } else if (

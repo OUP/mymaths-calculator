@@ -1,8 +1,11 @@
 //Adds in some fixes to buggy js floating point arithmetic
-export function robustOp(v1, operation, v2) {
+export function robustOp(v1, operation, v2 = 0) {
   switch (operation) {
     case 'xⁿ':
       return pow(v1, v2);
+
+    case 'x²':
+      return multiply(v1, v1);
 
     case '÷':
       return divide(v1, v2);

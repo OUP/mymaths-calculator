@@ -140,7 +140,12 @@ function executeOp(inputArray, position) {
 
   const operation = inputArray[position].value;
   const numBefore = parseFloat(inputArray[position - 1].value);
-  const numAfter = parseFloat(inputArray[position + 1].value);
+  let numAfter = 0;
+
+  if (inputArray[position + 1]) {
+    numAfter = parseFloat(inputArray[position + 1].value);
+  }
+
   if (numBefore === '-' || numAfter === '-') {
     return ['syntax error'];
   }
@@ -180,6 +185,9 @@ function opPriority(element) {
   } else {
     switch (element.value) {
       case 'xⁿ':
+        return 2;
+
+      case 'x²':
         return 2;
 
       case '÷':
