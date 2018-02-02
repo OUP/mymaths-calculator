@@ -36,6 +36,9 @@ function opToStringMap(op) {
     case 'x²':
       return '²';
 
+    case 'x!':
+      return '!';
+
     default:
       return op;
   }

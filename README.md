@@ -12,7 +12,6 @@ Click buttons to make things happen. Caveats below.
 The following buttons are still idle:
 `shift`
 `frac`
-`x!`
 `%`
 `ENG`
 `S⇔D`

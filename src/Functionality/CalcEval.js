@@ -190,6 +190,10 @@ function opPriority(element) {
       case 'x²':
         return 2;
 
+      case 'x!':
+        return 2;
+      //Strictly should be 4 but setting it to 2 is an auto-correct
+
       case '÷':
         return 3;
 
