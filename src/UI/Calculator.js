@@ -60,7 +60,7 @@ class Calculator extends Component {
   }
 
   render() {
-    //console.log('Calculator.state.shift:', this.state.shift);
+    console.log('Calculator.state.shift:', this.state.shift);
     return (
       <div className="Calculator">
         <div className="InputDisplay">{this.state.inputStr}</div>

@@ -1,10 +1,8 @@
 //This is injected at UI/ButtonsColumn.js
 export function generateButtons(position, column, shift) {
   if (!shift) {
-    //console.log('unshifted grid, got here');
     return unshiftedGrid(position, column);
   } else {
-    //console.log('shifted grid, got here');
     return shiftedGrid(position, column);
   }
 }

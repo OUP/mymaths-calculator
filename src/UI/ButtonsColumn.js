@@ -7,14 +7,20 @@ import './CalcButton.css';
 class ButtonsColumn extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      buttons: generateButtons(this.props.position, this.props.column)
-    };
+    this.chooseButtons = this.chooseButtons.bind(this);
     this.press = this.press.bind(this);
   }
 
+  chooseButtons() {
+    return generateButtons(
+      this.props.position,
+      this.props.column,
+      this.props.shift
+    );
+  }
+
   renderButtons() {
-    return this.state.buttons.map(name => (
+    return this.chooseButtons().map(name => (
       <CalcButton key={name} name={name} press={this.press} />
     ));
   }

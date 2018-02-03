@@ -13,7 +13,7 @@ class ButtonsGrid extends Component {
   }
 
   render() {
-    return genButtonsGrid(this, this.props.position);
+    return genButtonsGrid(this, this.props.position, this.props.shift);
   }
 }
 
