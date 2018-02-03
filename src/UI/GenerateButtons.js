@@ -95,16 +95,16 @@ function shiftedGrid(position, column) {
           return ['shift'];
 
         case '1':
-          return ['a'];
+          return ['⬅'];
 
         case '2':
-          return ['b'];
+          return ['➡'];
 
         case '3':
-          return ['c'];
+          return ['⬆'];
 
         case '4':
-          return ['d'];
+          return ['⬇'];
 
         default:
           console.error('No column here.');
@@ -115,22 +115,22 @@ function shiftedGrid(position, column) {
     case 'middle':
       switch (column) {
         case '0':
-          return ['|x|', 'frac', '(-)'];
+          return ['ẋ', 'mixed', 'nPr'];
 
         case '1':
-          return ['x²', '√(x)', 'ENG'];
+          return ['x³', 'ⁿ√(x)', 'nCr'];
 
         case '2':
-          return ['xⁿ', 'sin(x)', '('];
+          return ['x⁻¹', 'sin⁻¹', 'Pol'];
 
         case '3':
-          return ['log(x)', 'cos(x)', ')'];
+          return ['logₐ(x)', 'cos⁻¹', 'FACT'];
 
         case '4':
-          return ['ln(x)', 'tan(x)', 'S⇔D'];
+          return ['eⁿ', 'tan⁻¹', 'mx⇔fr'];
 
         case '5':
-          return ['x!', '%', 'π'];
+          return ['Ran#', 'round', '° \' "'];
 
         default:
           console.error('No column here.');

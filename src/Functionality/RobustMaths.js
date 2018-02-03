@@ -189,7 +189,6 @@ function pow10(v1, v2) {
 const factorial = function recur(v1, index = 1, result = 1) {
   if (Math.round(v1) === v1) {
     result = multiply(result, index);
-    console.log('factorial result', result);
     if (index < v1) {
       return recur(v1, index + 1, result);
     } else {
