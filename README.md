@@ -10,22 +10,24 @@ Click buttons to make things happen. Caveats below.
 # Known errors
 
 The following buttons are still idle:
-`shift`
 `frac`
 `%`
 `ENG`
 `S⇔D`
 `π`
+shifted buttons
 
 Nested brackets `(())` are buggy.
 
 Cursor skips.
 
-Using multiple decimal points in a number will give weird outputs.
+Using multiple decimal points in a number outputs weird values instead of `syntax error`.
 
 Output values can be imprecise due to solvable errors with floating point arithmetic.
 
 -+3 gives an infinite loop.
+
+Error if you try to retrieve a stored input before one exists.
 
 # Compulsory improvements
 
@@ -36,8 +38,6 @@ Handle fractions correctly.
 Handle surds correctly.
 
 Handle recurring decimals correctly.
-
-Add in the shift mode buttons (inverse trig functions etc.)
 
 Add in functionality to store variables.
 
