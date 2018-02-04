@@ -1,5 +1,5 @@
 .StandardButton {
-    background-color: #D2E8FF;
+    background-color: #d2e8ff;
     height: 30px;
     width: 65px;
     cursor: pointer;
@@ -9,7 +9,7 @@
 }
 
 .StandardButton:hover {
-    background-color: #DB0066;
+    background-color: #db0066;
     color: white;
 }
 
@@ -24,12 +24,27 @@
 }
 
 .SmallButton:hover {
-    background-color: #DB0066;
+    background-color: #db0066;
+    color: white;
+}
+
+.ShiftSmallButton {
+    background-color: #ffff00;
+    height: 30px;
+    width: 58px;
+    cursor: pointer;
+    margin: 2px;
+    font-size: 13.5px;
+    border-radius: 5px;
+}
+
+.ShiftSmallButton:hover {
+    background-color: #db0066;
     color: white;
 }
 
 .DelButton {
-    background-color: #FF8000;
+    background-color: #ff8000;
     height: 30px;
     width: 65px;
     cursor: pointer;
@@ -40,12 +55,12 @@
 
 .DelButton:hover {
     background-color: #000000;
-    color: #FFFF00;
+    color: #ffff00;
     font-weight: bold;
 }
 
 .ModeButton {
-    background-color: rgb(199, 199, 159);
+    background-color: #66db00;
     height: 30px;
     width: 65px;
     cursor: pointer;
@@ -55,6 +70,22 @@
 }
 
 .ModeButton:hover {
-    background-color: #DB0066;
+    background-color: #db0066;
     color: white;
+}
+
+.ShiftModeButton {
+    background-color: #db0066;
+    height: 30px;
+    width: 65px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 18px;
+    border-radius: 5px;
+    color: white;
+}
+
+.ShiftModeButton:hover {
+    background-color: white;
+    color: #DB0066;
 }

@@ -21,7 +21,12 @@ class ButtonsColumn extends Component {
 
   renderButtons() {
     return this.chooseButtons().map(name => (
-      <CalcButton key={name} name={name} press={this.press} />
+      <CalcButton
+        key={name}
+        name={name}
+        press={this.press}
+        shift={this.props.shift}
+      />
     ));
   }
 

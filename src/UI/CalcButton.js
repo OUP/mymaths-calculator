@@ -15,7 +15,10 @@ class CalcButton extends Component {
   render() {
     return (
       <div>
-        <button className={buttonStyle(this.props.name)} onClick={this.press}>
+        <button
+          className={buttonStyle(this.props.name, this.props.shift)}
+          onClick={this.press}
+        >
           {this.props.name}
         </button>
       </div>
@@ -23,28 +26,37 @@ class CalcButton extends Component {
   }
 }
 
-function buttonStyle(button) {
+function buttonStyle(button, shift = false) {
   const type = buttonType(button);
+  let style;
   if (type === 'AC' || button === 'DEL') {
-    return 'DelButton';
+    style = 'DelButton';
   } else if (
     button === 'xⁿ' ||
     button === '(-)' ||
     button === 'x²' ||
     button === 'x!'
   ) {
-    return 'SmallButton';
+    style = 'SmallButton';
   } else if (
     type === 'number' ||
     type === 'operator' ||
     type === 'Ans' ||
     type === '='
   ) {
-    return 'StandardButton';
+    style = 'StandardButton';
   } else if (type === 'mode') {
-    return 'ModeButton';
+    style = 'ModeButton';
   } else {
-    return 'SmallButton';
+    style = 'SmallButton';
+  }
+
+  if (shift === false) {
+    return style;
+  } else if (style === 'SmallButton' || button === 'shift') {
+    return 'Shift' + style;
+  } else {
+    return style;
   }
 }
 
