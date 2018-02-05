@@ -1,5 +1,6 @@
 //Arbitrary precision arithmetic
 import { Decimal } from 'decimal.js';
+const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
   switch (operation) {
@@ -85,9 +86,8 @@ function multiply(v1, v2) {
 
 //v1 / v2
 function divide(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  return v1.dividedBy(v2);
+  const f = new Fraction(v1, v2);
+  return f.toFraction();
 }
 
 //v1 ^ v2

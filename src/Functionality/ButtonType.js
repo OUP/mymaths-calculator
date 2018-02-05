@@ -8,6 +8,7 @@ export function buttonType(b) {
   if (
     b === parseFloat(b).toString() ||
     b.includes('.') ||
+    b.includes('/') ||
     b === '(-)' ||
     b === '-'
   ) {

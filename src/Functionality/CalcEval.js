@@ -1,5 +1,6 @@
 import { buttonType } from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
+import { fractionOp } from './FractionOps';
 
 //Do the calculation on pressing =
 export function calcEval(inputArray, oldOutput = '0') {
@@ -61,7 +62,7 @@ function replaceAns(inputArray, oldOutput) {
 
   for (let i = 0; i < inputArray.length; i++) {
     if (ansReplaced[i] === 'Ans') {
-      ansReplaced[i] = oldOutput;
+      ansReplaced[i] = oldOutput[0];
     }
   }
   return ansReplaced;
@@ -80,10 +81,10 @@ function findNextOp(inputArray) {
   //Skip prioritise ops if already prioritised
   if (!inputArray[0].priority && inputArray[0].priority !== 0) {
     prioritisedArray = prioritiseOps(inputArray);
-    console.log('gen prioritisedArray', prioritisedArray);
+    console.log('gen prioritisedArray', prioritisedArray.slice(0));
   } else {
     prioritisedArray = inputArray;
-    console.log('received prioritisedArray', prioritisedArray);
+    console.log('received prioritisedArray', prioritisedArray.slice(0));
   }
 
   const output = {};
@@ -139,17 +140,37 @@ function executeOp(inputArray, position) {
   }
 
   const operation = inputArray[position].value;
-  const numBefore = parseFloat(inputArray[position - 1].value);
-  let numAfter = 0;
+  const elBefore = inputArray[position - 1];
+  const elAfter = inputArray[position + 1];
+  let outputVal = 0;
+  if (!checkIfFraction(elBefore) && !checkIfFraction(elAfter)) {
+    const numBefore = parseFloat(inputArray[position - 1].value);
+    let numAfter = 0;
 
-  if (inputArray[position + 1]) {
-    numAfter = parseFloat(inputArray[position + 1].value);
+    if (inputArray[position + 1]) {
+      numAfter = parseFloat(inputArray[position + 1].value);
+    }
+
+    if (numBefore === '-' || numAfter === '-') {
+      return ['syntax error'];
+    }
+    outputVal = accurateOp(numBefore, operation, numAfter);
+    console.log('outputVal', outputVal);
+  } else {
+    const numBefore = inputArray[position - 1].value;
+    let numAfter = 0;
+
+    if (inputArray[position + 1]) {
+      numAfter = inputArray[position + 1].value;
+    }
+
+    if (numBefore === '-' || numAfter === '-') {
+      return ['syntax error'];
+    }
+
+    outputVal = fractionOp(numBefore, operation, numAfter);
   }
 
-  if (numBefore === '-' || numAfter === '-') {
-    return ['syntax error'];
-  }
-  const outputVal = accurateOp(numBefore, operation, numAfter);
   output.value = outputVal.toString();
 
   if (output.value === 'NaN') {
@@ -159,6 +180,7 @@ function executeOp(inputArray, position) {
   output.type = buttonType(output.value);
   output.priority = opPriority(output);
   outputArray.splice(position - 1, 3, output);
+  console.log('outputArray', outputArray);
   return outputArray;
 }
 
@@ -219,4 +241,13 @@ function opPriority(element) {
 function funcEval(func, argument) {
   const argVal = calcEval(argument);
   return accurateFunc(func, argVal);
+}
+
+function checkIfFraction(x) {
+  //x can be undefined
+  if (x) {
+    return x.value.includes('/');
+  } else {
+    return false;
+  }
 }
