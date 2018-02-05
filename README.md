@@ -13,7 +13,6 @@ The following buttons are still idle:
 `frac`
 `%`
 `ENG`
-`S⇔D`
 `π`
 shifted buttons
 
@@ -33,11 +32,7 @@ Error if you try to retrieve a stored input before one exists.
 
 Set rad, degrees, grad modes for trig functions.
 
-Handle fractions correctly.
-
 Handle surds correctly.
-
-Handle recurring decimals correctly.
 
 Add in functionality to store variables.
 

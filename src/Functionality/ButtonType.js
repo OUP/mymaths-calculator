@@ -32,6 +32,8 @@ export function buttonType(b) {
     b === '⬇'
   ) {
     return 'mode';
+  } else if (b === 'S⇔D' || b === 'ENG') {
+    return 'display';
   } else if (b === 'DEL' || b === 'AC' || b === 'Ans' || b === '=') {
     return b;
   } else if (b === '') {

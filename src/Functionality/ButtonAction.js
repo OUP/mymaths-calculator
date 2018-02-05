@@ -9,13 +9,19 @@ export function buttonAction(
   cursorPosition,
   storedInputs = [],
   storePosition = -1,
-  shift = false
+  shift = false,
+  displayMode = 'default'
 ) {
   const bType = buttonType(button);
   let buttonOutput;
 
   //Store input and clear on first button input after pressing =
-  if (cursorPosition === -1 && button !== '=' && bType !== 'mode') {
+  if (
+    cursorPosition === -1 &&
+    button !== '=' &&
+    bType !== 'mode' &&
+    bType !== 'display'
+  ) {
     if (currentInputValue !== []) {
       if (!storedInputs.length) {
         storedInputs.push(currentInputValue);
@@ -79,6 +85,19 @@ export function buttonAction(
         storedInputs,
         storePosition,
         shift
+      );
+      break;
+
+    case 'display':
+      buttonOutput = pressDisplay(
+        button,
+        currentInputValue,
+        currentOutputValue,
+        cursorPosition,
+        storedInputs,
+        storePosition,
+        shift,
+        displayMode
       );
       break;
 
@@ -160,7 +179,8 @@ function buttonReturn(
   output,
   cursorPosition = 0,
   storePosition = -1,
-  shift
+  shift = false,
+  displayMode = 'fraction'
 ) {
   if (output.constructor !== Array) {
     output = [output];
@@ -170,7 +190,8 @@ function buttonReturn(
     output: output,
     cursorPosition: cursorPosition,
     storePosition: storePosition,
-    shift: shift
+    shift: shift,
+    displayMode: displayMode
   };
 }
 
@@ -327,4 +348,36 @@ function pressMode(
     //TODO: shift, ⬆ and ⬇
   }
   return buttonReturn(input, output, cursorPosition, storePosition, shift);
+}
+
+function pressDisplay(
+  button,
+  currentInputValue,
+  currentOutputValue,
+  cursorPosition,
+  storedInputs,
+  storePosition,
+  shift,
+  displayMode
+) {
+  switch (button) {
+    case 'S⇔D':
+      if (displayMode === 'fraction') {
+        displayMode = 'decimal';
+      } else {
+        displayMode = 'fraction';
+      }
+      break;
+
+    default:
+      break;
+  }
+  return buttonReturn(
+    currentInputValue,
+    currentOutputValue,
+    cursorPosition,
+    storePosition,
+    shift,
+    displayMode
+  );
 }

@@ -1,5 +1,12 @@
+const Fraction = require('fraction.js');
+import { Decimal } from 'decimal.js';
+
 //This will become more complicated to deal with fractions etc.
-export function parseToRender(arr, cursorPosition = -1) {
+export function parseToRender(
+  arr,
+  cursorPosition = -1,
+  displayMode = 'default'
+) {
   if (cursorPosition >= 0) {
     arr = addCursor(arr, cursorPosition);
   }
@@ -7,7 +14,7 @@ export function parseToRender(arr, cursorPosition = -1) {
   let i,
     str = '';
   for (i = 0; i < arr.length; i++) {
-    str += parseElement(arr[i]);
+    str += parseElement(arr[i], displayMode);
   }
 
   return str;
@@ -19,9 +26,20 @@ function addCursor(arr, position) {
   return arr;
 }
 
-function parseElement(el) {
+function parseElement(el, displayMode = 'default') {
   if (typeof el === 'string') {
-    return opToStringMap(el);
+    if (displayMode === 'default') {
+      return opToStringMap(el);
+    } else if (displayMode === 'fraction') {
+      console.log('render fraction, got here');
+      const frac = new Fraction(el);
+      return frac.toFraction();
+    } else if (displayMode === 'decimal') {
+      const frac = new Fraction(el);
+      const num = new Decimal(frac.n);
+      const den = new Decimal(frac.d);
+      return frac.toString();
+    }
   } else if (typeof el === 'number') {
     return el.toString();
   } else if (el.constructor === Array) {

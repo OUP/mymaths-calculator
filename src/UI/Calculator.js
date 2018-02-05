@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Calculator.css';
 import ButtonsGrid from './ButtonsGrid';
 import { buttonAction } from '../Functionality/ButtonAction';
+import { buttonType } from '../Functionality/ButtonType';
 import { parseToRender } from '../Functionality/ParseToRender';
 
 class Calculator extends Component {
@@ -16,7 +17,8 @@ class Calculator extends Component {
       outputStr: '0',
       cursorPosition: 0,
       storedInputs: [],
-      storePosition: -1
+      storePosition: -1,
+      displayMode: 'fraction'
     };
   }
 
@@ -28,7 +30,8 @@ class Calculator extends Component {
       this.state.cursorPosition,
       this.state.storedInputs,
       this.state.storePosition,
-      this.state.shift
+      this.state.shift,
+      this.state.displayMode
     );
 
     //Show error in UI if the button press didn't do anything.
@@ -52,10 +55,24 @@ class Calculator extends Component {
           buttonEffect.cursorPosition
         ),
         outputValue: buttonEffect.output,
-        outputStr: parseToRender(buttonEffect.output),
+        outputStr: parseToRender(
+          buttonEffect.output,
+          -1,
+          this.state.displayMode
+        ),
         storedInputs: buttonEffect.storedInputs,
         storePosition: buttonEffect.storePosition
       });
+      if (buttonType(button) === 'display') {
+        this.setState({
+          outputStr: parseToRender(
+            buttonEffect.output,
+            -1,
+            buttonEffect.displayMode
+          ),
+          displayMode: buttonEffect.displayMode
+        });
+      }
     }
   }
 
