@@ -1,7 +1,7 @@
 //Arbitrary precision arithmetic
 import { Decimal } from 'decimal.js';
 
-export function robustOp(v1, operation, v2 = 0) {
+export function accurateOp(v1, operation, v2 = 0) {
   switch (operation) {
     case 'xⁿ':
       return pow(v1, v2);
@@ -34,7 +34,7 @@ export function robustOp(v1, operation, v2 = 0) {
   }
 }
 
-export function robustFunc(func, arg) {
+export function accurateFunc(func, arg) {
   switch (func) {
     case '|x|':
       return Math.abs(arg);
@@ -66,42 +66,42 @@ export function robustFunc(func, arg) {
 function add(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
-  return v1.add(v2).toString();
+  return v1.add(v2);
 }
 
 //v1 - v2
 function subtract(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
-  return v1.minus(v2).toString();
+  return v1.minus(v2);
 }
 
 //v1 * v2
 function multiply(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
-  return v1.times(v2).toString();
+  return v1.times(v2);
 }
 
 //v1 / v2
 function divide(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
-  return v1.dividedBy(v2).toString();
+  return v1.dividedBy(v2);
 }
 
 //v1 ^ v2
 function pow(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
-  return v1.toPower(v2).toString();
+  return v1.toPower(v2);
 }
 
 function pow10(v1, v2) {
   v1 = new Decimal(v1);
   v2 = new Decimal(v2);
   const ten = new Decimal(10);
-  return v1.times(ten.toPower(v2)).toString();
+  return v1.times(ten.toPower(v2));
 }
 
 const factorial = function recur(v1, index = 1, result = 1) {

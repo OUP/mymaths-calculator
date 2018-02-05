@@ -1,5 +1,5 @@
 import { buttonType } from './ButtonType';
-import { robustOp, robustFunc } from './RobustMaths';
+import { accurateOp, accurateFunc } from './AccurateMaths';
 
 //Do the calculation on pressing =
 export function calcEval(inputArray, oldOutput = '0') {
@@ -149,7 +149,7 @@ function executeOp(inputArray, position) {
   if (numBefore === '-' || numAfter === '-') {
     return ['syntax error'];
   }
-  const outputVal = robustOp(numBefore, operation, numAfter);
+  const outputVal = accurateOp(numBefore, operation, numAfter);
   output.value = outputVal.toString();
 
   if (output.value === 'NaN') {
@@ -218,5 +218,5 @@ function opPriority(element) {
 
 function funcEval(func, argument) {
   const argVal = calcEval(argument);
-  return robustFunc(func, argVal);
+  return accurateFunc(func, argVal);
 }
