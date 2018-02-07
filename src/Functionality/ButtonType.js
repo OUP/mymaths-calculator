@@ -106,9 +106,6 @@ export function buttonSuperType(button) {
       type === 'Ans':
       return 'input';
 
-    case type === 'DEL' || type === 'AC':
-      return 'delete';
-
     default:
       return type;
   }

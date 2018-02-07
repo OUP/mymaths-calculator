@@ -3,7 +3,7 @@ import { buttonAction } from './ButtonAction';
 import { parseToRender } from './ParseToRender';
 
 export function updateState(context, button) {
-  const buttonEffect = determineButtonEffect(context, button);
+  const buttonEffect = buttonAction(button, context.state);
   const type = buttonType(button);
 
   if (type !== 'display') {
@@ -25,19 +25,6 @@ export function initialiseState(context) {
     storePosition: -1,
     displayMode: 'fraction'
   };
-}
-
-function determineButtonEffect(context, button) {
-  return buttonAction(
-    button,
-    context.state.inputValue,
-    context.state.outputValue,
-    context.state.cursorPosition,
-    context.state.storedInputs,
-    context.state.storePosition,
-    context.state.shift,
-    context.state.displayMode
-  );
 }
 
 function updateValues(context, buttonEffect) {
