@@ -31,14 +31,27 @@ function parseElement(el, displayMode = 'default') {
     if (displayMode === 'default') {
       return opToStringMap(el);
     } else if (displayMode === 'fraction') {
-      console.log('render fraction, got here');
-      const frac = new Fraction(el);
-      return frac.toFraction();
+      if (!el.includes('/')) {
+        console.log('el', el);
+        const decimal = new Decimal(el);
+        if (decimal.toFraction() === decimal.toFraction(10000)) {
+          const frac = new Fraction(el);
+          return frac.toFraction();
+        } else {
+          return decimal;
+        }
+      } else {
+        const frac = new Fraction(el);
+        return frac.toFraction();
+      }
     } else if (displayMode === 'decimal') {
-      const frac = new Fraction(el);
-      const num = new Decimal(frac.n);
-      const den = new Decimal(frac.d);
-      return frac.toString();
+      if (!el.includes('/')) {
+        const decimal = new Decimal(el);
+        return decimal;
+      } else {
+        const recDec = new Fraction(el);
+        return recDec.toString();
+      }
     }
   } else if (typeof el === 'number') {
     return el.toString();
