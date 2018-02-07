@@ -1,4 +1,4 @@
-export function pressFunction(button, input, cursorPosition) {
+export function pressFunction(button, currentState) {
   let funcType = button;
   if (
     button === '|x|' ||
@@ -15,34 +15,32 @@ export function pressFunction(button, input, cursorPosition) {
 
   switch (funcType) {
     case 'argAfter':
-      return pressArgAfter(button, input, cursorPosition);
+      return pressArgAfter(button, currentState);
 
     case ')':
-      return pressCloseBracket(input, cursorPosition);
+      return pressCloseBracket(currentState);
 
     default:
       break;
   }
 }
 
-function pressCloseBracket(input, cursorPosition) {
-  const newInput = input;
-  newInput.push(')');
-  cursorPosition++;
-  return { newInput: newInput, newCursorPosition: cursorPosition };
+function pressCloseBracket(currentState) {
+  currentState.inputValue.push(')');
+  currentState.cursorPosition++;
+  return currentState;
 }
 
-function pressArgAfter(button, input, cursorPosition) {
-  const newInput = input;
-  newInput.push({
+function pressArgAfter(button, currentState) {
+  currentState.inputValue.push({
     type: 'function',
     function: button,
     argument: []
   });
-  cursorPosition++;
+  currentState.cursorPosition++;
 
   if (button === '|x|') {
-    newInput.push('|');
+    currentState.inputValue.push('|');
   }
-  return { newInput: newInput, newCursorPosition: cursorPosition };
+  return currentState;
 }

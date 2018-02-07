@@ -1,5 +1,7 @@
-import { buttonReturn } from './ButtonUtilities';
-
-export function pressAC() {
-  return buttonReturn([], '0');
+export function pressAC(currentState) {
+  currentState.inputValue = [];
+  currentState.outputValue = [];
+  currentState.cursorPosition = 0;
+  currentState.storePosition = -1;
+  return currentState;
 }

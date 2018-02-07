@@ -10,93 +10,55 @@ import { pressDisplay } from './Buttons/PressDisplay';
 export function buttonAction(button, currentState) {
   const bType = buttonType(button);
   const bSuperType = buttonSuperType(button);
-  let currentInputValue = currentState.inputValue;
-  const currentOutputValue = currentState.outputValue;
-  let cursorPosition = currentState.cursorPosition;
-  const storedInputs = currentState.storedInputs;
-  const storePosition = currentState.storePosition;
-  const shift = currentState.shift;
-  const displayMode = currentState.displayMode;
-  let buttonOutput;
 
   //Store input and clear on first button input after pressing =
   if (
-    cursorPosition === -1 &&
+    currentState.cursorPosition === -1 &&
     button !== '=' &&
     bType !== 'mode' &&
     bType !== 'display'
   ) {
-    if (currentInputValue !== []) {
-      if (!storedInputs.length) {
-        storedInputs.push(currentInputValue);
-      } else if (storedInputs[storedInputs.length - 1] !== currentInputValue) {
+    if (currentState.inputValue !== []) {
+      if (!currentState.storedInputs.length) {
+        currentState.storedInputs.push(currentState.inputValue);
+      } else if (
+        currentState.storedInputs[currentState.storedInputs.length - 1] !==
+        currentState.inputValue
+      ) {
         //Don't store if input is unchanged
-        storedInputs.push(currentInputValue);
+        currentState.storedInputs.push(currentState.inputValue);
       }
     }
-    currentInputValue = [];
-    cursorPosition = 0;
-  } else if (storePosition === -1 && (button === '⬆' || button === '⬇')) {
-    storedInputs.push(currentInputValue);
+    currentState.inputValue = [];
+    currentState.cursorPosition = 0;
+  } else if (
+    currentState.storePosition === -1 &&
+    (button === '⬆' || button === '⬇')
+  ) {
+    currentState.storedInputs.push(currentState.inputValue);
   }
 
   switch (bSuperType) {
     case 'input':
-      buttonOutput = pressInput(
-        button,
-        bType,
-        currentInputValue,
-        currentOutputValue,
-        cursorPosition
-      );
-      break;
+      return pressInput(button, bType, currentState);
 
     case '=':
-      buttonOutput = pressEquals(currentInputValue, currentOutputValue);
-      break;
+      return pressEquals(currentState);
 
     case 'DEL':
-      buttonOutput = pressDel(
-        currentInputValue,
-        currentOutputValue,
-        cursorPosition
-      );
-      break;
+      return pressDel(currentState);
 
     case 'AC':
-      buttonOutput = pressAC();
-      break;
+      return pressAC(currentState);
 
     case 'mode':
-      buttonOutput = pressMode(
-        button,
-        currentInputValue,
-        currentOutputValue,
-        cursorPosition,
-        storedInputs,
-        storePosition,
-        shift
-      );
-      break;
+      return pressMode(button, currentState);
 
     case 'display':
-      buttonOutput = pressDisplay(
-        button,
-        currentInputValue,
-        currentOutputValue,
-        cursorPosition,
-        storedInputs,
-        storePosition,
-        shift,
-        displayMode
-      );
-      break;
+      return pressDisplay(button, currentState);
 
     default:
-      console.error('Unhandled button press.');
-      break;
+      currentState.outputValue = ['error'];
+      return currentState;
   }
-
-  buttonOutput.storedInputs = storedInputs;
-  return buttonOutput;
 }

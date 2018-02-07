@@ -1,60 +1,58 @@
-import { buttonReturn } from './ButtonUtilities';
-
-export function pressMode(
-  button,
-  input,
-  output,
-  cursorPosition,
-  storedInputs = [],
-  storePosition = -1,
-  shift
-) {
+export function pressMode(button, currentState) {
   switch (button) {
     case 'shift':
-      if (shift === false) {
-        shift = true;
+      if (currentState.shift === false) {
+        currentState.shift = true;
       } else {
-        shift = false;
+        currentState.shift = false;
       }
       break;
 
     case '⬅':
-      if (cursorPosition > 0) {
-        cursorPosition--;
+      if (currentState.cursorPosition > 0) {
+        currentState.cursorPosition--;
       } else {
-        cursorPosition = input.length;
+        currentState.cursorPosition = currentState.inputValue.length;
       }
       break;
 
     case '➡':
-      if (cursorPosition < input.length) {
-        cursorPosition++;
+      if (currentState.cursorPosition < currentState.inputValue.length) {
+        currentState.cursorPosition++;
       } else {
-        cursorPosition = 0;
+        currentState.cursorPosition = 0;
       }
       break;
 
     case '⬆':
-      if (storedInputs.length > 0 && cursorPosition < 0) {
-        if (storePosition === -1) {
-          storePosition = storedInputs.length - 2;
-        } else if (storePosition > 0) {
-          storePosition--;
+      if (
+        currentState.storedInputs.length > 0 &&
+        currentState.cursorPosition < 0
+      ) {
+        if (currentState.storePosition === -1) {
+          currentState.storePosition = currentState.storedInputs.length - 2;
+        } else if (currentState.storePosition > 0) {
+          currentState.storePosition--;
         } else {
-          storePosition = storedInputs.length - 1;
+          currentState.storePosition = currentState.storedInputs.length - 1;
         }
-        input = storedInputs[storePosition];
+        currentState.inputValue =
+          currentState.storedInputs[currentState.storePosition];
       }
       break;
 
     case '⬇':
-      if (storedInputs.length > 0 && cursorPosition < 0) {
-        if (storePosition < storedInputs.length - 1) {
-          storePosition++;
+      if (
+        currentState.storedInputs.length > 0 &&
+        currentState.cursorPosition < 0
+      ) {
+        if (currentState.storePosition < currentState.storedInputs.length - 1) {
+          currentState.storePosition++;
         } else {
-          storePosition = 0;
+          currentState.storePosition = 0;
         }
-        input = storedInputs[storePosition];
+        currentState.inputValue =
+          currentState.storedInputs[currentState.storePosition];
       }
       break;
 
@@ -62,5 +60,5 @@ export function pressMode(
       console.error(button + ' is WIP');
       break;
   }
-  return buttonReturn(input, output, cursorPosition, storePosition, shift);
+  return currentState;
 }

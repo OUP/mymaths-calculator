@@ -3,10 +3,10 @@ import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
 
 //Do the calculation on pressing =
-export function calcEval(inputArray, oldOutput = '0') {
+export function calcEval(inputValue, oldOutput = '0') {
   //Pass input array by value not by reference
   let outputArray = [];
-  outputArray = inputArray.slice(0);
+  outputArray = inputValue.slice(0);
 
   //Stitch together adjacent digits
   for (let i = 0; i < outputArray.length; i++) {

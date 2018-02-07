@@ -30,8 +30,8 @@ export function initialiseState(context) {
 function updateValues(context, buttonEffect) {
   updateShift(context, buttonEffect.shift);
   updateCursorPostion(context, buttonEffect.cursorPosition);
-  updateInput(context, buttonEffect.input, buttonEffect.cursorPosition);
-  updateOutput(context, buttonEffect.output, context.state.displayMode);
+  updateInput(context, buttonEffect.inputValue, buttonEffect.cursorPosition);
+  updateOutput(context, buttonEffect.outputValue, context.state.displayMode);
   updateStoredInputs(context, buttonEffect.storedInputs);
   updateStorePosition(context, buttonEffect.storePosition);
 }
@@ -48,17 +48,17 @@ function updateCursorPostion(context, cursorPosition) {
   });
 }
 
-function updateInput(context, input, cursorPosition) {
+function updateInput(context, inputValue, cursorPosition) {
   context.setState({
-    inputValue: input,
-    inputStr: parseToRender(input, cursorPosition)
+    inputValue: inputValue,
+    inputStr: parseToRender(inputValue, cursorPosition)
   });
 }
 
-function updateOutput(context, output, displayMode) {
+function updateOutput(context, outputValue, displayMode) {
   context.setState({
-    outputValue: output,
-    outputStr: parseToRender(output, -1, displayMode)
+    outputValue: outputValue,
+    outputStr: parseToRender(outputValue, -1, displayMode)
   });
 }
 
@@ -76,7 +76,11 @@ function updateStorePosition(context, storePosition) {
 
 function updateDisplay(context, buttonEffect) {
   context.setState({
-    outputStr: parseToRender(buttonEffect.output, -1, buttonEffect.displayMode),
+    outputStr: parseToRender(
+      buttonEffect.outputValue,
+      -1,
+      buttonEffect.displayMode
+    ),
     displayMode: buttonEffect.displayMode
   });
 }

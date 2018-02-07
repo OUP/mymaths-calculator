@@ -1,25 +1,27 @@
-import { buttonReturn, splitInputAtCursor } from './ButtonUtilities';
+import { splitInputAtCursor, cloneState } from './ButtonUtilities';
 
-export const pressDel = function recur(input, output, cursorPosition) {
-  const splitInput = splitInputAtCursor(input, cursorPosition);
-  let newInput;
+export const pressDel = function recur(currentState) {
+  const splitInput = splitInputAtCursor(currentState);
 
   //Recursion to get inside brackets
   const funcArg = splitInput.arg;
   if (funcArg) {
     if (funcArg.length) {
-      const newFuncArg = recur(funcArg, output, funcArg.length).input;
-      splitInput.start[cursorPosition - 1].argument = newFuncArg;
-      newInput = splitInput.start.concat(splitInput.end);
-      return buttonReturn(newInput, output, cursorPosition);
+      const funcState = cloneState(currentState);
+      funcState.inputValue = funcArg;
+      funcState.cursorPosition = funcArg.length;
+      const newFuncArg = recur(funcState).inputValue;
+      splitInput.start[currentState.cursorPosition - 1].argument = newFuncArg;
+      currentState.inputValue = splitInput.start.concat(splitInput.end);
+      return currentState;
     }
   }
 
-  newInput = splitInput.start;
-  newInput.pop();
-  newInput = newInput.concat(splitInput.end);
-  if (cursorPosition > 0) {
-    cursorPosition--;
+  currentState.inputValue = splitInput.start;
+  currentState.inputValue.pop();
+  currentState.inputValue = currentState.inputValue.concat(splitInput.end);
+  if (currentState.cursorPosition > 0) {
+    currentState.cursorPosition--;
   }
-  return buttonReturn(newInput, output, cursorPosition);
+  return currentState;
 };

@@ -1,33 +1,15 @@
-import { buttonReturn } from './ButtonUtilities';
-
-export function pressDisplay(
-  button,
-  currentInputValue,
-  currentOutputValue,
-  cursorPosition,
-  storedInputs,
-  storePosition,
-  shift,
-  displayMode
-) {
+export function pressDisplay(button, currentState) {
   switch (button) {
     case 'S⇔D':
-      if (displayMode === 'fraction') {
-        displayMode = 'decimal';
+      if (currentState.displayMode === 'fraction') {
+        currentState.displayMode = 'decimal';
       } else {
-        displayMode = 'fraction';
+        currentState.displayMode = 'fraction';
       }
       break;
 
     default:
       break;
   }
-  return buttonReturn(
-    currentInputValue,
-    currentOutputValue,
-    cursorPosition,
-    storePosition,
-    shift,
-    displayMode
-  );
+  return currentState;
 }

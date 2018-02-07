@@ -1,52 +1,45 @@
-import { buttonReturn, splitInputAtCursor } from './ButtonUtilities';
-import { pressNumber } from './PressNumber';
-import { pressOperator } from './PressOperator';
-import { pressAns } from './PressAns';
+import { splitInputAtCursor, cloneState } from './ButtonUtilities';
 import { pressFunction } from './PressFunction';
 
-export const pressInput = function recur(
-  button,
-  bType,
-  input,
-  output,
-  cursorPosition
-) {
-  const splitInput = splitInputAtCursor(input, cursorPosition);
-  let buttonOutput;
-  let newInput;
+export const pressInput = function recur(button, bType, currentState) {
+  if (currentState.cursorPosition === -1) {
+    currentState.inputValue = [];
+    currentState.cursorPosition++;
+  }
+
+  const splitInput = splitInputAtCursor(currentState);
 
   //Recursion to get inside brackets
   const funcArg = splitInput.arg;
   if (funcArg && button !== ')') {
-    const newFuncArg = recur(button, bType, funcArg, output, funcArg.length)
-      .input;
-    splitInput.start[cursorPosition - 1].argument = newFuncArg;
-    newInput = splitInput.start.concat(splitInput.end);
-    return buttonReturn(newInput, output, cursorPosition);
+    const funcState = cloneState(currentState);
+    funcState.inputValue = funcArg;
+    funcState.cursorPosition = funcArg.length;
+    const newFuncArg = recur(button, bType, funcState).inputValue;
+    splitInput.start[currentState.cursorPosition - 1].argument = newFuncArg;
+    currentState.inputValue = splitInput.start.concat(splitInput.end);
+    return currentState;
   }
 
+  currentState.inputValue = splitInput.start;
+
   switch (bType) {
-    case 'number':
-      buttonOutput = pressNumber(button, splitInput.start, cursorPosition);
-      break;
-
-    case 'operator':
-      buttonOutput = pressOperator(button, splitInput.start, cursorPosition);
-      break;
-
-    case 'Ans':
-      buttonOutput = pressAns(splitInput.start, cursorPosition);
-      break;
-
     case 'function':
-      buttonOutput = pressFunction(button, splitInput.start, cursorPosition);
+      pressFunction(button, currentState);
       break;
 
     default:
-      console.error(bType + ' not defined correctly.');
+      pressButton(button, currentState);
       break;
   }
 
-  newInput = buttonOutput.newInput.concat(splitInput.end);
-  return buttonReturn(newInput, output, buttonOutput.newCursorPosition);
+  currentState.inputValue = currentState.inputValue.concat(splitInput.end);
+  currentState.cursorPosition = currentState.cursorPosition;
+  return currentState;
 };
+
+function pressButton(button, currentState) {
+  currentState.inputValue.push(button.toString());
+  currentState.cursorPosition++;
+  return currentState;
+}
