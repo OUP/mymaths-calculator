@@ -1,24 +1,3 @@
-export function buttonReturn(
-  newInput,
-  output,
-  cursorPosition = 0,
-  storePosition = -1,
-  shift = false,
-  displayMode = 'fraction'
-) {
-  if (output.constructor !== Array) {
-    output = [output];
-  }
-  return {
-    input: newInput,
-    output: output,
-    cursorPosition: cursorPosition,
-    storePosition: storePosition,
-    shift: shift,
-    displayMode: displayMode
-  };
-}
-
 export function splitInputAtCursor(currentState) {
   const inputValue = currentState.inputValue;
   const cursorPosition = currentState.cursorPosition;
