@@ -3,8 +3,10 @@ import { pressFunction } from './PressFunction';
 
 export const pressInput = function recur(button, bType, currentState) {
   if (currentState.cursorPosition === -1) {
-    currentState.inputValue = [];
-    currentState.cursorPosition++;
+    if (currentState.storePosition === -1) {
+      currentState.inputValue = [];
+    }
+    currentState.cursorPosition = currentState.inputValue.length;
   }
 
   const splitInput = splitInputAtCursor(currentState);

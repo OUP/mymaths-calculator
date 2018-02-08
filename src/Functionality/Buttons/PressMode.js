@@ -30,7 +30,11 @@ export function pressMode(button, currentState) {
         currentState.cursorPosition < 0
       ) {
         if (currentState.storePosition === -1) {
-          currentState.storePosition = currentState.storedInputs.length - 2;
+          if (currentState.storedInputs.length >= 2) {
+            currentState.storePosition = currentState.storedInputs.length - 2;
+          } else if (currentState.storedInputs.length === 1) {
+            currentState.storePosition = 0;
+          }
         } else if (currentState.storePosition > 0) {
           currentState.storePosition--;
         } else {
