@@ -1,5 +1,6 @@
 const Fraction = require('fraction.js');
 import { Decimal } from 'decimal.js';
+import { buttonType } from './ButtonType';
 
 //This will become more complicated to deal with fractions etc.
 export function parseToRender(
@@ -27,38 +28,72 @@ function addCursor(arr, position) {
 }
 
 function parseElement(el, displayMode = 'default') {
-  if (typeof el === 'string') {
-    if (displayMode === 'default') {
+  const type = buttonType(el);
+  switch (type) {
+    case 'number':
+      return parseNumber(el, displayMode);
+
+    case 'operator':
       return opToStringMap(el);
-    } else if (displayMode === 'fraction') {
-      if (!el.includes('/')) {
-        console.log('el', el);
-        const decimal = new Decimal(el);
-        if (decimal.toFraction() === decimal.toFraction(10000)) {
-          const frac = new Fraction(el);
-          return frac.toFraction();
+
+    case 'function':
+      if (el.function) {
+        const func = funcToStringMap(el.function);
+        if (el.argument) {
+          return func + parseToRender(el.argument);
         } else {
-          return decimal;
+          return func;
         }
       } else {
-        const frac = new Fraction(el);
-        return frac.toFraction();
+        return el;
       }
-    } else if (displayMode === 'decimal') {
-      if (!el.includes('/')) {
-        const decimal = new Decimal(el);
-        return decimal;
+
+    default:
+      return el;
+  }
+}
+
+function parseNumber(el, displayMode = 'default') {
+  if (el === '(-)') {
+    el = '-';
+  }
+
+  switch (displayMode) {
+    case 'fraction':
+      if (!checkNumComplexity(el)) {
+        console.log('got here');
+        el = new Fraction(el);
+        return el.toFraction();
       } else {
-        const recDec = new Fraction(el);
-        return recDec.toString();
+        return el;
       }
+
+    case 'decimal':
+      if (el.includes('/')) {
+        el = new Fraction(el);
+        return el.toString();
+      } else {
+        return el;
+      }
+
+    default:
+      return el;
+  }
+}
+
+function checkNumComplexity(el) {
+  if (!el.includes('/')) {
+    el = new Decimal(el);
+    if (
+      el < 100000 &&
+      el.toFraction(10000).toString() === el.toFraction(100000).toString()
+    ) {
+      return false;
+    } else {
+      return true;
     }
-  } else if (typeof el === 'number') {
-    return el.toString();
-  } else if (el.constructor === Array) {
-    return el[0].toString();
   } else {
-    return funcToStringMap(el.function) + parseToRender(el.argument);
+    return true;
   }
 }
 
@@ -101,7 +136,10 @@ function funcToStringMap(func) {
     case '(':
       return '(';
 
+    case ')':
+      return ')';
+
     default:
-      return "didn't render";
+      return func;
   }
 }
