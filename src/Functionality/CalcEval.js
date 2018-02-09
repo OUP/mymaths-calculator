@@ -179,7 +179,12 @@ function executeOp(inputArray, position) {
 
   output.type = buttonType(output.value);
   output.priority = opPriority(output);
-  outputArray.splice(position - 1, 3, output);
+  if (operation !== 'x²' && operation !== 'x!') {
+    outputArray.splice(position - 1, 3, output);
+  } else {
+    outputArray.splice(position - 1, 2, output);
+  }
+
   console.log('outputArray', outputArray);
   return outputArray;
 }
