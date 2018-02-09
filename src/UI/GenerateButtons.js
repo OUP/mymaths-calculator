@@ -35,7 +35,7 @@ function unshiftedGrid(position, column) {
     case 'middle':
       switch (column) {
         case '0':
-          return ['|x|', 'frac', '(-)'];
+          return ['|x|', 'frac', '-'];
 
         case '1':
           return ['x²', '√(x)', 'ENG'];

@@ -19,7 +19,7 @@ class CalcButton extends Component {
           className={buttonStyle(this.props.name, this.props.shift)}
           onClick={this.press}
         >
-          {this.props.name}
+          {nameToLabelMap(this.props.name)}
         </button>
       </div>
     );
@@ -33,7 +33,7 @@ function buttonStyle(button, shift = false) {
     style = 'DelButton';
   } else if (
     button === 'xⁿ' ||
-    button === '(-)' ||
+    button === '-' ||
     button === 'x²' ||
     button === 'x!'
   ) {
@@ -57,6 +57,16 @@ function buttonStyle(button, shift = false) {
     return 'Shift' + style;
   } else {
     return style;
+  }
+}
+
+function nameToLabelMap(name) {
+  switch (name) {
+    case '-':
+      return '(-)';
+
+    default:
+      return name;
   }
 }
 
