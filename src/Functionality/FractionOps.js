@@ -9,6 +9,9 @@ export function fractionOp(v1, operation, v2 = 0) {
     case 'x²':
       return fracMultiply(v1, v1);
 
+    case 'x³':
+      return fracMultiply(fracMultiply(v1, v1), v1);
+
     case 'x!':
       return fracFactorial(v1);
 

@@ -179,7 +179,7 @@ function executeOp(inputArray, position) {
 
   output.type = buttonType(output.value);
   output.priority = opPriority(output);
-  if (operation !== 'x²' && operation !== 'x!') {
+  if (operation !== 'x²' && operation !== 'x!' && operation !== 'x³') {
     outputArray.splice(position - 1, 3, output);
   } else {
     outputArray.splice(position - 1, 2, output);
@@ -213,6 +213,9 @@ function opPriority(element) {
         return 2;
 
       case 'x²':
+        return 2;
+
+      case 'x³':
         return 2;
 
       case 'x!':
