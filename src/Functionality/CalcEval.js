@@ -19,17 +19,7 @@ export function calcEval(inputValue, oldOutput = '0') {
     }
   }
 
-  //Assemble function arguments
-  for (let i = 0; i < outputArray.length; i++) {
-    if (buttonType(outputArray[i]) === 'function' && outputArray[i + 1]) {
-      if (!outputArray[i].argument.includes(')')) {
-        const updatedFunc = cloneState(outputArray[i]);
-        updatedFunc.argument.push(outputArray[i + 1]);
-        outputArray.splice(i, 2, updatedFunc);
-        i--;
-      }
-    }
-  }
+  outputArray = assembleArguments(outputArray);
 
   //Substitute in value for Ans
   outputArray = replaceAns(outputArray, oldOutput);
@@ -261,3 +251,24 @@ function checkIfFraction(x) {
     return false;
   }
 }
+
+const assembleArguments = function recur(outputArray) {
+  for (let i = 0; i < outputArray.length; i++) {
+    if (outputArray[i].argument && outputArray[i + 1]) {
+      if (!outputArray[i].argument.includes(')')) {
+        const updatedFunc = cloneState(outputArray[i]);
+        updatedFunc.argument.push(outputArray[i + 1]);
+        outputArray.splice(i, 2, updatedFunc);
+        i--;
+      }
+    }
+  }
+
+  for (let i = 0; i < outputArray.length; i++) {
+    if (outputArray[i].argument) {
+      const funcArg = outputArray[i].argument;
+      outputArray[i].argument = recur(funcArg);
+    }
+  }
+  return outputArray;
+};
