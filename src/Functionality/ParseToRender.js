@@ -8,6 +8,7 @@ export function parseToRender(
   cursorPosition = -1,
   displayMode = 'default'
 ) {
+  console.log('arr', arr);
   if (cursorPosition >= 0) {
     arr = addCursor(arr, cursorPosition);
   }

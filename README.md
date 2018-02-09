@@ -16,10 +16,6 @@ The following buttons are still idle:
 `π`
 shifted buttons
 
-Nested brackets `(())` are buggy.
-
-Cursor skips.
-
 Using multiple decimal points in a number outputs weird values instead of `syntax error`.
 
 Output values can be imprecise due to solvable errors with floating point arithmetic.

@@ -1,6 +1,7 @@
 import { buttonType } from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
+import { cloneState } from './Buttons/ButtonUtilities';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -14,7 +15,18 @@ export function calcEval(inputValue, oldOutput = '0') {
       if (buttonType(outputArray[i + 1]) === 'number') {
         outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);
         i--;
-        console.log('outputArray', outputArray);
+      }
+    }
+  }
+
+  //Assemble function arguments
+  for (let i = 0; i < outputArray.length; i++) {
+    if (buttonType(outputArray[i]) === 'function' && outputArray[i + 1]) {
+      if (!outputArray[i].argument.includes(')')) {
+        const updatedFunc = cloneState(outputArray[i]);
+        updatedFunc.argument.push(outputArray[i + 1]);
+        outputArray.splice(i, 2, updatedFunc);
+        i--;
       }
     }
   }
@@ -81,10 +93,8 @@ function findNextOp(inputArray) {
   //Skip prioritise ops if already prioritised
   if (!inputArray[0].priority && inputArray[0].priority !== 0) {
     prioritisedArray = prioritiseOps(inputArray);
-    console.log('gen prioritisedArray', prioritisedArray.slice(0));
   } else {
     prioritisedArray = inputArray;
-    console.log('received prioritisedArray', prioritisedArray.slice(0));
   }
 
   const output = {};
