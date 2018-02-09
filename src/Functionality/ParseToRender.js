@@ -61,7 +61,6 @@ function parseNumber(el, displayMode = 'default') {
   switch (displayMode) {
     case 'fraction':
       if (!checkNumComplexity(el)) {
-        console.log('got here');
         el = new Fraction(el);
         return el.toFraction();
       } else {
@@ -82,6 +81,7 @@ function parseNumber(el, displayMode = 'default') {
 }
 
 function checkNumComplexity(el) {
+  //Check whether el is too complicated to represent as a fraction
   if (!el.includes('/')) {
     el = new Decimal(el);
     if (
@@ -93,7 +93,8 @@ function checkNumComplexity(el) {
       return true;
     }
   } else {
-    return true;
+    //el is already a fraction
+    return false;
   }
 }
 
