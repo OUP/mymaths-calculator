@@ -14,17 +14,14 @@ The following buttons are still idle:
 `%`
 `ENG`
 `π`
+`(-)`
 shifted buttons
 
 Using multiple decimal points in a number outputs weird values instead of `syntax error`.
 
-Buggy nested brackets `(())`
-
 Output values can be imprecise due to solvable errors with floating point arithmetic.
 
 -+3 gives an infinite loop.
-
-Error if you try to retrieve a stored input before one exists.
 
 # Compulsory improvements
 
@@ -39,6 +36,8 @@ Add hotkeys.
 Better cursor.
 
 Improve design.
+
+Basic auto-corrections
 
 # Optional improvements
 

@@ -184,8 +184,6 @@ function executeOp(inputArray, position) {
   } else {
     outputArray.splice(position - 1, 2, output);
   }
-
-  console.log('outputArray', outputArray);
   return outputArray;
 }
 
@@ -258,22 +256,46 @@ function checkIfFraction(x) {
 }
 
 const assembleArguments = function recur(outputArray) {
+  let j = 0;
+  let recursionNeeded = false;
   for (let i = 0; i < outputArray.length; i++) {
-    if (outputArray[i].argument && outputArray[i + 1]) {
-      if (!outputArray[i].argument.includes(')')) {
-        const updatedFunc = cloneState(outputArray[i]);
-        updatedFunc.argument.push(outputArray[i + 1]);
-        outputArray.splice(i, 2, updatedFunc);
-        i--;
+    if (safeArgCheck(outputArray, i)) {
+      if (!safeArgCheck(outputArray, i + 1)) {
+        if (outputArray[i + 1]) {
+          const updatedFunc = cloneState(outputArray[i]);
+          updatedFunc.argument.push(outputArray[i + 1]);
+          outputArray.splice(i, 2, updatedFunc);
+          i--;
+          j++;
+          if (j >= 5000) {
+            console.error('recursion error');
+            return ['recursion error'];
+          }
+        }
+      } else {
+        recursionNeeded = true;
       }
     }
   }
-
-  for (let i = 0; i < outputArray.length; i++) {
-    if (outputArray[i].argument) {
-      const funcArg = outputArray[i].argument;
-      outputArray[i].argument = recur(funcArg);
-    }
+  if (recursionNeeded) {
+    outputArray = recur(outputArray);
   }
   return outputArray;
 };
+
+//Check whether element at i has an open argument
+function safeArgCheck(outputArray, i) {
+  if (outputArray[i]) {
+    if (outputArray[i].argument) {
+      if (!outputArray[i].argument.includes(')')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
