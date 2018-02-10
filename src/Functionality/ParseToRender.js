@@ -140,6 +140,15 @@ function funcToStringMap(func) {
     case 'tan(x)':
       return 'tan(';
 
+    case 'sin⁻¹':
+      return 'sin⁻¹(';
+
+    case 'cos⁻¹':
+      return 'cos⁻¹(';
+
+    case 'tan⁻¹':
+      return 'tan⁻¹(';
+
     case '(':
       return '(';
 

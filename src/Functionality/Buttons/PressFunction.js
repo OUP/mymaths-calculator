@@ -8,7 +8,10 @@ export function pressFunction(button, currentState) {
     button === '(' ||
     button === 'sin(x)' ||
     button === 'cos(x)' ||
-    button === 'tan(x)'
+    button === 'tan(x)' ||
+    button === 'sin⁻¹' ||
+    button === 'cos⁻¹' ||
+    button === 'tan⁻¹'
   ) {
     funcType = 'argAfter';
   }

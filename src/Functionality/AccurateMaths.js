@@ -64,6 +64,15 @@ export function accurateFunc(func, arg) {
     case 'tan(x)':
       return Math.tan(arg);
 
+    case 'sin⁻¹':
+      return Math.asin(arg);
+
+    case 'cos⁻¹':
+      return Math.acos(arg);
+
+    case 'tan⁻¹':
+      return Math.atan(arg);
+
     case '(':
       return arg;
   }
