@@ -11,5 +11,7 @@ export function pressDisplay(button, currentState) {
     default:
       break;
   }
+
+  currentState.shift = false;
   return currentState;
 }

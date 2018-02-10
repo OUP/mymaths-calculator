@@ -24,6 +24,7 @@ export const pressInput = function recur(button, bType, currentState) {
 
   currentState.inputValue = currentState.inputValue.concat(splitInput.end);
   currentState.cursorPosition = currentState.cursorPosition;
+  currentState.shift = false;
   return currentState;
 };
 

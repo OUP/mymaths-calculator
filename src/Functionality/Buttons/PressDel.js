@@ -9,5 +9,6 @@ export const pressDel = function recur(currentState) {
   if (currentState.cursorPosition > 0) {
     currentState.cursorPosition--;
   }
+  currentState.shift = false;
   return currentState;
 };

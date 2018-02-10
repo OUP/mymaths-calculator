@@ -6,6 +6,7 @@ export function pressEquals(currentState) {
   ];
   currentState.storePosition = -1;
   currentState.cursorPosition = -1;
+  currentState.shift = false;
 
   if (decideToStore(currentState)) {
     currentState.storedInputs.push(currentState.inputValue);
