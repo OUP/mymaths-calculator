@@ -1,4 +1,4 @@
-import { splitInputAtCursor, cloneState } from './ButtonUtilities';
+import { splitInputAtCursor } from './ButtonUtilities';
 
 export const pressDel = function recur(currentState) {
   const splitInput = splitInputAtCursor(currentState);
