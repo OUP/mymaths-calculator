@@ -106,6 +106,9 @@ function opToStringMap(op) {
     case 'x³':
       return '³';
 
+    case 'x⁻¹':
+      return '⁻¹';
+
     case 'x!':
       return '!';
 

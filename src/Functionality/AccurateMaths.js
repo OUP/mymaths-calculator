@@ -13,6 +13,9 @@ export function accurateOp(v1, operation, v2 = 0) {
     case 'x³':
       return multiply(multiply(v1, v1), v1);
 
+    case 'x⁻¹':
+      return divide('1', v1);
+
     case 'x!':
       return factorial(v1);
 

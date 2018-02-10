@@ -57,6 +57,7 @@ function checkForOperator(b) {
     b === 'xⁿ' ||
     b === 'x²' ||
     b === 'x³' ||
+    b === 'x⁻¹' ||
     b === 'x!'
   ) {
     return true;

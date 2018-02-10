@@ -36,6 +36,7 @@ function buttonStyle(button, shift = false) {
     button === '-' ||
     button === 'x²' ||
     button === 'x³' ||
+    button === 'x⁻¹' ||
     button === 'x!'
   ) {
     style = 'SmallButton';
