@@ -1,5 +1,5 @@
 //Arbitrary precision arithmetic
-import { Decimal } from 'decimal.js';
+import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {

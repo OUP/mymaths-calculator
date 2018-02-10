@@ -1,5 +1,5 @@
 const Fraction = require('fraction.js');
-import { Decimal } from 'decimal.js';
+import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
 
 //This will become more complicated to deal with fractions etc.
