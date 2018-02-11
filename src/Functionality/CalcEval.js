@@ -9,19 +9,8 @@ export function calcEval(inputValue, oldOutput = '0') {
   let outputArray = [];
   outputArray = inputValue.slice(0);
 
-  //Stitch together adjacent digits
-  for (let i = 0; i < outputArray.length; i++) {
-    if (buttonType(outputArray[i]) === 'number') {
-      if (buttonType(outputArray[i + 1]) === 'number') {
-        outputArray.splice(i, 2, outputArray[i] + outputArray[i + 1]);
-        i--;
-      }
-    }
-  }
-
+  outputArray = assembleNumbers(outputArray);
   outputArray = assembleArguments(outputArray);
-
-  //Substitute in value for Ans
   outputArray = replaceAns(outputArray, oldOutput);
 
   //Closed brackets are only used in organising the input, not to evaluate.
@@ -266,7 +255,20 @@ function checkIfFraction(x) {
   }
 }
 
-const assembleArguments = function recur(outputArray) {
+export function assembleNumbers(outputArray) {
+  const updatedArray = outputArray.slice(0);
+  for (let i = 0; i < updatedArray.length; i++) {
+    if (buttonType(updatedArray[i]) === 'number') {
+      if (buttonType(updatedArray[i + 1]) === 'number') {
+        updatedArray.splice(i, 2, updatedArray[i] + updatedArray[i + 1]);
+        i--;
+      }
+    }
+  }
+  return updatedArray;
+}
+
+export const assembleArguments = function recur(outputArray) {
   let j = 0;
   let recursionNeeded = false;
   for (let i = 0; i < outputArray.length; i++) {
@@ -295,7 +297,7 @@ const assembleArguments = function recur(outputArray) {
 };
 
 //Check whether element at i has an open argument
-function safeArgCheck(outputArray, i) {
+export function safeArgCheck(outputArray, i) {
   if (outputArray[i]) {
     if (outputArray[i].argument) {
       if (!outputArray[i].argument.includes(')')) {

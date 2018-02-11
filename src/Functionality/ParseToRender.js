@@ -1,7 +1,139 @@
+import React from 'react';
 const Fraction = require('fraction.js');
-import Decimal from 'decimal.js/decimal';
+//import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
+import { assembleNumbers, assembleArguments, safeArgCheck } from './CalcEval';
 
+export function parseToRender(
+  arr,
+  cursorPosition = -1,
+  displayMode = 'default'
+) {
+  if (cursorPosition >= 0) {
+    arr = addCursor(arr, cursorPosition);
+  }
+
+  arr = assembleNumbers(arr);
+  arr = assembleArguments(arr);
+  return <math>{arr.map(parseToMaths)}</math>;
+}
+
+function addCursor(arr, position) {
+  arr = arr.filter(x => x !== '¦');
+  arr.splice(position, 0, '¦');
+  return arr;
+}
+
+/*eslint-disable */
+export function parseToMaths(el) {
+  const bType = buttonType(el);
+  switch (bType) {
+    case 'number':
+      if (!el.includes('/')) {
+        return <mn>{el}</mn>;
+      } else {
+        el = new Fraction(el);
+        return (
+          <mfrac>
+            <mn>{el.n}</mn>
+            <mn>{el.d}</mn>
+          </mfrac>
+        );
+      }
+
+    case 'operator':
+      switch (el) {
+        case 'x²':
+          return (
+            <msup>
+              <mn>{}</mn>
+              <mn>{2}</mn>
+            </msup>
+          );
+
+        case 'x³':
+          return (
+            <msup>
+              <mn>{}</mn>
+              <mn>{3}</mn>
+            </msup>
+          );
+
+        default:
+          return <mo>{el}</mo>;
+      }
+
+    case 'function':
+      if (safeArgCheck(el)) {
+        const dispArg = el.argument.filter(x => x !== ')');
+        return (
+          <mtext>
+            {funcToStringMap(el.function)}
+            <mfenced>{parseToRender(dispArg)}</mfenced>
+          </mtext>
+        );
+      } else if (el !== ')') {
+        return (
+          <mtext>
+            {funcToStringMap(el.function)}
+            (
+            {parseToRender(el.argument)}
+          </mtext>
+        );
+      } else {
+        return <mtext>)</mtext>;
+      }
+
+    default:
+      return <mtext>{el}</mtext>;
+  }
+}
+/*eslint-enable */
+
+function funcToStringMap(func) {
+  switch (func) {
+    case '|x|':
+      return '|';
+
+    case 'log(x)':
+      return 'log';
+
+    case 'ln(x)':
+      return 'ln';
+
+    case '√(x)':
+      return '√';
+
+    case 'sin(x)':
+      return 'sin';
+
+    case 'cos(x)':
+      return 'cos';
+
+    case 'tan(x)':
+      return 'tan';
+
+    case 'sin⁻¹':
+      return 'sin⁻¹';
+
+    case 'cos⁻¹':
+      return 'cos⁻¹';
+
+    case 'tan⁻¹':
+      return 'tan⁻¹';
+
+    case '(':
+      return '';
+
+    case ')':
+      return ')';
+
+    default:
+      return func;
+  }
+}
+
+/*
 //This will become more complicated to deal with fractions etc.
 export function parseToRender(
   arr,
@@ -159,3 +291,5 @@ function funcToStringMap(func) {
       return func;
   }
 }
+
+*/
