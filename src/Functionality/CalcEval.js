@@ -271,6 +271,7 @@ export function assembleNumbers(outputArray) {
 export const assembleArguments = function recur(outputArray) {
   let j = 0;
   let recursionNeeded = false;
+  const arrFromPrevIteration = outputArray.slice(0);
   for (let i = 0; i < outputArray.length; i++) {
     if (safeArgCheck(outputArray, i)) {
       if (!safeArgCheck(outputArray, i + 1)) {
@@ -290,7 +291,7 @@ export const assembleArguments = function recur(outputArray) {
       }
     }
   }
-  if (recursionNeeded) {
+  if (recursionNeeded && !identicalArrays(outputArray, arrFromPrevIteration)) {
     outputArray = recur(outputArray);
   }
   return outputArray;
@@ -311,4 +312,8 @@ export function safeArgCheck(outputArray, i) {
   } else {
     return false;
   }
+}
+
+function identicalArrays(arr1, arr2) {
+  return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
