@@ -64,24 +64,37 @@ export function parseToMaths(el) {
       }
 
     case 'function':
-      if (safeArgCheck(el)) {
-        const dispArg = el.argument.filter(x => x !== ')');
-        return (
-          <mtext>
-            {funcToStringMap(el.function)}
-            <mfenced>{parseToRender(dispArg)}</mfenced>
-          </mtext>
-        );
-      } else if (el !== ')') {
-        return (
-          <mtext>
-            {funcToStringMap(el.function)}
-            (
-            {parseToRender(el.argument)}
-          </mtext>
-        );
-      } else {
-        return <mtext>)</mtext>;
+      switch (el.function) {
+        case '√(x)':
+          const dispArg = el.argument.filter(x => x !== 'cArg');
+          return <msqrt>{parseToRender(dispArg)}</msqrt>;
+
+        default:
+          if (safeArgCheck(el)) {
+            const dispArg = el.argument.filter(x => x !== ')');
+            return (
+              <mtext>
+                {funcToStringMap(el.function)}
+                <mfenced>{parseToRender(dispArg)}</mfenced>
+              </mtext>
+            );
+          } else if (el !== ')' && el !== 'cArg') {
+            return (
+              <mtext>
+                {funcToStringMap(el.function)}
+                (
+                {parseToRender(el.argument)}
+              </mtext>
+            );
+          } else {
+            switch (el) {
+              case ')':
+                return <mtext>)</mtext>;
+
+              case 'cArg':
+                break;
+            }
+          }
       }
 
     default:

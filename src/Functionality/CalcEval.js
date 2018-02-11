@@ -16,6 +16,7 @@ export function calcEval(inputValue, oldOutput = '0') {
   //Closed brackets are only used in organising the input, not to evaluate.
   outputArray = outputArray.filter(x => x !== ')');
   outputArray = outputArray.filter(x => x !== '|');
+  outputArray = outputArray.filter(x => x !== 'cArg');
 
   while (moreOpsToDo(outputArray)) {
     outputArray = doNextOp(outputArray);
@@ -301,7 +302,10 @@ export const assembleArguments = function recur(outputArray) {
 export function safeArgCheck(outputArray, i) {
   if (outputArray[i]) {
     if (outputArray[i].argument) {
-      if (!outputArray[i].argument.includes(')')) {
+      if (
+        !outputArray[i].argument.includes(')') &&
+        !outputArray[i].argument.includes('cArg')
+      ) {
         return true;
       } else {
         return false;
