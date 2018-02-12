@@ -15,7 +15,7 @@ export function parseToRender(
 
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
-  return <math>{arr.map(parseToMaths)}</math>;
+  return <math>{parseToMaths(arr)}</math>;
 }
 
 function addCursor(arr, position) {
@@ -24,8 +24,12 @@ function addCursor(arr, position) {
   return arr;
 }
 
+function parseToMaths(arr) {
+  return arr.map(parseElToMaths);
+}
+
 /*eslint-disable */
-export function parseToMaths(el) {
+function parseElToMaths(el) {
   const bType = buttonType(el);
   switch (bType) {
     case 'number':
@@ -67,7 +71,7 @@ export function parseToMaths(el) {
       switch (el.function) {
         case '√(x)':
           const dispArg = el.argument.filter(x => x !== 'cArg');
-          return <msqrt>{parseToRender(dispArg)}</msqrt>;
+          return <msqrt>{parseToMaths(dispArg)}</msqrt>;
 
         default:
           if (safeArgCheck(el)) {
