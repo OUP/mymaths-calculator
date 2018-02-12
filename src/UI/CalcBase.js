@@ -20,7 +20,9 @@ class CalcBase extends Component {
       <Draggable>
         <div className="CalcBase">
           <div className="InputDisplay">{this.state.inputStr}</div>
-          <div className="OutputDisplay">{this.state.outputStr}</div>
+          <div className="OutputDisplay">
+            <div className="OutputText">{this.state.outputStr}</div>
+          </div>
           <ButtonsGrid
             press={this.press}
             shift={this.state.shift}

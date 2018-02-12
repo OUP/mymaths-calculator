@@ -3,29 +3,33 @@ const Fraction = require('fraction.js');
 //import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
 import { assembleNumbers, assembleArguments, safeArgCheck } from './CalcEval';
+import '../UI/Maths.css';
 
 export function parseToRender(
   arr,
   cursorPosition = -1,
   displayMode = 'default'
 ) {
+  return (
+    <math className="Maths">
+      {parseToMaths(arr, cursorPosition, displayMode)}
+    </math>
+  );
+}
+
+function parseToMaths(arr, cursorPosition, displayMode) {
   if (cursorPosition >= 0) {
     arr = addCursor(arr, cursorPosition);
   }
-
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
-  return <math>{parseToMaths(arr)}</math>;
+  return arr.map(parseElToMaths);
 }
 
 function addCursor(arr, position) {
   arr = arr.filter(x => x !== '¦');
   arr.splice(position, 0, '¦');
   return arr;
-}
-
-function parseToMaths(arr) {
-  return arr.map(parseElToMaths);
 }
 
 /*eslint-disable */
@@ -38,7 +42,7 @@ function parseElToMaths(el) {
       } else {
         el = new Fraction(el);
         return (
-          <mfrac>
+          <mfrac className="Fraction">
             <mn>{el.n}</mn>
             <mn>{el.d}</mn>
           </mfrac>
@@ -68,14 +72,19 @@ function parseElToMaths(el) {
       }
 
     case 'function':
+      let dispArg;
       switch (el.function) {
         case '√(x)':
-          const dispArg = el.argument.filter(x => x !== 'cArg');
-          return <msqrt>{parseToMaths(dispArg)}</msqrt>;
+          dispArg = el.argument.filter(x => x !== 'cArg');
+          return (
+            <msqrt className="Root">
+              <mstyle className="InsideRoot">{parseToMaths(dispArg)}</mstyle>
+            </msqrt>
+          );
 
         default:
           if (safeArgCheck(el)) {
-            const dispArg = el.argument.filter(x => x !== ')');
+            dispArg = el.argument.filter(x => x !== ')');
             return (
               <mtext>
                 {funcToStringMap(el.function)}
@@ -87,7 +96,7 @@ function parseElToMaths(el) {
               <mtext>
                 {funcToStringMap(el.function)}
                 (
-                {parseToRender(el.argument)}
+                {parseToMaths(el.argument)}
               </mtext>
             );
           } else {
@@ -100,9 +109,14 @@ function parseElToMaths(el) {
             }
           }
       }
+      break;
 
     default:
-      return <mtext>{el}</mtext>;
+      return (
+        <mtext>
+          <mstyle className="Cursor">{el}</mstyle>
+        </mtext>
+      );
   }
 }
 /*eslint-enable */
