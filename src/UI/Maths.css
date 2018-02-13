@@ -1,17 +1,17 @@
 .Maths {
-  font-size: 100%;
-}
-
-.Root {
   font-size: 80%;
 }
 
+.Root {
+  font-size: 100%;
+}
+
 .InsideRoot {
-  font-size: 125%;
+  font-size: 100%;
 }
 
 .Fraction {
-  font-size: 130%;
+  font-size: 100%;
 }
 
 .Cursor {

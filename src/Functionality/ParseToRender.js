@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 const Fraction = require('fraction.js');
 //import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
@@ -10,7 +11,7 @@ export function parseToRender(
   cursorPosition = -1,
   displayMode = 'default'
 ) {
-  return (
+  return ReactDOMServer.renderToString(
     <math className="Maths">
       {parseToMaths(arr, cursorPosition, displayMode)}
     </math>
@@ -130,7 +131,7 @@ function parseElToMaths(el) {
     default:
       return (
         <mtext>
-          <mstyle className="Cursor">{el}</mstyle>
+          {el}
         </mtext>
       );
   }
