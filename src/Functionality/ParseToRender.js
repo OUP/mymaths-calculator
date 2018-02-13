@@ -87,7 +87,7 @@ function parseElToMaths(el) {
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
             dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
-            return <mfenced>{parseToMaths(dispArg)}</mfenced>;
+            return <mfenced separators="">{parseToMaths(dispArg)}</mfenced>;
           } else {
             return (
               <mtext>
@@ -104,7 +104,7 @@ function parseElToMaths(el) {
             return (
               <mtext>
                 {funcToStringMap(el.function)}
-                <mfenced>{parseToMaths(dispArg)}</mfenced>
+                <mfenced separators="">{parseToMaths(dispArg)}</mfenced>
               </mtext>
             );
           } else if (el !== ')' && el !== 'cArg') {
