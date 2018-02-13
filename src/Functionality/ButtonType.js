@@ -17,6 +17,9 @@ export function buttonType(b) {
     case checkForMisc(b):
       return b;
 
+    case checkForCArg(b):
+      return 'cArg';
+
     case checkForNull(b):
       return null;
 
@@ -84,6 +87,14 @@ function checkForDisplay(b) {
 
 function checkForMisc(b) {
   if (b === 'DEL' || b === 'AC' || b === 'Ans' || b === '=' || b === '¦') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function checkForCArg(b) {
+  if (b.includes('cArg')) {
     return true;
   } else {
     return false;

@@ -23,7 +23,8 @@ export function initialiseState(context) {
     cursorPosition: 0,
     storedInputs: [],
     storePosition: -1,
-    displayMode: 'fraction'
+    displayMode: 'fraction',
+    functionKey: 0 //Used for automatically destroying hidden characters
   };
 }
 
@@ -34,6 +35,7 @@ function updateValues(context, buttonEffect) {
   updateOutput(context, buttonEffect.outputValue, context.state.displayMode);
   updateStoredInputs(context, buttonEffect.storedInputs);
   updateStorePosition(context, buttonEffect.storePosition);
+  updateFunctionKey(context, buttonEffect.functionKey);
 }
 
 function updateShift(context, shiftValue) {
@@ -82,5 +84,11 @@ function updateDisplay(context, buttonEffect) {
       buttonEffect.displayMode
     ),
     displayMode: buttonEffect.displayMode
+  });
+}
+
+function updateFunctionKey(context, functionKey) {
+  context.setState({
+    functionKey: functionKey
   });
 }

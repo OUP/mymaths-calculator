@@ -33,6 +33,7 @@ function addCursor(arr, position) {
 }
 
 /*eslint-disable */
+//Note: cArg denotes a hidden character
 function parseElToMaths(el) {
   const bType = buttonType(el);
   switch (bType) {
@@ -85,6 +86,7 @@ function parseElToMaths(el) {
         default:
           if (safeArgCheck(el)) {
             dispArg = el.argument.filter(x => x !== ')');
+            dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
             return (
               <mtext>
                 {funcToStringMap(el.function)}
@@ -103,12 +105,12 @@ function parseElToMaths(el) {
             switch (el) {
               case ')':
                 return <mtext>)</mtext>;
-
-              case 'cArg':
-                break;
             }
           }
       }
+      break;
+
+    case 'cArg':
       break;
 
     default:

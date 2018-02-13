@@ -17,7 +17,7 @@ export const pressInput = function recur(button, bType, currentState) {
       pressFunction(button, currentState);
       switch (button) {
         case '√(x)':
-          currentState.inputValue.push('cArg');
+          currentState.inputValue.push('cArg' + currentState.functionKey);
           break;
 
         default:

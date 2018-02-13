@@ -16,7 +16,7 @@ export function calcEval(inputValue, oldOutput = '0') {
   //Closed brackets are only used in organising the input, not to evaluate.
   outputArray = outputArray.filter(x => x !== ')');
   outputArray = outputArray.filter(x => x !== '|');
-  outputArray = outputArray.filter(x => x !== 'cArg');
+  outputArray = outputArray.filter(x => buttonType(x) !== 'cArg');
 
   while (moreOpsToDo(outputArray)) {
     outputArray = doNextOp(outputArray);
@@ -304,7 +304,7 @@ export function safeArgCheck(outputArray, i) {
     if (outputArray[i].argument) {
       if (
         !outputArray[i].argument.includes(')') &&
-        !outputArray[i].argument.includes('cArg')
+        !cArgCheck(outputArray[i].argument)
       ) {
         return true;
       } else {
@@ -316,6 +316,19 @@ export function safeArgCheck(outputArray, i) {
   } else {
     return false;
   }
+}
+
+function cArgCheck(argArray) {
+  if (argArray.length) {
+    for (let i = 0; i < argArray.length; i++) {
+      if (buttonType(argArray[i]) === 'cArg') {
+        return true;
+      }
+    }
+  } else {
+    return false;
+  }
+  return false;
 }
 
 function identicalArrays(arr1, arr2) {

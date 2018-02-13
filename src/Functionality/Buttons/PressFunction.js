@@ -35,12 +35,15 @@ function pressCloseBracket(currentState) {
 }
 
 function pressArgAfter(button, currentState) {
+  currentState.cursorPosition++;
+  currentState.functionKey++;
   currentState.inputValue.push({
     type: 'function',
     function: button,
-    argument: []
+    argument: [],
+    key: currentState.functionKey
+    //Key used to destroy hidden characters that go with the function if the function is deleted
   });
-  currentState.cursorPosition++;
 
   if (button === '|x|') {
     currentState.inputValue.push('|');
