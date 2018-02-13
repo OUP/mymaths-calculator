@@ -2,7 +2,7 @@ import React from 'react';
 const Fraction = require('fraction.js');
 //import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
-import { assembleNumbers, assembleArguments, safeArgCheck } from './CalcEval';
+import { assembleNumbers, assembleArguments } from './CalcEval';
 import '../UI/Maths.css';
 
 export function parseToRender(
@@ -83,14 +83,28 @@ function parseElToMaths(el) {
             </msqrt>
           );
 
-        default:
-          if (safeArgCheck(el)) {
+        case '(':
+          if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
-            dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+            dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
+            return <mfenced>{parseToMaths(dispArg)}</mfenced>;
+          } else {
+            return (
+              <mtext>
+                (
+                {parseToMaths(el.argument)}
+              </mtext>
+            );
+          }
+
+        default:
+          if (safeArgClosed(el) && el !== ')') {
+            dispArg = el.argument.filter(x => x !== ')');
+            dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
             return (
               <mtext>
                 {funcToStringMap(el.function)}
-                <mfenced>{parseToRender(dispArg)}</mfenced>
+                <mfenced>{parseToMaths(dispArg)}</mfenced>
               </mtext>
             );
           } else if (el !== ')' && el !== 'cArg') {
@@ -164,6 +178,17 @@ function funcToStringMap(func) {
     default:
       return func;
   }
+}
+
+function safeArgClosed(el) {
+  if (el) {
+    if (el.argument) {
+      if (el.argument.includes(')')) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 /*
