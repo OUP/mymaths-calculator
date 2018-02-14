@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import katex from 'katex';
 const Fraction = require('fraction.js');
 //import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
@@ -8,23 +8,26 @@ import '../UI/Maths.css';
 
 export function parseToRender(
   arr,
+  id,
   cursorPosition = -1,
   displayMode = 'default'
 ) {
-  return ReactDOMServer.renderToString(
-    <math className="Maths">
-      {parseToMaths(arr, cursorPosition, displayMode)}
-    </math>
-  );
+  const maths = parseToMaths(arr, cursorPosition, displayMode);
+  if (maths && document.getElementById(id)) {
+    katex.render(maths, document.getElementById(id));
+  }
 }
 
 function parseToMaths(arr, cursorPosition, displayMode) {
   if (cursorPosition >= 0) {
-    arr = addCursor(arr, cursorPosition);
+    //arr = addCursor(arr, cursorPosition);
   }
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
-  return arr.map(parseElToMaths);
+  return arr
+    .map(parseElToMaths)
+    .join('')
+    .toString();
 }
 
 function addCursor(arr, position) {
@@ -33,22 +36,16 @@ function addCursor(arr, position) {
   return arr;
 }
 
-/*eslint-disable */
 //Note: cArg denotes a hidden character
 function parseElToMaths(el) {
   const bType = buttonType(el);
   switch (bType) {
     case 'number':
       if (!el.includes('/')) {
-        return <mn>{el}</mn>;
+        return el.toString();
       } else {
         el = new Fraction(el);
-        return (
-          <mfrac className="Fraction">
-            <mn>{el.n}</mn>
-            <mn>{el.d}</mn>
-          </mfrac>
-        );
+        return '\\frac {' + el.n + '} {' + el.d + '}';
       }
 
     case 'operator':
@@ -70,7 +67,7 @@ function parseElToMaths(el) {
           );
 
         default:
-          return <mo>{el}</mo>;
+          return el;
       }
 
     case 'function':
@@ -78,24 +75,15 @@ function parseElToMaths(el) {
       switch (el.function) {
         case '√(x)':
           dispArg = el.argument.filter(x => x !== 'cArg');
-          return (
-            <msqrt className="Root">
-              <mstyle className="InsideRoot">{parseToMaths(dispArg)}</mstyle>
-            </msqrt>
-          );
+          return '\\sqrt {' + parseToMaths(dispArg) + '}';
 
         case '(':
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
             dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
-            return <mfenced separators="">{parseToMaths(dispArg)}</mfenced>;
+            return '\\left(' + parseToMaths(dispArg) + '\\right)';
           } else {
-            return (
-              <mtext>
-                (
-                {parseToMaths(el.argument)}
-              </mtext>
-            );
+            return '(' + parseToMaths(el.argument);
           }
 
         default:
@@ -129,10 +117,9 @@ function parseElToMaths(el) {
       break;
 
     default:
-      return <mtext>{el}</mtext>;
+      return el;
   }
 }
-/*eslint-enable */
 
 function funcToStringMap(func) {
   switch (func) {

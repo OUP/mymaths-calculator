@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import MathJax from 'react-mathjax-preview';
 import Draggable from 'react-draggable';
 import './CalcBase.css';
 import ButtonsGrid from './ButtonsGrid';
@@ -20,15 +19,9 @@ class CalcBase extends Component {
     return (
       <Draggable>
         <div className="CalcBase">
-          <div className="InputDisplay">
-            <div id="Input">
-              <MathJax math={this.state.inputStr} />
-            </div>
-          </div>
+          <div id="Input" className="InputDisplay" />
           <div className="OutputDisplay">
-            <div id="Output">
-              <MathJax className="OutputText" math={this.state.outputStr} />{' '}
-            </div>
+            <div id="Output" className="OutputText" />
           </div>
           <ButtonsGrid
             press={this.press}
