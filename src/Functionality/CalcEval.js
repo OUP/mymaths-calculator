@@ -307,15 +307,10 @@ export function safeArgCheck(outputArray, i) {
         !cArgCheck(outputArray[i].argument)
       ) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
     }
-  } else {
-    return false;
   }
+  return false;
 }
 
 function cArgCheck(argArray) {

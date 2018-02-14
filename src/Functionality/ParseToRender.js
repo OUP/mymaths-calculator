@@ -1,4 +1,3 @@
-import React from 'react';
 import katex from 'katex';
 const Fraction = require('fraction.js');
 //import Decimal from 'decimal.js/decimal';
