@@ -58,20 +58,10 @@ function parseElToMaths(el) {
           return '-';
 
         case 'x²':
-          return (
-            <msup>
-              <mn>{}</mn>
-              <mn>{2}</mn>
-            </msup>
-          );
+          return '^{2}';
 
         case 'x³':
-          return (
-            <msup>
-              <mn>{}</mn>
-              <mn>{3}</mn>
-            </msup>
-          );
+          return '^{3}';
 
         default:
           return el;
