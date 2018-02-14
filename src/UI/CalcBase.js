@@ -21,10 +21,14 @@ class CalcBase extends Component {
       <Draggable>
         <div className="CalcBase">
           <div className="InputDisplay">
-            <MathJax math={this.state.inputStr} />
+            <div id="Input">
+              <MathJax math={this.state.inputStr} />
+            </div>
           </div>
           <div className="OutputDisplay">
-            <MathJax className="OutputText" math={this.state.outputStr} />
+            <div id="Output">
+              <MathJax className="OutputText" math={this.state.outputStr} />{' '}
+            </div>
           </div>
           <ButtonsGrid
             press={this.press}

@@ -129,11 +129,7 @@ function parseElToMaths(el) {
       break;
 
     default:
-      return (
-        <mtext>
-          {el}
-        </mtext>
-      );
+      return <mtext>{el}</mtext>;
   }
 }
 /*eslint-enable */

@@ -17,7 +17,7 @@ export function initialiseState(context) {
   context.state = {
     shift: false,
     inputValue: [],
-    inputStr: '¦',
+    inputStr: parseToRender([], 0),
     outputValue: [''],
     outputStr: '',
     cursorPosition: 0,
@@ -51,17 +51,24 @@ function updateCursorPostion(context, cursorPosition) {
 }
 
 function updateInput(context, inputValue, cursorPosition) {
-  context.setState({
-    inputValue: inputValue,
-    inputStr: parseToRender(inputValue, cursorPosition)
-  });
+  if (!identicalArrays(context.inputValue, inputValue)) {
+    inputInvisible();
+    context.setState({
+      inputValue: inputValue,
+      inputStr: parseToRender(inputValue, cursorPosition)
+    });
+    setTimeout(inputSlightlyVisible, 100);
+    setTimeout(displayVisible, 200);
+  }
 }
 
 function updateOutput(context, outputValue, displayMode) {
-  context.setState({
-    outputValue: outputValue,
-    outputStr: parseToRender(outputValue, -1, displayMode)
-  });
+  if (!identicalArrays(context.outputValue, outputValue)) {
+    context.setState({
+      outputValue: outputValue,
+      outputStr: parseToRender(outputValue, -1, displayMode)
+    });
+  }
 }
 
 function updateStoredInputs(context, storedInputs) {
@@ -91,4 +98,28 @@ function updateFunctionKey(context, functionKey) {
   context.setState({
     functionKey: functionKey
   });
+}
+
+function identicalArrays(arr1, arr2) {
+  return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+function inputInvisible() {
+  document.getElementById('Input').style.visibility = 'hidden';
+}
+
+function outputInvisible() {
+  document.getElementById('Output').style.visibility = 'hidden';
+}
+
+function inputSlightlyVisible() {
+  document.getElementById('Input').style.visibility = 'visible';
+  document.getElementById('Input').style.opacity = 0.1;
+}
+
+function displayVisible() {
+  document.getElementById('Input').style.visibility = 'visible';
+  document.getElementById('Output').style.visibility = 'visible';
+  document.getElementById('Input').style.opacity = 1;
+  document.getElementById('Output').style.opacity = 1;
 }
