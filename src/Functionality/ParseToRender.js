@@ -62,6 +62,9 @@ function parseElToMaths(el) {
         case 'x³':
           return '^{3}';
 
+        case 'x!':
+          return '{!}';
+
         default:
           return el;
       }
@@ -119,13 +122,13 @@ function funcToStringMap(func) {
       return '|';
 
     case 'log(x)':
-      return '\\lg';
+      return '\\log';
 
     case 'ln(x)':
       return '\\ln';
 
     case '√(x)':
-      return '√';
+      return '\\sqrt';
 
     case 'sin(x)':
       return '\\sin';
