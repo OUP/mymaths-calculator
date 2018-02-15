@@ -128,7 +128,7 @@ function parseElToMaths(el) {
       break;
 
     default:
-      return '{\\text{｜}}';
+      return '{\\text{|}}';
   }
 }
 
