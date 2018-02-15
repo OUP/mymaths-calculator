@@ -1,16 +1,9 @@
-import { buttonType } from './ButtonType';
 import { buttonAction } from './ButtonAction';
 import { parseToRender } from './ParseToRender';
 
 export function updateState(context, button) {
   const buttonEffect = buttonAction(button, context.state);
-  const type = buttonType(button);
-
-  if (type !== 'display') {
-    updateValues(context, buttonEffect);
-  } else {
-    updateDisplay(context, buttonEffect);
-  }
+  updateValues(context, buttonEffect);
 }
 
 export function initialiseState(context) {

@@ -21,14 +21,14 @@ export function parseToRender(
   }
 }
 
-function parseToMaths(arr, cursorPosition, displayMode) {
+function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
   if (cursorPosition >= 0) {
     arr = addCursor(arr, cursorPosition);
   }
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
   return arr
-    .map(parseElToMaths)
+    .map(parseElToMaths, displayMode)
     .join('')
     .toString();
 }
@@ -44,12 +44,26 @@ function parseElToMaths(el) {
   const bType = buttonType(el);
   switch (bType) {
     case 'number':
-      if (!el.includes('/')) {
-        return el.toString();
-      } else {
-        el = new Fraction(el);
-        return '\\frac {' + el.n + '} {' + el.d + '}';
+      switch (this) { //this is the displayMode
+        case 'fraction':
+        case 'default':
+          if (!el.includes('/')) {
+            return el.toString();
+          } else {
+            el = new Fraction(el);
+            return '\\frac {' + el.n + '} {' + el.d + '}';
+          }
+
+        case 'decimal':
+          if (!el.includes('/')) {
+            return el.toString();
+          } else {
+            el = new Fraction(el);
+            el = el.toString();
+            return genRecurringDecimal(el);
+          }
       }
+      break;
 
     case 'operator':
       switch (el) {
@@ -97,7 +111,9 @@ function parseElToMaths(el) {
             );
           } else if (el !== ')' && el !== 'cArg') {
             return (
-              funcToStringMap(el.function) + '(' + parseToMaths(el.argument)
+              funcToStringMap(el.function) +
+              '(' +
+              parseToMaths(el.argument, this)
             );
           } else {
             switch (el) {
@@ -114,6 +130,22 @@ function parseElToMaths(el) {
     default:
       return '{\\text{｜}}';
   }
+}
+
+function genRecurringDecimal(decimal) {
+  const decArray = decimal.split('');
+  for (let i = 0; i < decArray.length; i++) {
+    if (decArray[i] === '(') {
+      decArray.splice(i, 2, '\\dot{' + decArray[i + 1] + '}');
+    } else if (decArray[i] === ')') {
+      if (decArray[i - 1].includes('\\dot')) {
+        decArray.pop();
+      } else {
+        decArray.splice(i - 1, 2, '\\dot{' + decArray[i - 1] + '}');
+      }
+    }
+  }
+  return decArray.join('');
 }
 
 function funcToStringMap(func) {
