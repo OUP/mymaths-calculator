@@ -51,7 +51,7 @@ function parseElToMaths(el) {
             return el.toString();
           } else {
             el = new Fraction(el);
-            return '\\frac {' + el.n + '} {' + el.d + '}';
+            return '\\large \\frac {' + el.n + '} {' + el.d + '}';
           }
 
         case 'decimal':
