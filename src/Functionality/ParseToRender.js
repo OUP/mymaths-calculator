@@ -12,11 +12,7 @@ export function parseToRender(
   displayMode = 'default'
 ) {
   const maths = parseToMaths(arr, cursorPosition, displayMode);
-  if (maths) {
-    katex.render(maths, document.getElementById(id));
-  } else {
-    katex.render('', document.getElementById(id));
-  }
+  katex.render(maths, document.getElementById(id));
 }
 
 function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
