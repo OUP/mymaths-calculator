@@ -6,24 +6,33 @@ export function updateState(context, button) {
   updateValues(context, buttonEffect);
 }
 
-export function initialiseState(context) {
+export function initialiseInternalState(context) {
   context.state = {
     shift: false,
     inputValue: [],
-    inputStr: parseToRender([], 'Input', 0),
     outputValue: ['0'],
-    outputStr: parseToRender(['0'], 'Output', -1),
     cursorPosition: 0,
+    displayMode: 'fraction',
     storedInputs: [],
     storePosition: -1,
-    displayMode: 'fraction',
     functionKey: 0 //Used for automatically destroying hidden characters
   };
+}
+
+export function initialiseDisplay(context) {
+  context.state.inputStr = parseToRender(context.state.inputValue, 'Input', 0);
+  context.state.outputStr = parseToRender(
+    context.state.outputValue,
+    'Output',
+    -1,
+    context.state.displayMode
+  );
 }
 
 function updateValues(context, buttonEffect) {
   updateShift(context, buttonEffect.shift);
   updateCursorPostion(context, buttonEffect.cursorPosition);
+  updateDisplayMode(context, buttonEffect.displayMode);
   updateInput(context, buttonEffect.inputValue, buttonEffect.cursorPosition);
   updateOutput(context, buttonEffect.outputValue, context.state.displayMode);
   updateStoredInputs(context, buttonEffect.storedInputs);
@@ -40,6 +49,12 @@ function updateShift(context, shiftValue) {
 function updateCursorPostion(context, cursorPosition) {
   context.setState({
     cursorPosition: cursorPosition
+  });
+}
+
+function updateDisplayMode(context, displayMode) {
+  context.setState({
+    displayMode: displayMode
   });
 }
 
@@ -66,17 +81,6 @@ function updateStoredInputs(context, storedInputs) {
 function updateStorePosition(context, storePosition) {
   context.setState({
     storePosition: storePosition
-  });
-}
-
-function updateDisplay(context, buttonEffect) {
-  context.setState({
-    outputStr: parseToRender(
-      buttonEffect.outputValue,
-      -1,
-      buttonEffect.displayMode
-    ),
-    displayMode: buttonEffect.displayMode
   });
 }
 

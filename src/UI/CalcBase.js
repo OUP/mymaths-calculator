@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import './CalcBase.css';
 import ButtonsGrid from './ButtonsGrid';
-import { updateState, initialiseState } from '../Functionality/ManageState';
+import {
+  updateState,
+  initialiseInternalState,
+  initialiseDisplay
+} from '../Functionality/ManageState';
 
 class CalcBase extends Component {
   constructor(props) {
     super(props);
     this.press = this.press.bind(this);
-    initialiseState(this);
+    initialiseInternalState(this);
+  }
+
+  componentDidMount() {
+    initialiseDisplay(this);
   }
 
   press(button) {
