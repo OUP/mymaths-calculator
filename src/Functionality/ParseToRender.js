@@ -84,33 +84,38 @@ function parseElToMaths(el) {
       let dispArg;
       switch (el.function) {
         case '√(x)':
-          dispArg = el.argument.filter(x => x !== 'cArg');
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
           return '\\sqrt {' + parseToMaths(dispArg) + '}';
 
         case '(':
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
             dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
+            dispArg = boxIfArgEmpty(dispArg);
             return '\\left(' + parseToMaths(dispArg) + '\\right)';
           } else {
             return '(' + parseToMaths(el.argument);
           }
 
         case 'xⁿ':
-          dispArg = el.argument.filter(x => x !== 'cArg');
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
           return '^{' + parseToMaths(dispArg) + '}';
 
         default:
+          console.log('got here');
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
             dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
+            dispArg = boxIfArgEmpty(dispArg);
             return (
               funcToStringMap(el.function) +
               '\\left(' +
               parseToMaths(dispArg) +
               '\\right)'
             );
-          } else if (el !== ')' && el !== 'cArg') {
+          } else if (el !== ')' && el !== 'cArg' && el !== 'box') {
             return (
               funcToStringMap(el.function) +
               '(' +
@@ -120,6 +125,9 @@ function parseElToMaths(el) {
             switch (el) {
               case ')':
                 return ')';
+
+              case 'box':
+                return '{\\Box}';
             }
           }
       }
@@ -131,6 +139,15 @@ function parseElToMaths(el) {
     default:
       return '{\\text{|}}';
   }
+}
+
+function boxIfArgEmpty(dispArg) {
+  if (!dispArg.length) {
+    dispArg = ['box'];
+  } else if (dispArg.length === 1 && dispArg[0] === '¦') {
+    dispArg.push('box');
+  }
+  return dispArg;
 }
 
 function genRecurringDecimal(decimal) {
