@@ -77,6 +77,9 @@ function parseElToMaths(el) {
           return el;
       }
 
+    case 'Ans':
+      return '\\text {' + el + '}';
+
     case 'function':
       let dispArg;
       switch (el.function) {
