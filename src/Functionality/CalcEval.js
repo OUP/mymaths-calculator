@@ -1,7 +1,7 @@
 import { buttonType } from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
-import { cloneState } from './Buttons/ButtonUtilities';
+import { cloneState, identicalArrays } from './Buttons/ButtonUtilities';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -331,10 +331,6 @@ function cArgCheck(argArray) {
     return false;
   }
   return false;
-}
-
-function identicalArrays(arr1, arr2) {
-  return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
 
 function assemblePreArgs(outputArray) {

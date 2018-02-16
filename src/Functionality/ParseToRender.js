@@ -1,9 +1,10 @@
 import katex from 'katex';
 const Fraction = require('fraction.js');
-//import Decimal from 'decimal.js/decimal';
+import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
 import { assembleNumbers, assembleArguments } from './CalcEval';
 import '../UI/Maths.css';
+import { identicalArrays } from './Buttons/ButtonUtilities';
 
 export function parseToRender(
   arr,
@@ -40,6 +41,23 @@ function parseElToMaths(el) {
     case 'number':
       switch (this) { //this is the displayMode
         case 'fraction':
+          if (!el.includes('/')) {
+            el = new Decimal(el);
+            const testFracEl = el.toFraction(1000);
+            const fracEl = el.toFraction();
+            if (
+              fracEl[1].toString() !== '1' &&
+              identicalArrays(fracEl, testFracEl)
+            ) {
+              return '\\large \\frac {' + fracEl[0] + '} {' + fracEl[1] + '}';
+            } else {
+              return el;
+            }
+          } else {
+            el = new Fraction(el);
+            return '\\large \\frac {' + el.n + '} {' + el.d + '}';
+          }
+
         case 'default':
           if (!el.includes('/')) {
             return el.toString();
@@ -104,7 +122,6 @@ function parseElToMaths(el) {
           return '^{' + parseToMaths(dispArg) + '}';
 
         default:
-          console.log('got here');
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');
             dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
