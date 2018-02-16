@@ -20,6 +20,10 @@ export const pressInput = function recur(button, bType, currentState) {
           currentState.inputValue.push('cArg' + currentState.functionKey);
           break;
 
+        case 'xⁿ':
+          currentState.inputValue.push('cArg' + currentState.functionKey);
+          break;
+
         default:
           break;
       }

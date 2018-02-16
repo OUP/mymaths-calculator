@@ -93,6 +93,10 @@ function parseElToMaths(el) {
             return '(' + parseToMaths(el.argument);
           }
 
+        case 'xⁿ':
+          dispArg = el.argument.filter(x => x !== 'cArg');
+          return '^{' + parseToMaths(dispArg) + '}';
+
         default:
           if (safeArgClosed(el)) {
             dispArg = el.argument.filter(x => x !== ')');

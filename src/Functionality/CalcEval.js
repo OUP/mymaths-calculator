@@ -11,6 +11,7 @@ export function calcEval(inputValue, oldOutput = '0') {
 
   outputArray = assembleNumbers(outputArray);
   outputArray = assembleArguments(outputArray);
+  outputArray = assemblePreArgs(outputArray);
   outputArray = replaceAns(outputArray, oldOutput);
 
   //Closed brackets are only used in organising the input, not to evaluate.
@@ -106,6 +107,7 @@ function executeOp(inputArray, position) {
       output = {
         value: funcEval(
           inputArray[position].value.function,
+          inputArray[position].value.preArgument,
           inputArray[position].value.argument
         ).toString(),
         priority: 0,
@@ -242,9 +244,14 @@ function opPriority(element) {
   }
 }
 
-function funcEval(func, argument) {
+function funcEval(func, preArgument, argument) {
   const argVal = calcEval(argument);
-  return accurateFunc(func, argVal);
+  if (preArgument) {
+    const preArgVal = calcEval(preArgument);
+    return accurateFunc(func, preArgVal, argVal);
+  } else {
+    return accurateFunc(func, preArgument, argVal);
+  }
 }
 
 function checkIfFraction(x) {
@@ -328,4 +335,26 @@ function cArgCheck(argArray) {
 
 function identicalArrays(arr1, arr2) {
   return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+function assemblePreArgs(outputArray) {
+  for (let i = 0; i < outputArray.length; i++) {
+    if (safePreArgCheck(outputArray, i)) {
+      const updatedFunc = cloneState(outputArray[i]);
+      updatedFunc.preArgument.push(outputArray[i - 1]);
+      outputArray.splice(i - 1, 2, updatedFunc);
+    }
+  }
+  return outputArray;
+}
+
+function safePreArgCheck(outputArray, i) {
+  if (outputArray[i]) {
+    if (outputArray[i].preArgument) {
+      if (outputArray[i].preArgument.length === 0) {
+        return true;
+      }
+    }
+  }
+  return false;
 }

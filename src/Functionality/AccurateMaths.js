@@ -41,10 +41,13 @@ export function accurateOp(v1, operation, v2 = 0) {
   }
 }
 
-export function accurateFunc(func, arg) {
+export function accurateFunc(func, preArg, arg) {
   switch (func) {
     case '|x|':
       return Math.abs(arg);
+
+    case 'xⁿ':
+      return pow(preArg, arg);
 
     case 'log(x)':
       return Math.log10(arg);
