@@ -31,7 +31,7 @@ function funcType(button) {
     button === 'tan⁻¹'
   ) {
     return 'argAfter';
-  } else if (button === 'xⁿ') {
+  } else if (button === 'xⁿ' || button === 'frac') {
     return 'argBothSides';
   } else {
     return button;
@@ -54,6 +54,9 @@ function pressArgAfter(button, currentState) {
     key: currentState.functionKey
     //Key used to destroy hidden characters that go with the function if the function is deleted
   });
+  if (button === '√(x)') {
+    currentState.inputValue.push('cArg' + currentState.functionKey);
+  }
 
   if (button === '|x|') {
     currentState.inputValue.push('|');
@@ -62,7 +65,9 @@ function pressArgAfter(button, currentState) {
 }
 
 function pressArgBothSides(button, currentState) {
-  currentState.cursorPosition++;
+  if (button === 'xⁿ') {
+    currentState.cursorPosition++;
+  }
   currentState.functionKey++;
   currentState.inputValue.push({
     type: 'function',
@@ -72,6 +77,7 @@ function pressArgBothSides(button, currentState) {
     key: currentState.functionKey
     //Key used to destroy hidden characters that go with the function if the function is deleted
   });
+  currentState.inputValue.push('cArg' + currentState.functionKey);
 
   return currentState;
 }

@@ -43,6 +43,9 @@ export function accurateOp(v1, operation, v2 = 0) {
 
 export function accurateFunc(func, preArg, arg) {
   switch (func) {
+    case 'frac':
+      return divide(preArg, arg);
+
     case '|x|':
       return Math.abs(arg);
 

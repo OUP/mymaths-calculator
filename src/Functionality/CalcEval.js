@@ -333,7 +333,7 @@ function cArgCheck(argArray) {
   return false;
 }
 
-function assemblePreArgs(outputArray) {
+export function assemblePreArgs(outputArray) {
   for (let i = 0; i < outputArray.length; i++) {
     if (safePreArgCheck(outputArray, i)) {
       const updatedFunc = cloneState(outputArray[i]);

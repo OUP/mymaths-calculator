@@ -2,7 +2,11 @@ import katex from 'katex';
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
-import { assembleNumbers, assembleArguments } from './CalcEval';
+import {
+  assembleNumbers,
+  assembleArguments,
+  assemblePreArgs
+} from './CalcEval';
 import '../UI/Maths.css';
 import { identicalArrays } from './Buttons/ButtonUtilities';
 
@@ -22,6 +26,7 @@ function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
   }
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
+  arr = assemblePreArgs(arr);
   return arr
     .map(parseElToMaths, displayMode)
     .join('')
@@ -100,7 +105,22 @@ function parseElToMaths(el) {
 
     case 'function':
       let dispArg;
+      let dispPreArg;
       switch (el.function) {
+        case 'frac':
+          dispPreArg = el.preArgument;
+          dispPreArg = el.preArgument.filter(x => buttonType(x) !== 'cArg');
+          dispPreArg = boxIfArgEmpty(dispPreArg);
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
+          return (
+            '\\large \\frac {' +
+            parseToMaths(dispPreArg) +
+            '} {' +
+            parseToMaths(dispArg) +
+            '} \\normalsize'
+          );
+
         case '√(x)':
           dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
           dispArg = boxIfArgEmpty(dispArg);
@@ -117,9 +137,12 @@ function parseElToMaths(el) {
           }
 
         case 'xⁿ':
+          dispPreArg = el.preArgument;
+          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'cArg');
+          dispPreArg = boxIfArgEmpty(dispPreArg);
           dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
           dispArg = boxIfArgEmpty(dispArg);
-          return '^{' + parseToMaths(dispArg) + '}';
+          return dispPreArg + '^{' + parseToMaths(dispArg) + '}';
 
         default:
           if (safeArgClosed(el)) {
