@@ -109,7 +109,8 @@ function parseElToMaths(el) {
       switch (el.function) {
         case 'frac':
           dispPreArg = el.preArgument;
-          dispPreArg = el.preArgument.filter(x => buttonType(x) !== 'cArg');
+          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'oArg');
+          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'cArg');
           dispPreArg = boxIfArgEmpty(dispPreArg);
           dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
           dispArg = boxIfArgEmpty(dispArg);
@@ -175,6 +176,9 @@ function parseElToMaths(el) {
 
     case 'cArg':
       break;
+
+    case 'oArg':
+      return 'oArg';
 
     default:
       return '{\\text{|}}';

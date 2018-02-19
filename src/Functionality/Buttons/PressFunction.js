@@ -65,10 +65,11 @@ function pressArgAfter(button, currentState) {
 }
 
 function pressArgBothSides(button, currentState) {
-  if (button === 'xⁿ') {
-    currentState.cursorPosition++;
-  }
+  currentState.cursorPosition++;
   currentState.functionKey++;
+  if (button === 'frac') {
+    currentState.inputValue.push('oArg' + currentState.functionKey);
+  }
   currentState.inputValue.push({
     type: 'function',
     function: button,

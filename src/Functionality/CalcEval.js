@@ -18,6 +18,7 @@ export function calcEval(inputValue, oldOutput = '0') {
   outputArray = outputArray.filter(x => x !== ')');
   outputArray = outputArray.filter(x => x !== '|');
   outputArray = outputArray.filter(x => buttonType(x) !== 'cArg');
+  outputArray = outputArray.filter(x => buttonType(x) !== 'oArg');
 
   while (moreOpsToDo(outputArray)) {
     outputArray = doNextOp(outputArray);
@@ -336,9 +337,13 @@ function cArgCheck(argArray) {
 export function assemblePreArgs(outputArray) {
   for (let i = 0; i < outputArray.length; i++) {
     if (safePreArgCheck(outputArray, i)) {
+      const key = outputArray[i].key;
       const updatedFunc = cloneState(outputArray[i]);
-      updatedFunc.preArgument.push(outputArray[i - 1]);
+      updatedFunc.preArgument.unshift(outputArray[i - 1]);
       outputArray.splice(i - 1, 2, updatedFunc);
+      if (searchForOArg(outputArray, key)) {
+        i -= 2;
+      }
     }
   }
   return outputArray;
@@ -347,9 +352,29 @@ export function assemblePreArgs(outputArray) {
 function safePreArgCheck(outputArray, i) {
   if (outputArray[i]) {
     if (outputArray[i].preArgument) {
-      if (outputArray[i].preArgument.length === 0) {
+      if (!oArgCheck(outputArray[i].preArgument)) {
         return true;
       }
+    }
+  }
+  return false;
+}
+
+function oArgCheck(argArray) {
+  if (argArray.length) {
+    for (let i = 0; i < argArray.length; i++) {
+      if (buttonType(argArray[i]) === 'oArg') {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function searchForOArg(outputArray, key) {
+  for (let i = 0; i < outputArray.length; i++) {
+    if (outputArray[i] === 'oArg' + key) {
+      return true;
     }
   }
   return false;
