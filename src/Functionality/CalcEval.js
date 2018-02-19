@@ -364,7 +364,12 @@ export const assemblePreArgs = function recur(outputArray) {
 function safePreArgCheck(outputArray, i) {
   if (outputArray[i]) {
     if (outputArray[i].preArgument) {
-      if (!oArgCheck(outputArray[i].preArgument)) {
+      const key = outputArray[i].key;
+      if (
+        (!oArgCheck(outputArray[i].preArgument) &&
+          !outputArray[i].preArgument.length) ||
+        searchForOArg(outputArray, key)
+      ) {
         return true;
       }
     }
