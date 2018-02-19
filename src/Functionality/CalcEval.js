@@ -335,14 +335,14 @@ function cArgCheck(argArray) {
 }
 
 export function assemblePreArgs(outputArray) {
-  for (let i = 0; i < outputArray.length; i++) {
+  for (let i = outputArray.length - 1; i >= 0; i--) {
     if (safePreArgCheck(outputArray, i)) {
       const key = outputArray[i].key;
       const updatedFunc = cloneState(outputArray[i]);
       updatedFunc.preArgument.unshift(outputArray[i - 1]);
       outputArray.splice(i - 1, 2, updatedFunc);
-      if (searchForOArg(outputArray, key)) {
-        i -= 2;
+      if (!searchForOArg(outputArray, key)) {
+        i--;
       }
     }
   }
