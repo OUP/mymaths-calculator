@@ -109,7 +109,7 @@ function multiply(v1, v2) {
 function divide(v1, v2) {
   v1 = new Fraction(v1);
   v2 = new Fraction(v2);
-  const f = new Fraction(v1, v2);
+  const f = v1.div(v2);
   return f.toFraction();
 }
 
