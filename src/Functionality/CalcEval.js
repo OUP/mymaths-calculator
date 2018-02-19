@@ -334,20 +334,32 @@ function cArgCheck(argArray) {
   return false;
 }
 
-export function assemblePreArgs(outputArray) {
+export const assemblePreArgs = function recur(outputArray) {
+  let recursionNeeded = false;
+  const arrFromPrevIteration = outputArray.slice(0);
   for (let i = outputArray.length - 1; i >= 0; i--) {
     if (safePreArgCheck(outputArray, i)) {
-      const key = outputArray[i].key;
-      const updatedFunc = cloneState(outputArray[i]);
-      updatedFunc.preArgument.unshift(outputArray[i - 1]);
-      outputArray.splice(i - 1, 2, updatedFunc);
-      if (!searchForOArg(outputArray, key)) {
-        i--;
+      if (!safePreArgCheck(outputArray, i - 1)) {
+        const key = outputArray[i].key;
+        const updatedFunc = cloneState(outputArray[i]);
+        updatedFunc.preArgument.unshift(outputArray[i - 1]);
+        outputArray.splice(i - 1, 2, updatedFunc);
+        if (!searchForOArg(outputArray, key)) {
+          i--;
+        }
+      } else {
+        recursionNeeded = true;
       }
+    }
+    if (
+      recursionNeeded &&
+      !identicalArrays(outputArray, arrFromPrevIteration)
+    ) {
+      outputArray = recur(outputArray);
     }
   }
   return outputArray;
-}
+};
 
 function safePreArgCheck(outputArray, i) {
   if (outputArray[i]) {
