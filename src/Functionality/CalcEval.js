@@ -278,7 +278,6 @@ export function assembleNumbers(outputArray) {
 }
 
 export const assembleArguments = function recur(outputArray) {
-  let j = 0;
   let recursionNeeded = false;
   const arrFromPrevIteration = outputArray.slice(0);
   for (let i = 0; i < outputArray.length; i++) {
@@ -286,13 +285,10 @@ export const assembleArguments = function recur(outputArray) {
       if (!safeArgCheck(outputArray, i + 1)) {
         if (outputArray[i + 1]) {
           const updatedFunc = cloneState(outputArray[i]);
-          updatedFunc.argument.push(outputArray[i + 1]);
-          outputArray.splice(i, 2, updatedFunc);
-          i--;
-          j++;
-          if (j >= 5000) {
-            console.error('recursion error');
-            return ['recursion error'];
+          if (checkToAdd(outputArray, i + 1)) {
+            updatedFunc.argument.push(outputArray[i + 1]);
+            outputArray.splice(i, 2, updatedFunc);
+            i--;
           }
         }
       } else {
@@ -305,6 +301,27 @@ export const assembleArguments = function recur(outputArray) {
   }
   return outputArray;
 };
+
+function checkToAdd(outputArray, j) {
+  const possArgEl = outputArray[j];
+  const testKey = safeGetKey(possArgEl);
+  if (testKey) {
+    const testArray = outputArray.slice(0, j);
+    return !searchForOArg(testArray, testKey);
+  } else {
+    return true;
+  }
+}
+
+function safeGetKey(possibleFunc) {
+  if (possibleFunc) {
+    const key = possibleFunc.key;
+    if (key) {
+      return key;
+    }
+  }
+  return null;
+}
 
 //Check whether element at i has an open argument
 export function safeArgCheck(outputArray, i) {
