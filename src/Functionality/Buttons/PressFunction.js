@@ -66,19 +66,40 @@ function pressArgAfter(button, currentState) {
 
 function pressArgBothSides(button, currentState) {
   currentState.cursorPosition++;
-  currentState.functionKey++;
   if (button === 'frac') {
-    currentState.inputValue.push('oArg' + currentState.functionKey);
+    currentState.functionKey++;
+    currentState.inputValue.push({
+      type: 'function',
+      function: 'numerator',
+      argument: [],
+      key: currentState.functionKey
+      //Key used to destroy hidden characters that go with the function if the function is deleted
+    });
+    currentState.inputValue.push('cArg' + currentState.functionKey);
+    currentState.inputValue.push({
+      type: 'function',
+      function: 'denominator',
+      argument: [],
+      key: currentState.functionKey
+    });
+    currentState.inputValue.push('cArg' + currentState.functionKey);
+  } else if (button === 'xⁿ') {
+    currentState.inputValue.push({
+      type: 'function',
+      function: 'base',
+      argument: [],
+      key: currentState.functionKey
+      //Key used to destroy hidden characters that go with the function if the function is deleted
+    });
+    currentState.functionKey++;
+    currentState.inputValue.push('cArg' + currentState.functionKey);
+    currentState.inputValue.push({
+      type: 'function',
+      function: 'exponent',
+      argument: [],
+      key: currentState.functionKey
+    });
+    currentState.inputValue.push('cArg' + currentState.functionKey);
   }
-  currentState.inputValue.push({
-    type: 'function',
-    function: button,
-    preArgument: [],
-    argument: [],
-    key: currentState.functionKey
-    //Key used to destroy hidden characters that go with the function if the function is deleted
-  });
-  currentState.inputValue.push('cArg' + currentState.functionKey);
-
   return currentState;
 }

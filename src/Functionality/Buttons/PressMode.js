@@ -11,6 +11,13 @@ export function pressMode(button, currentState) {
     case '⬅':
       if (currentState.cursorPosition > 0) {
         currentState.cursorPosition--;
+        const func = safeGetFunction(
+          currentState.inputValue,
+          currentState.cursorPosition
+        );
+        if (func === 'numerator' || func === 'denominator' || func === 'base') {
+          pressMode('⬅', currentState);
+        }
       } else {
         currentState.cursorPosition = currentState.inputValue.length;
       }
@@ -19,6 +26,13 @@ export function pressMode(button, currentState) {
     case '➡':
       if (currentState.cursorPosition < currentState.inputValue.length) {
         currentState.cursorPosition++;
+        const func = safeGetFunction(
+          currentState.inputValue,
+          currentState.cursorPosition
+        );
+        if (func === 'denominator' || func === 'base' || func === 'exponent') {
+          pressMode('➡', currentState);
+        }
       } else {
         currentState.cursorPosition = 0;
       }
@@ -65,4 +79,16 @@ export function pressMode(button, currentState) {
       break;
   }
   return currentState;
+}
+
+function safeGetFunction(arr, index) {
+  if (arr) {
+    if (arr[index]) {
+      const func = arr[index].function;
+      if (func) {
+        return func;
+      }
+    }
+  }
+  return false;
 }

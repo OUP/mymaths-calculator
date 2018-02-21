@@ -2,11 +2,7 @@ import katex from 'katex';
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { buttonType } from './ButtonType';
-import {
-  assembleNumbers,
-  assembleArguments,
-  assemblePreArgs
-} from './CalcEval';
+import { assembleNumbers, assembleArguments } from './CalcEval';
 import '../UI/Maths.css';
 import { identicalArrays } from './Buttons/ButtonUtilities';
 
@@ -26,7 +22,7 @@ function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
   }
   arr = assembleNumbers(arr);
   arr = assembleArguments(arr);
-  arr = assemblePreArgs(arr);
+  //arr = assemblePreArgs(arr);
   return arr
     .map(parseElToMaths, displayMode)
     .join('')
@@ -107,20 +103,15 @@ function parseElToMaths(el) {
       let dispArg;
       let dispPreArg;
       switch (el.function) {
-        case 'frac':
-          dispPreArg = el.preArgument;
-          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'oArg');
-          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'cArg');
-          dispPreArg = boxIfArgEmpty(dispPreArg);
+        case 'numerator':
           dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
           dispArg = boxIfArgEmpty(dispArg);
-          return (
-            '\\large \\frac {' +
-            parseToMaths(dispPreArg) +
-            '} {' +
-            parseToMaths(dispArg) +
-            '} \\normalsize'
-          );
+          return '\\large \\frac {' + parseToMaths(dispArg) + '}';
+
+        case 'denominator':
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
+          return '{' + parseToMaths(dispArg) + '} \\normalsize';
 
         case '√(x)':
           dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
@@ -136,6 +127,16 @@ function parseElToMaths(el) {
           } else {
             return '(' + parseToMaths(el.argument);
           }
+
+        case 'base':
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
+          return parseToMaths(dispArg);
+
+        case 'exponent':
+          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
+          dispArg = boxIfArgEmpty(dispArg);
+          return '^{' + parseToMaths(dispArg) + '}';
 
         case 'xⁿ':
           dispPreArg = el.preArgument;

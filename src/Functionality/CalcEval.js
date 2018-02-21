@@ -106,11 +106,7 @@ function executeOp(inputArray, position) {
     if (inputArray[position].value.argument) {
       console.log('found argument', inputArray[position].value.argument);
       output = {
-        value: funcEval(
-          inputArray[position].value.function,
-          inputArray[position].value.preArgument,
-          inputArray[position].value.argument
-        ).toString(),
+        value: funcEval(inputArray, position).toString(),
         priority: 0,
         type: 'number'
       };
