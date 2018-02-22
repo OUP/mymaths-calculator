@@ -51,6 +51,7 @@ function pressArgAfter(button, currentState) {
     type: 'function',
     function: button,
     argument: [],
+    parts: 1,
     key: currentState.functionKey
     //Key used to destroy hidden characters that go with the function if the function is deleted
   });
@@ -72,6 +73,7 @@ function pressArgBothSides(button, currentState) {
       type: 'function',
       function: 'numerator',
       argument: [],
+      parts: 2,
       key: currentState.functionKey
       //Key used to destroy hidden characters that go with the function if the function is deleted
     });
@@ -88,6 +90,7 @@ function pressArgBothSides(button, currentState) {
       type: 'function',
       function: 'base',
       argument: [],
+      parts: 2,
       key: currentState.functionKey
       //Key used to destroy hidden characters that go with the function if the function is deleted
     });

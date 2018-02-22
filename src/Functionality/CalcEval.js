@@ -110,7 +110,7 @@ function executeOp(inputArray, position) {
         priority: 0,
         type: 'number'
       };
-      outputArray.splice(position, 1, output);
+      outputArray.splice(position, inputArray[position].value.parts, output);
 
       //Catch infinite loops
       if (outputArray[position].value) {
@@ -241,13 +241,17 @@ function opPriority(element) {
   }
 }
 
-function funcEval(func, preArgument, argument) {
-  const argVal = calcEval(argument);
-  if (preArgument) {
-    const preArgVal = calcEval(preArgument);
-    return accurateFunc(func, preArgVal, argVal);
+function funcEval(inputArray, funcIndex) {
+  const inputEl = inputArray[funcIndex].value;
+  const func = inputEl.function;
+  console.log('inputEl.argument', inputEl.argument);
+  const arg = calcEval(inputEl.argument);
+  if (inputEl.parts === 2) {
+    const inputEl2 = inputArray[funcIndex + 1].value;
+    const arg2 = calcEval(inputEl2.argument);
+    return accurateFunc(func, arg, arg2);
   } else {
-    return accurateFunc(func, preArgument, argVal);
+    return accurateFunc(func, arg);
   }
 }
 
