@@ -20,3 +20,7 @@ export function splitInputAtCursor(currentState) {
 export function cloneState(state) {
   return JSON.parse(JSON.stringify(state));
 }
+
+export function identicalArrays(arr1, arr2) {
+  return JSON.stringify(arr1) === JSON.stringify(arr2);
+}

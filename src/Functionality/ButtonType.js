@@ -17,6 +17,9 @@ export function buttonType(b) {
     case checkForMisc(b):
       return b;
 
+    case checkForOArg(b):
+      return 'oArg';
+
     case checkForCArg(b):
       return 'cArg';
 
@@ -57,7 +60,6 @@ function checkForOperator(b) {
     b === '×' ||
     b === '÷' ||
     b === '×10ⁿ' ||
-    b === 'xⁿ' ||
     b === 'x²' ||
     b === 'x³' ||
     b === 'x⁻¹' ||
@@ -87,6 +89,14 @@ function checkForDisplay(b) {
 
 function checkForMisc(b) {
   if (b === 'DEL' || b === 'AC' || b === 'Ans' || b === '=' || b === '¦') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function checkForOArg(b) {
+  if (b.includes('oArg')) {
     return true;
   } else {
     return false;

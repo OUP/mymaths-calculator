@@ -1,7 +1,10 @@
 export function pressDisplay(button, currentState) {
   switch (button) {
     case 'S⇔D':
-      if (currentState.displayMode === 'fraction') {
+      if (
+        currentState.displayMode === 'fraction' ||
+        currentState.displayMode === 'default'
+      ) {
         currentState.displayMode = 'decimal';
       } else {
         currentState.displayMode = 'fraction';

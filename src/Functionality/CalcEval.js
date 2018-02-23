@@ -1,7 +1,7 @@
 import { buttonType } from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
-import { cloneState } from './Buttons/ButtonUtilities';
+import { cloneState, identicalArrays } from './Buttons/ButtonUtilities';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -11,12 +11,14 @@ export function calcEval(inputValue, oldOutput = '0') {
 
   outputArray = assembleNumbers(outputArray);
   outputArray = assembleArguments(outputArray);
+  outputArray = assemblePreArgs(outputArray);
   outputArray = replaceAns(outputArray, oldOutput);
 
   //Closed brackets are only used in organising the input, not to evaluate.
   outputArray = outputArray.filter(x => x !== ')');
   outputArray = outputArray.filter(x => x !== '|');
   outputArray = outputArray.filter(x => buttonType(x) !== 'cArg');
+  outputArray = outputArray.filter(x => buttonType(x) !== 'oArg');
 
   while (moreOpsToDo(outputArray)) {
     outputArray = doNextOp(outputArray);
@@ -104,14 +106,11 @@ function executeOp(inputArray, position) {
     if (inputArray[position].value.argument) {
       console.log('found argument', inputArray[position].value.argument);
       output = {
-        value: funcEval(
-          inputArray[position].value.function,
-          inputArray[position].value.argument
-        ).toString(),
+        value: funcEval(inputArray, position).toString(),
         priority: 0,
         type: 'number'
       };
-      outputArray.splice(position, 1, output);
+      outputArray.splice(position, inputArray[position].value.parts, output);
 
       //Catch infinite loops
       if (outputArray[position].value) {
@@ -242,9 +241,18 @@ function opPriority(element) {
   }
 }
 
-function funcEval(func, argument) {
-  const argVal = calcEval(argument);
-  return accurateFunc(func, argVal);
+function funcEval(inputArray, funcIndex) {
+  const inputEl = inputArray[funcIndex].value;
+  const func = inputEl.function;
+  console.log('inputEl.argument', inputEl.argument);
+  const arg = calcEval(inputEl.argument);
+  if (inputEl.parts === 2) {
+    const inputEl2 = inputArray[funcIndex + 1].value;
+    const arg2 = calcEval(inputEl2.argument);
+    return accurateFunc(func, arg, arg2);
+  } else {
+    return accurateFunc(func, arg);
+  }
 }
 
 function checkIfFraction(x) {
@@ -270,7 +278,6 @@ export function assembleNumbers(outputArray) {
 }
 
 export const assembleArguments = function recur(outputArray) {
-  let j = 0;
   let recursionNeeded = false;
   const arrFromPrevIteration = outputArray.slice(0);
   for (let i = 0; i < outputArray.length; i++) {
@@ -278,13 +285,10 @@ export const assembleArguments = function recur(outputArray) {
       if (!safeArgCheck(outputArray, i + 1)) {
         if (outputArray[i + 1]) {
           const updatedFunc = cloneState(outputArray[i]);
-          updatedFunc.argument.push(outputArray[i + 1]);
-          outputArray.splice(i, 2, updatedFunc);
-          i--;
-          j++;
-          if (j >= 5000) {
-            console.error('recursion error');
-            return ['recursion error'];
+          if (checkToAdd(outputArray, i + 1)) {
+            updatedFunc.argument.push(outputArray[i + 1]);
+            outputArray.splice(i, 2, updatedFunc);
+            i--;
           }
         }
       } else {
@@ -298,6 +302,27 @@ export const assembleArguments = function recur(outputArray) {
   return outputArray;
 };
 
+function checkToAdd(outputArray, j) {
+  const possArgEl = outputArray[j];
+  const testKey = safeGetKey(possArgEl);
+  if (testKey) {
+    const testArray = outputArray.slice(0, j);
+    return !searchForOArg(testArray, testKey);
+  } else {
+    return true;
+  }
+}
+
+function safeGetKey(possibleFunc) {
+  if (possibleFunc) {
+    const key = possibleFunc.key;
+    if (key) {
+      return key;
+    }
+  }
+  return null;
+}
+
 //Check whether element at i has an open argument
 export function safeArgCheck(outputArray, i) {
   if (outputArray[i]) {
@@ -307,15 +332,10 @@ export function safeArgCheck(outputArray, i) {
         !cArgCheck(outputArray[i].argument)
       ) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
     }
-  } else {
-    return false;
   }
+  return false;
 }
 
 function cArgCheck(argArray) {
@@ -331,6 +351,65 @@ function cArgCheck(argArray) {
   return false;
 }
 
-function identicalArrays(arr1, arr2) {
-  return JSON.stringify(arr1) === JSON.stringify(arr2);
+export const assemblePreArgs = function recur(outputArray) {
+  let recursionNeeded = false;
+  const arrFromPrevIteration = outputArray.slice(0);
+  for (let i = outputArray.length - 1; i >= 0; i--) {
+    if (safePreArgCheck(outputArray, i)) {
+      if (!safePreArgCheck(outputArray, i - 1)) {
+        const key = outputArray[i].key;
+        const updatedFunc = cloneState(outputArray[i]);
+        updatedFunc.preArgument.unshift(outputArray[i - 1]);
+        outputArray.splice(i - 1, 2, updatedFunc);
+        if (!searchForOArg(outputArray, key)) {
+          i--;
+        }
+      } else {
+        recursionNeeded = true;
+      }
+    }
+    if (
+      recursionNeeded &&
+      !identicalArrays(outputArray, arrFromPrevIteration)
+    ) {
+      outputArray = recur(outputArray);
+    }
+  }
+  return outputArray;
+};
+
+function safePreArgCheck(outputArray, i) {
+  if (outputArray[i]) {
+    if (outputArray[i].preArgument) {
+      const key = outputArray[i].key;
+      if (
+        (!oArgCheck(outputArray[i].preArgument) &&
+          !outputArray[i].preArgument.length) ||
+        searchForOArg(outputArray, key)
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function oArgCheck(argArray) {
+  if (argArray.length) {
+    for (let i = 0; i < argArray.length; i++) {
+      if (buttonType(argArray[i]) === 'oArg') {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function searchForOArg(outputArray, key) {
+  for (let i = 0; i < outputArray.length; i++) {
+    if (outputArray[i] === 'oArg' + key) {
+      return true;
+    }
+  }
+  return false;
 }

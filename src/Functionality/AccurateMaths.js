@@ -41,10 +41,16 @@ export function accurateOp(v1, operation, v2 = 0) {
   }
 }
 
-export function accurateFunc(func, arg) {
+export function accurateFunc(func, arg, arg2) {
   switch (func) {
+    case 'numerator':
+      return divide(arg, arg2);
+
     case '|x|':
       return Math.abs(arg);
+
+    case 'base':
+      return pow(arg, arg2);
 
     case 'log(x)':
       return Math.log10(arg);
@@ -101,7 +107,9 @@ function multiply(v1, v2) {
 
 //v1 / v2
 function divide(v1, v2) {
-  const f = new Fraction(v1, v2);
+  v1 = new Fraction(v1);
+  v2 = new Fraction(v2);
+  const f = v1.div(v2);
   return f.toFraction();
 }
 

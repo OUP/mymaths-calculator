@@ -1,40 +1,39 @@
 .CalcBase {
-    text-align: center;
-    display: inline-block;
-    background: #eceef7;
-    border-radius: 5px;
-    border: #000066 solid;
+  text-align: center;
+  display: inline-block;
+  background: #eceef7;
+  border-radius: 5px;
+  border: #000066 solid;
 }
 
 .InputDisplay {
-    border: 2px solid #cccccc;
-    text-align: left;
-    background: #ffffff;
-    color: #990000;
-    margin: 5px;
-    padding: 10px;
-    font-size: 24px;
-    min-height: 70px;
-    max-height: 120px;
-    overflow: hidden;
-    position: relative;
+  border: 2px solid #cccccc;
+  text-align: left;
+  background: #ffffff;
+  color: #990000;
+  margin: 5px;
+  padding: 10px;
+  font-size: 20px;
+  height: 80px;
+  width: 355px;
+  position: relative;
+  overflow: scroll;
 }
 
 .OutputDisplay {
-    border: 2px solid #cccccc;
-    background: rgb(191, 240, 213);
-    color: #000000;
-    margin: 5px;
-    padding: 10px;
-    font-size: 24px;
-    min-height: 55px;
-    max-height: 120px;
-    overflow: hidden;
-    position: relative;
+  border: 2px solid #cccccc;
+  background: rgb(191, 240, 213);
+  color: #000000;
+  margin: 5px;
+  padding: 10px;
+  font-size: 20px;
+  height: 55px;
+  overflow: hidden;
+  position: relative;
 }
 
 .OutputText {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
