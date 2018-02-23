@@ -12,7 +12,6 @@ export function calcEval(inputValue, oldOutput = '0') {
 
   outputArray = assembleNumbers(outputArray);
   outputArray = assembleArguments(outputArray);
-  outputArray = assemblePreArgs(outputArray);
   outputArray = replaceAns(outputArray, oldOutput);
 
   //Closed brackets are only used in organising the input, not to evaluate.
@@ -296,6 +295,10 @@ export const assembleArguments = function recur(outputArray) {
             updatedFunc.argument.push(outputArray[i + 1]);
             outputArray.splice(i, 2, updatedFunc);
             i--;
+          } else {
+            updatedFunc.argument.push('cArg');
+            outputArray.splice(i, 1, updatedFunc);
+            i--;
           }
         }
       } else {
@@ -310,11 +313,11 @@ export const assembleArguments = function recur(outputArray) {
 };
 
 function checkToAdd(outputArray, j) {
+  const func = outputArray[j - 1];
+  const key = safeGetKey(func);
   const possArgEl = outputArray[j];
-  const testKey = safeGetKey(possArgEl);
-  if (testKey) {
-    const testArray = outputArray.slice(0, j);
-    return !searchForOArg(testArray, testKey);
+  if (buttonType(possArgEl) === 'cArg' && possArgEl !== 'cArg' + key) {
+    return false;
   } else {
     return true;
   }
@@ -354,69 +357,6 @@ function cArgCheck(argArray) {
     }
   } else {
     return false;
-  }
-  return false;
-}
-
-export const assemblePreArgs = function recur(outputArray) {
-  let recursionNeeded = false;
-  const arrFromPrevIteration = outputArray.slice(0);
-  for (let i = outputArray.length - 1; i >= 0; i--) {
-    if (safePreArgCheck(outputArray, i)) {
-      if (!safePreArgCheck(outputArray, i - 1)) {
-        const key = outputArray[i].key;
-        const updatedFunc = cloneState(outputArray[i]);
-        updatedFunc.preArgument.unshift(outputArray[i - 1]);
-        outputArray.splice(i - 1, 2, updatedFunc);
-        if (!searchForOArg(outputArray, key)) {
-          i--;
-        }
-      } else {
-        recursionNeeded = true;
-      }
-    }
-    if (
-      recursionNeeded &&
-      !identicalArrays(outputArray, arrFromPrevIteration)
-    ) {
-      outputArray = recur(outputArray);
-    }
-  }
-  return outputArray;
-};
-
-function safePreArgCheck(outputArray, i) {
-  if (outputArray[i]) {
-    if (outputArray[i].preArgument) {
-      const key = outputArray[i].key;
-      if (
-        (!oArgCheck(outputArray[i].preArgument) &&
-          !outputArray[i].preArgument.length) ||
-        searchForOArg(outputArray, key)
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function oArgCheck(argArray) {
-  if (argArray.length) {
-    for (let i = 0; i < argArray.length; i++) {
-      if (buttonType(argArray[i]) === 'oArg') {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function searchForOArg(outputArray, key) {
-  for (let i = 0; i < outputArray.length; i++) {
-    if (outputArray[i] === 'oArg' + key) {
-      return true;
-    }
   }
   return false;
 }
