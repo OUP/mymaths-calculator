@@ -2,6 +2,7 @@ import { buttonType } from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
 import { cloneState, identicalArrays } from './Buttons/ButtonUtilities';
+import Decimal from 'decimal.js/decimal';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -39,8 +40,14 @@ export function calcEval(inputValue, oldOutput = '0') {
     return oldOutput;
   }
 
-  console.log('outVal', outputArray[0].value);
-  return outputArray[0].value.toString();
+  const outVal = outputArray[0].value;
+  const outValStr = outVal.toString();
+  if (!outValStr.includes('/')) {
+    const decVal = new Decimal(outVal);
+    return decVal.toString();
+  } else {
+    return outputArray[0].value.toString();
+  }
 }
 
 function moreOpsToDo(inputArray) {
