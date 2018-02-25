@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { buttonType } from '../Functionality/ButtonType';
+import buttonType from '../Functionality/ButtonType';
 import './CalcButton.css';
 
 class CalcButton extends Component {

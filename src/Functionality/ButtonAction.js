@@ -1,4 +1,4 @@
-import { buttonType } from './ButtonType';
+import buttonType from './ButtonType';
 import { buttonSuperType } from './ButtonType';
 import { pressInput } from './Buttons/PressInput';
 import { pressEquals } from './Buttons/PressEquals';

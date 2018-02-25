@@ -1,10 +1,10 @@
 import katex from 'katex';
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
-import { buttonType } from './ButtonType';
-import { assembleNumbers, assembleArguments } from './CalcEval';
+import buttonType from './ButtonType';
+import { assembleNumbers, assembleArguments } from './Utilities';
 import '../UI/Maths.css';
-import { identicalArrays } from './Buttons/ButtonUtilities';
+import { identicalArrays } from './Utilities';
 
 export function parseToRender(
   arr,

@@ -1,8 +1,13 @@
-import { buttonType } from './ButtonType';
+import buttonType from './ButtonType';
 import { accurateOp, accurateFunc } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
-import { cloneState, identicalArrays } from './Buttons/ButtonUtilities';
 import Decimal from 'decimal.js/decimal';
+import {
+  assembleArguments,
+  assembleNumbers,
+  checkIfFraction
+} from './Utilities';
+import { moreOpsToDo, findNextOp, opPriority } from './OrganiseOps';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -49,12 +54,11 @@ export function calcEval(inputValue, oldOutput = '0') {
   }
 }
 
-function moreOpsToDo(inputArray) {
-  if (inputArray.length > 1 || inputArray[0].argument) {
-    return true;
-  } else {
-    return false;
-  }
+function doNextOp(inputArray) {
+  const nextOp = findNextOp(inputArray);
+  console.log('nextOp.position', nextOp.position);
+  const outputArray = executeOp(nextOp.array, nextOp.position);
+  return outputArray;
 }
 
 function replaceAns(inputArray, oldOutput) {
@@ -66,41 +70,6 @@ function replaceAns(inputArray, oldOutput) {
     }
   }
   return ansReplaced;
-}
-
-function doNextOp(inputArray) {
-  const nextOp = findNextOp(inputArray);
-  console.log('nextOp.position', nextOp.position);
-  const outputArray = executeOp(nextOp.array, nextOp.position);
-  return outputArray;
-}
-
-function findNextOp(inputArray) {
-  let prioritisedArray;
-
-  //Skip prioritise ops if already prioritised
-  if (!inputArray[0].priority && inputArray[0].priority !== 0) {
-    prioritisedArray = prioritiseOps(inputArray);
-  } else {
-    prioritisedArray = inputArray;
-  }
-
-  const output = {};
-  let i;
-  let j;
-
-  for (i = 1; i <= 6; i++) {
-    for (j = 0; j < prioritisedArray.length; j++) {
-      if (prioritisedArray[j].priority === i) {
-        output.array = prioritisedArray;
-        output.position = j;
-        return output;
-      }
-    }
-  }
-
-  console.error('findNextOp expected an op.');
-  return inputArray;
 }
 
 function executeOp(inputArray, position) {
@@ -187,66 +156,6 @@ function executeOp(inputArray, position) {
   return outputArray;
 }
 
-function prioritiseOps(inputArray) {
-  const prioritised = [];
-  let element = {};
-  let i;
-  console.log(inputArray);
-  for (i = 0; i < inputArray.length; i++) {
-    element.value = inputArray[i];
-    element.type = buttonType(inputArray[i]);
-    element.priority = opPriority(element);
-    prioritised.push(element);
-    element = {};
-  }
-  return prioritised;
-}
-
-function opPriority(element) {
-  if (element.type === 'function') {
-    return 1;
-  } else if (element.type !== 'operator') {
-    return 0;
-  } else {
-    switch (element.value) {
-      case 'xⁿ':
-        return 2;
-
-      case 'x²':
-        return 2;
-
-      case 'x³':
-        return 2;
-
-      case 'x⁻¹':
-        return 2;
-
-      case 'x!':
-        return 2;
-      //Strictly should be 4 but setting it to 2 is an auto-correct
-
-      case '÷':
-        return 3;
-
-      case '×':
-        return 4;
-
-      case '×10ⁿ':
-        return 4;
-
-      case '–':
-        return 5;
-
-      case '+':
-        return 6;
-
-      default:
-        console.error("Don't know the priority of " + element.value);
-        break;
-    }
-  }
-}
-
 function funcEval(inputArray, funcIndex) {
   const inputEl = inputArray[funcIndex].value;
   const func = inputEl.function;
@@ -259,104 +168,4 @@ function funcEval(inputArray, funcIndex) {
   } else {
     return accurateFunc(func, arg);
   }
-}
-
-function checkIfFraction(x) {
-  //x can be undefined
-  if (x) {
-    return x.value.includes('/');
-  } else {
-    return false;
-  }
-}
-
-export function assembleNumbers(outputArray) {
-  const updatedArray = outputArray.slice(0);
-  for (let i = 0; i < updatedArray.length; i++) {
-    if (buttonType(updatedArray[i]) === 'number') {
-      if (buttonType(updatedArray[i + 1]) === 'number') {
-        updatedArray.splice(i, 2, updatedArray[i] + updatedArray[i + 1]);
-        i--;
-      }
-    }
-  }
-  return updatedArray;
-}
-
-export const assembleArguments = function recur(outputArray) {
-  let recursionNeeded = false;
-  const arrFromPrevIteration = outputArray.slice(0);
-  for (let i = 0; i < outputArray.length; i++) {
-    if (safeArgCheck(outputArray, i)) {
-      if (!safeArgCheck(outputArray, i + 1)) {
-        if (outputArray[i + 1]) {
-          const updatedFunc = cloneState(outputArray[i]);
-          if (checkToAdd(outputArray, i + 1)) {
-            updatedFunc.argument.push(outputArray[i + 1]);
-            outputArray.splice(i, 2, updatedFunc);
-            i--;
-          } else {
-            updatedFunc.argument.push('cArg');
-            outputArray.splice(i, 1, updatedFunc);
-            i--;
-          }
-        }
-      } else {
-        recursionNeeded = true;
-      }
-    }
-  }
-  if (recursionNeeded && !identicalArrays(outputArray, arrFromPrevIteration)) {
-    outputArray = recur(outputArray);
-  }
-  return outputArray;
-};
-
-function checkToAdd(outputArray, j) {
-  const func = outputArray[j - 1];
-  const key = safeGetKey(func);
-  const possArgEl = outputArray[j];
-  if (buttonType(possArgEl) === 'cArg' && possArgEl !== 'cArg' + key) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-function safeGetKey(possibleFunc) {
-  if (possibleFunc) {
-    const key = possibleFunc.key;
-    if (key) {
-      return key;
-    }
-  }
-  return null;
-}
-
-//Check whether element at i has an open argument
-export function safeArgCheck(outputArray, i) {
-  if (outputArray[i]) {
-    if (outputArray[i].argument) {
-      if (
-        !outputArray[i].argument.includes(')') &&
-        !cArgCheck(outputArray[i].argument)
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function cArgCheck(argArray) {
-  if (argArray.length) {
-    for (let i = 0; i < argArray.length; i++) {
-      if (buttonType(argArray[i]) === 'cArg') {
-        return true;
-      }
-    }
-  } else {
-    return false;
-  }
-  return false;
 }

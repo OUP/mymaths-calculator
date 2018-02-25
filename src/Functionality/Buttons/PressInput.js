@@ -1,4 +1,4 @@
-import { splitInputAtCursor } from './ButtonUtilities';
+import { splitInputAtCursor } from '../Utilities';
 import { pressFunction } from './PressFunction';
 
 export const pressInput = function recur(button, bType, currentState) {

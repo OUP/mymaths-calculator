@@ -1,4 +1,4 @@
-export function buttonType(b) {
+export default function buttonType(b) {
   b = safeToString(b);
 
   switch (true) {
