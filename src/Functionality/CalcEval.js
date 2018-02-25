@@ -5,44 +5,26 @@ import Decimal from 'decimal.js/decimal';
 import {
   assembleArguments,
   assembleNumbers,
-  checkIfFraction
+  checkIfFraction,
+  cloneState
 } from './Utilities';
 import { moreOpsToDo, findNextOp, opPriority } from './OrganiseOps';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
-  //Pass input array by value not by reference
-  let outputArray = [];
-  outputArray = inputValue.slice(0);
-
-  outputArray = assembleNumbers(outputArray);
-  outputArray = assembleArguments(outputArray);
-  outputArray = replaceAns(outputArray, oldOutput);
-
-  //Closed brackets are only used in organising the input, not to evaluate.
-  outputArray = outputArray.filter(x => x !== ')');
-  outputArray = outputArray.filter(x => x !== '|');
-  outputArray = outputArray.filter(x => buttonType(x) !== 'cArg');
-  outputArray = outputArray.filter(x => buttonType(x) !== 'oArg');
-
-  while (moreOpsToDo(outputArray)) {
-    outputArray = doNextOp(outputArray);
-  }
-
-  //Handle errors
-  if (!outputArray[0]) {
-    outputArray = new Array('0');
-  }
-
-  //Handle = press with empty input
-  if (!outputArray[0].value) {
-    outputArray[0] = { value: outputArray[0] };
-  }
+  let outputArray = initOutputArray(inputValue);
 
   //Don't remove the old output if there's nothing to execute
   if (outputArray.length === 0) {
     return oldOutput;
   }
+
+  outputArray = assembleNumbers(outputArray);
+  outputArray = assembleArguments(outputArray);
+  outputArray = replaceAns(outputArray, oldOutput);
+  outputArray = filterCloseBrackets(outputArray);
+  outputArray = doAllOps(outputArray);
+  handleEmptyOutput(outputArray);
 
   const outVal = outputArray[0].value;
   const outValStr = outVal.toString();
@@ -54,11 +36,20 @@ export function calcEval(inputValue, oldOutput = '0') {
   }
 }
 
-function doNextOp(inputArray) {
-  const nextOp = findNextOp(inputArray);
-  console.log('nextOp.position', nextOp.position);
-  const outputArray = executeOp(nextOp.array, nextOp.position);
-  return outputArray;
+function initOutputArray(inputArray) {
+  if (inputArray.length) {
+    return cloneState(inputArray);
+  }
+  return [];
+}
+
+function filterCloseBrackets(inputArray) {
+  //Close brackets are used to organise ops, not to evaluate
+  inputArray = inputArray.filter(x => x !== ')');
+  inputArray = inputArray.filter(x => x !== '|');
+  inputArray = inputArray.filter(x => buttonType(x) !== 'cArg');
+  inputArray = inputArray.filter(x => buttonType(x) !== 'oArg');
+  return inputArray;
 }
 
 function replaceAns(inputArray, oldOutput) {
@@ -70,6 +61,20 @@ function replaceAns(inputArray, oldOutput) {
     }
   }
   return ansReplaced;
+}
+
+function doAllOps(inputArray) {
+  while (moreOpsToDo(inputArray)) {
+    inputArray = doNextOp(inputArray);
+  }
+  return inputArray;
+}
+
+function doNextOp(inputArray) {
+  const nextOp = findNextOp(inputArray);
+  console.log('nextOp.position', nextOp.position);
+  const outputArray = executeOp(nextOp.array, nextOp.position);
+  return outputArray;
 }
 
 function executeOp(inputArray, position) {
@@ -154,6 +159,13 @@ function executeOp(inputArray, position) {
     outputArray.splice(position - 1, 2, output);
   }
   return outputArray;
+}
+
+function handleEmptyOutput(inputArray) {
+  if (!inputArray[0].value) {
+    inputArray[0] = { value: inputArray[0] };
+  }
+  return;
 }
 
 function funcEval(inputArray, funcIndex) {
