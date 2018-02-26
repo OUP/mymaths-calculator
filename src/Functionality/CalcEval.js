@@ -92,18 +92,6 @@ function executeOp(inputArray, position) {
       };
       outputArray.splice(position, inputArray[position].value.parts, output);
 
-      //Catch infinite loops
-      if (outputArray[position].value) {
-        if (outputArray[position].value.argument) {
-          console.error('recursion error');
-          return {
-            value: 'recursion error',
-            priority: 0,
-            type: 'number'
-          };
-        }
-      }
-
       return outputArray;
     }
   }
