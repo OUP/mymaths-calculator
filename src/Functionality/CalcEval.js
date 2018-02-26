@@ -78,22 +78,12 @@ function doNextOp(inputArray) {
 }
 
 function executeOp(inputArray, position) {
-  let output = {};
+  const output = {};
   const outputArray = inputArray;
 
-  //Recursion to get inside brackets
-  if (inputArray[position].value) {
-    if (inputArray[position].value.argument) {
-      console.log('found argument', inputArray[position].value.argument);
-      output = {
-        value: funcEval(inputArray, position).toString(),
-        priority: 0,
-        type: 'number'
-      };
-      outputArray.splice(position, inputArray[position].value.parts, output);
-
-      return outputArray;
-    }
+  if (functionOp(outputArray[position])) {
+    doFunction(outputArray, position);
+    return outputArray;
   }
 
   const operation = inputArray[position].value;
@@ -153,6 +143,26 @@ function handleEmptyOutput(inputArray) {
   if (!inputArray[0].value) {
     inputArray[0] = { value: inputArray[0] };
   }
+  return;
+}
+
+function functionOp(opEl) {
+  if (opEl.value) {
+    if (opEl.value.argument) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function doFunction(inputArray, position) {
+  console.log('found argument', inputArray[position].value.argument);
+  const output = {
+    value: funcEval(inputArray, position).toString(),
+    priority: 0,
+    type: 'number'
+  };
+  inputArray.splice(position, inputArray[position].value.parts, output);
   return;
 }
 
