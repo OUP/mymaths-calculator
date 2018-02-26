@@ -1,4 +1,4 @@
-import buttonType from './ButtonType';
+import buttonType from '../ButtonType';
 
 export function moreOpsToDo(inputArray) {
   if (inputArray.length > 1 || inputArray[0].argument) {

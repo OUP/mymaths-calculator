@@ -1,7 +1,7 @@
-import buttonType from './ButtonType';
+import buttonType from '../ButtonType';
 import { accurateOp } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
-import { checkIfFraction } from './Utilities';
+import { checkIfFraction } from '../Utilities';
 import { opPriority } from './OrganiseOps';
 
 export function doArithmeticOp(inputArray, position) {

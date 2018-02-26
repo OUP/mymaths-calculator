@@ -1,4 +1,4 @@
-import { calcEval } from '../CalcEval';
+import { calcEval } from '../Eval/CalcEval';
 
 export function pressEquals(currentState) {
   currentState.outputValue = [

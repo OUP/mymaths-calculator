@@ -1,6 +1,6 @@
-import buttonType from './ButtonType';
+import buttonType from '../ButtonType';
 import Decimal from 'decimal.js/decimal';
-import { assembleArguments, assembleNumbers, cloneState } from './Utilities';
+import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
