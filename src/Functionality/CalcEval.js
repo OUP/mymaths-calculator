@@ -12,28 +12,13 @@ import { moreOpsToDo, findNextOp, opPriority } from './OrganiseOps';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
-  let outputArray = initOutputArray(inputValue);
-
-  //Don't remove the old output if there's nothing to execute
-  if (outputArray.length === 0) {
-    return oldOutput;
+  if (inputValue.length === 0) {
+    //Don't remove the old output if there's nothing to execute
+    return oldOutput.toString();
   }
-
-  outputArray = replaceAns(outputArray, oldOutput);
-  outputArray = assembleNumbers(outputArray);
-  outputArray = assembleArguments(outputArray);
-  outputArray = filterCloseBrackets(outputArray);
-  outputArray = doAllOps(outputArray);
-  handleEmptyOutput(outputArray);
-
-  const outVal = outputArray[0].value;
-  const outValStr = outVal.toString();
-  if (!outValStr.includes('/')) {
-    const decVal = new Decimal(outVal);
-    return decVal.toString();
-  } else {
-    return outputArray[0].value.toString();
-  }
+  const outputArray = initOutputArray(inputValue);
+  const value = getValue(outputArray, oldOutput);
+  return processValue(value);
 }
 
 function initOutputArray(inputArray) {
@@ -41,6 +26,26 @@ function initOutputArray(inputArray) {
     return cloneState(inputArray);
   }
   return [];
+}
+
+function getValue(inputArray, oldOutput) {
+  inputArray = replaceAns(inputArray, oldOutput);
+  inputArray = assembleNumbers(inputArray);
+  inputArray = assembleArguments(inputArray);
+  inputArray = filterCloseBrackets(inputArray);
+  inputArray = doAllOps(inputArray);
+  handleEmptyOutput(inputArray);
+  return inputArray[0].value;
+}
+
+function processValue(value) {
+  const valStr = value.toString();
+  if (!valStr.includes('/')) {
+    const decVal = new Decimal(value);
+    return decVal.toString();
+  } else {
+    return valStr;
+  }
 }
 
 function filterCloseBrackets(inputArray) {
