@@ -19,9 +19,9 @@ export function calcEval(inputValue, oldOutput = '0') {
     return oldOutput;
   }
 
+  outputArray = replaceAns(outputArray, oldOutput);
   outputArray = assembleNumbers(outputArray);
   outputArray = assembleArguments(outputArray);
-  outputArray = replaceAns(outputArray, oldOutput);
   outputArray = filterCloseBrackets(outputArray);
   outputArray = doAllOps(outputArray);
   handleEmptyOutput(outputArray);
