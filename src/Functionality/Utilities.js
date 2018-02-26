@@ -118,10 +118,10 @@ export function identicalArrays(arr1, arr2) {
   return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
 
-export function checkIfFraction(x) {
+export function checkIfFraction(val) {
   //x can be undefined
-  if (x) {
-    return x.value.includes('/');
+  if (val) {
+    return val.includes('/');
   }
   return false;
 }
