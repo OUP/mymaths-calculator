@@ -63,7 +63,8 @@ function checkForOperator(b) {
     b === 'x²' ||
     b === 'x³' ||
     b === 'x⁻¹' ||
-    b === 'x!'
+    b === 'x!' ||
+    b === '%'
   ) {
     return true;
   } else {

@@ -30,7 +30,8 @@ function updateArrayFromOp(inputArray, position, operation, output) {
     operation !== 'x²' &&
     operation !== 'x!' &&
     operation !== 'x³' &&
-    operation !== 'x⁻¹'
+    operation !== 'x⁻¹' &&
+    operation !== '%'
   ) {
     inputArray.splice(position - 1, 3, output);
   } else {

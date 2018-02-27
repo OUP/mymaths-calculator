@@ -22,6 +22,10 @@ export function accurateOp(v1, operation, v2 = 0) {
     case 'x!':
       return factorial(v1);
 
+    case '%':
+      const oneHundred = new Fraction(100);
+      return v1.div(oneHundred);
+
     case '÷':
       return v1.div(v2).toFraction();
 
@@ -51,6 +55,7 @@ function initOp(v, operation) {
   if (
     operation !== '÷' &&
     operation !== 'numerator' &&
+    operation !== '%' &&
     !v.toString().includes('/')
   ) {
     return new Decimal(v);

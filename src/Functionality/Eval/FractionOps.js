@@ -18,6 +18,9 @@ export function fractionOp(v1, operation, v2 = 0) {
     case 'x!':
       return fracFactorial(v1);
 
+    case '%':
+      return fracDivide(v1, '100');
+
     case '÷':
       return fracDivide(v1, v2);
 

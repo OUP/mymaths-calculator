@@ -92,6 +92,9 @@ function parseElToMaths(el) {
         case 'x!':
           return '{!}';
 
+        case '%':
+          return '{\\%}';
+
         default:
           return el;
       }

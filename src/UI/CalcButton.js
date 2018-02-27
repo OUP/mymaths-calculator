@@ -37,7 +37,8 @@ function buttonStyle(button, shift = false) {
     button === 'x²' ||
     button === 'x³' ||
     button === 'x⁻¹' ||
-    button === 'x!'
+    button === 'x!' ||
+    button === '%'
   ) {
     style = 'SmallButton';
   } else if (

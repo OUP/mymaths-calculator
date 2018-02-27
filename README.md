@@ -10,15 +10,11 @@ Click buttons to make things happen. Caveats below.
 # Known errors
 
 The following buttons are still idle:
-`frac`
-`%`
 `ENG`
 `π`
-shifted buttons
+some shifted buttons
 
-Using multiple decimal points in a number outputs weird values instead of `syntax error`.
-
-Output values can be imprecise due to solvable errors with floating point arithmetic.
+Output values can be imprecise when dividing by large numbers or decimals.
 
 # Compulsory improvements
 
@@ -37,8 +33,6 @@ Improve design.
 Basic auto-corrections
 
 # Optional improvements
-
-MathJax/LaTeX rendering of fractions and surds.
 
 Stats and table modes.
 

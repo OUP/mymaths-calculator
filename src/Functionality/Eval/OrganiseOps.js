@@ -72,6 +72,9 @@ export function opPriority(element) {
 
       case 'x!':
         return 2;
+
+      case '%':
+        return 2;
       //Strictly should be 4 but setting it to 2 is an auto-correct
 
       case '÷':
