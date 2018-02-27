@@ -1,7 +1,7 @@
 import buttonType from './ButtonType';
 
 export function assembleNumbers(outputArray) {
-  const updatedArray = outputArray.slice(0);
+  const updatedArray = cloneState(outputArray);
   for (let i = 0; i < updatedArray.length; i++) {
     if (buttonType(updatedArray[i]) === 'number') {
       if (buttonType(updatedArray[i + 1]) === 'number') {
@@ -15,7 +15,7 @@ export function assembleNumbers(outputArray) {
 
 export const assembleArguments = function recur(outputArray) {
   let recursionNeeded = false;
-  const arrFromPrevIteration = outputArray.slice(0);
+  const arrFromPrevIteration = cloneState(outputArray);
   for (let i = 0; i < outputArray.length; i++) {
     if (safeArgCheck(outputArray, i)) {
       if (!safeArgCheck(outputArray, i + 1)) {
