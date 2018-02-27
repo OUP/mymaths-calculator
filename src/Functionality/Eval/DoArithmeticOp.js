@@ -13,7 +13,10 @@ export function doArithmeticOp(inputArray, position) {
 
 function evalArithmeticOp(inputArray, position, operation) {
   const valBefore = inputArray[position - 1].value;
-  const valAfter = inputArray[position + 1].value;
+  let valAfter = '0';
+  if (inputArray[position + 1]) {
+    valAfter = inputArray[position + 1].value;
+  }
   if (!checkIfFraction(valBefore) && !checkIfFraction(valAfter)) {
     return doDecimalOp(valBefore, operation, valAfter);
   } else {
