@@ -11,8 +11,14 @@ export function calcEval(inputValue, oldOutput = '0') {
     //Don't remove the old output if there's nothing to execute
     return oldOutput.toString();
   }
-  const outputArray = initOutputArray(inputValue);
-  return processValue(getValue(outputArray, oldOutput));
+  inputValue = initOutputArray(inputValue);
+  inputValue = replaceAns(inputValue, oldOutput);
+  inputValue = assembleNumbers(inputValue);
+  inputValue = assembleArguments(inputValue);
+  inputValue = filterCloseBrackets(inputValue);
+  inputValue = doAllOps(inputValue);
+  handleEmptyOutput(inputValue);
+  return processValue(inputValue[0].value);
 }
 
 function initOutputArray(inputArray) {
@@ -20,27 +26,6 @@ function initOutputArray(inputArray) {
     return cloneState(inputArray);
   }
   return [];
-}
-
-function getValue(inputArray, oldOutput) {
-  inputArray = replaceAns(inputArray, oldOutput);
-  inputArray = assembleNumbers(inputArray);
-  inputArray = assembleArguments(inputArray);
-  inputArray = filterCloseBrackets(inputArray);
-  inputArray = doAllOps(inputArray);
-  handleEmptyOutput(inputArray);
-  return inputArray[0].value;
-}
-
-function processValue(value) {
-  //Decides between decimal and fraction and formats appropriately
-  const valStr = value.toString();
-  if (!valStr.includes('/')) {
-    const decVal = new Decimal(value);
-    return decVal.toString();
-  } else {
-    return valStr;
-  }
 }
 
 function filterCloseBrackets(inputArray) {
@@ -69,6 +54,24 @@ function doAllOps(inputArray) {
   return inputArray;
 }
 
+function handleEmptyOutput(inputArray) {
+  if (!inputArray[0].value) {
+    inputArray[0] = { value: inputArray[0] };
+  }
+  return;
+}
+
+function processValue(value) {
+  //Decides between decimal and fraction and formats appropriately
+  const valStr = value.toString();
+  if (!valStr.includes('/')) {
+    const decVal = new Decimal(value);
+    return decVal.toString();
+  } else {
+    return valStr;
+  }
+}
+
 function doNextOp(inputArray) {
   const nextOp = findNextOp(inputArray);
   console.log('nextOp.position', nextOp.position);
@@ -82,13 +85,6 @@ function executeOp(inputArray, position) {
     doArithmeticOp(inputArray, position);
   }
   return inputArray;
-}
-
-function handleEmptyOutput(inputArray) {
-  if (!inputArray[0].value) {
-    inputArray[0] = { value: inputArray[0] };
-  }
-  return;
 }
 
 function checkFunctionOp(opEl) {
