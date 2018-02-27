@@ -8,6 +8,9 @@ export default function buttonType(b) {
     case checkForOperator(b):
       return 'operator';
 
+    case checkForSymbol(b):
+      return 'symbol';
+
     case checkForMode(b):
       return 'mode';
 
@@ -72,6 +75,14 @@ function checkForOperator(b) {
   }
 }
 
+function checkForSymbol(b) {
+  if (b === 'π') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function checkForMode(b) {
   if (b === 'shift' || b === '⬅' || b === '➡' || b === '⬆' || b === '⬇') {
     return true;
@@ -126,6 +137,7 @@ export function buttonSuperType(button) {
   switch (true) {
     case type === 'number' ||
       type === 'operator' ||
+      type === 'symbol' ||
       type === 'function' ||
       type === 'Ans':
       return 'input';

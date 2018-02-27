@@ -99,6 +99,9 @@ function parseElToMaths(el) {
           return el;
       }
 
+    case 'symbol':
+      return el;
+
     case 'Ans':
       return '\\text {' + el + '}';
 
