@@ -62,9 +62,6 @@ function pressArgAfter(button, currentState) {
     currentState.inputValue.push('cArg' + currentState.functionKey);
   }
 
-  if (button === '|x|') {
-    currentState.inputValue.push('|');
-  }
   return currentState;
 }
 

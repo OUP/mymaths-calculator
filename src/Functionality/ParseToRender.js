@@ -217,7 +217,7 @@ function genRecurringDecimal(decimal) {
 function funcToStringMap(func) {
   switch (func) {
     case '|x|':
-      return '|';
+      return '\\text {Abs}';
 
     case 'log(x)':
       return '\\log';
