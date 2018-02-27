@@ -42,7 +42,7 @@ function parseElToMaths(el) {
     case 'number':
       switch (this) { //this is the displayMode
         case 'fraction':
-          if (!el.includes('/')) {
+          if (!el.includes('/') && !el.includes('(')) {
             el = new Decimal(el);
             const testFracEl = el.toFraction(1000);
             const fracEl = el.toFraction();

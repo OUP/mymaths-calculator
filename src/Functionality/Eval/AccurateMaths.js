@@ -48,7 +48,11 @@ function initOp(v, operation) {
   if (!v) {
     v = 0;
   }
-  if (operation !== '÷' && operation !== 'numerator') {
+  if (
+    operation !== '÷' &&
+    operation !== 'numerator' &&
+    !v.toString().includes('/')
+  ) {
     return new Decimal(v);
   } else {
     return new Fraction(v);
