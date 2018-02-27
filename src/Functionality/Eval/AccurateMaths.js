@@ -3,37 +3,40 @@ import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
+  v1 = initOp(v1, operation);
+  v2 = initOp(v2, operation);
   switch (operation) {
     case 'xⁿ':
-      return pow(v1, v2);
+      return v1.toPower(v2);
 
     case 'x²':
-      return multiply(v1, v1);
+      return v1.times(v1);
 
     case 'x³':
-      return multiply(multiply(v1, v1), v1);
+      return v1.times(v1).times(v1);
 
     case 'x⁻¹':
-      return divide('1', v1);
+      const one = new Fraction(1);
+      return one.div(v1).toFraction();
 
     case 'x!':
       return factorial(v1);
 
     case '÷':
-      return divide(v1, v2);
+      return v1.div(v2).toFraction();
 
     case '×':
-      return multiply(v1, v2);
+      return v1.times(v2);
 
     case '×10ⁿ':
-      return pow10(v1, v2);
-    //v1 * Math.pow(10, v2);
+      const ten = new Decimal(10);
+      return v1.times(ten.toPower(v2));
 
     case '–':
-      return subtract(v1, v2);
+      return v1.minus(v2);
 
     case '+':
-      return add(v1, v2);
+      return v1.add(v2);
 
     default:
       console.error("Don't know how to do the operation " + operation);
@@ -41,97 +44,68 @@ export function accurateOp(v1, operation, v2 = 0) {
   }
 }
 
+function initOp(v, operation) {
+  if (!v) {
+    v = 0;
+  }
+  if (operation !== '÷' && operation !== 'numerator') {
+    return new Decimal(v);
+  } else {
+    return new Fraction(v);
+  }
+}
+
 export function accurateFunc(func, arg, arg2) {
+  arg = initOp(arg, func);
+  arg2 = initOp(arg2, func);
   switch (func) {
     case 'numerator':
-      return divide(arg, arg2);
+      return arg.div(arg2).toFraction();
 
     case '|x|':
-      return Math.abs(arg);
+      return arg.abs();
 
     case 'base':
-      return pow(arg, arg2);
+      return arg.toPower(arg2);
 
     case 'log(x)':
-      return Math.log10(arg);
+      return arg.log(10);
 
     case 'ln(x)':
-      return Math.log(arg);
+      return arg.ln();
 
     case '√(x)':
-      return Math.sqrt(arg);
+      return arg.sqrt();
 
     case 'sin(x)':
-      return Math.sin(arg);
+      return arg.sin();
 
     case 'cos(x)':
-      return Math.cos(arg);
+      return arg.cos();
 
     case 'tan(x)':
-      return Math.tan(arg);
+      return arg.tan();
 
     case 'sin⁻¹':
-      return Math.asin(arg);
+      return arg.asin();
 
     case 'cos⁻¹':
-      return Math.acos(arg);
+      return arg.acos();
 
     case 'tan⁻¹':
-      return Math.atan(arg);
+      return arg.atan();
 
     case '(':
       return arg;
   }
 }
 
-//v1 + v2
-function add(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  return v1.add(v2);
-}
-
-//v1 - v2
-function subtract(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  return v1.minus(v2);
-}
-
-//v1 * v2
-function multiply(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  return v1.times(v2);
-}
-
-//v1 / v2
-function divide(v1, v2) {
-  v1 = new Fraction(v1);
-  v2 = new Fraction(v2);
-  const f = v1.div(v2);
-  return f.toFraction();
-}
-
-//v1 ^ v2
-function pow(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  return v1.toPower(v2);
-}
-
-function pow10(v1, v2) {
-  v1 = new Decimal(v1);
-  v2 = new Decimal(v2);
-  const ten = new Decimal(10);
-  return v1.times(ten.toPower(v2));
-}
-
 const factorial = function recur(v1, index = 1, result = 1) {
-  if (Math.round(v1) === v1) {
-    result = multiply(result, index);
-    if (index < v1) {
-      return recur(v1, index + 1, result);
+  if (v1.round().eq(v1)) {
+    index = new Decimal(index.toString());
+    result = index.times(result);
+    if (index.lt(v1)) {
+      return recur(v1, index.add(1), result);
     } else {
       return result;
     }
