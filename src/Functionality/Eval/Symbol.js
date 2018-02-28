@@ -83,7 +83,7 @@ export class Term {
   divBy(x) {
     switch (x.constructor) {
       case Expression:
-        break; //WIP
+        return x.divBy(this).reciprocal();
 
       case Term:
         return this.termMultiply(x.reciprocal());
@@ -248,6 +248,10 @@ export class Expression {
       wipTerms = wipTerms.minus(this.terms[i]);
     }
     return wipTerms;
+  }
+
+  reciprocal() {
+    //WiP
   }
 
   toString() {
