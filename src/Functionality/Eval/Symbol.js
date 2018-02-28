@@ -38,6 +38,19 @@ export class Term {
     return this.coefficient + wipString;
   }
 
+  simplify() {
+    const wipPowers = cloneState(this.powers);
+    const wipSymbols = cloneState(this.symbols);
+    for (let i = 0; i < this.symbols.length; i++) {
+      if (wipPowers[i] === 0) {
+        wipSymbols.splice(i, 1);
+        wipPowers.splice(i, 1);
+        i--;
+      }
+    }
+    return new Term(this.coefficient, wipSymbols, wipPowers);
+  }
+
   plus(x) {
     switch (x.constructor) {
       case Expression:
@@ -104,7 +117,8 @@ export class Term {
   }
 
   numAdd(num) {
-    return new Expression([this, num]);
+    const numTerm = new Term(num, [], []);
+    return this.termAdd(numTerm);
   }
 
   termMultiply(term) {
@@ -235,9 +249,9 @@ export class Expression {
   }
 
   simplify() {
-    let wipTerms = new Expression(this.terms).terms[0];
+    let wipTerms = new Expression(this.terms).terms[0].simplify();
     for (let i = 1; i < this.terms.length; i++) {
-      wipTerms = wipTerms.plus(this.terms[i]);
+      wipTerms = wipTerms.plus(this.terms[i].simplify());
     }
     return wipTerms;
   }
@@ -251,7 +265,8 @@ export class Expression {
   }
 
   reciprocal() {
-    return new inverseExpression(this);
+    const numerator = new Expression([new Term(1, [], [])]);
+    return new fractionExpression(numerator, this);
   }
 
   toString() {
@@ -267,17 +282,18 @@ export class Expression {
   }
 }
 
-class inverseExpression {
-  constructor(expression) {
-    this.reciprocal = expression;
+class fractionExpression {
+  constructor(numerator, denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
   }
 
   reciprocal() {
-    return this.reciprocal();
+    return new fractionExpression(this.denominator, this.numerator);
   }
 
   toString() {
-    return '1 / ' + this.reciprocal.toString();
+    return this.numerator.toString() + ' / ' + this.denominator.toString();
   }
 }
 

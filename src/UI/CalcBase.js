@@ -16,7 +16,11 @@ function testSymbolMethods() {
   const z = new Term(7, ['x', 'y'], [2, 3]);
   const A = x.plus(y).plus(z);
   const B = x.plus(z);
-  return x.divBy(A).toString();
+  return y
+    .divBy(x)
+    .divBy(x)
+    .simplify()
+    .toString();
 }
 
 class CalcBase extends Component {
