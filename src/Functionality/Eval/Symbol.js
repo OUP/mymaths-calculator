@@ -251,7 +251,7 @@ export class Expression {
   }
 
   reciprocal() {
-    //WiP
+    return new inverseExpression(this);
   }
 
   toString() {
@@ -264,6 +264,20 @@ export class Expression {
       }
     }
     return wipString;
+  }
+}
+
+class inverseExpression {
+  constructor(expression) {
+    this.reciprocal = expression;
+  }
+
+  reciprocal() {
+    return this.reciprocal();
+  }
+
+  toString() {
+    return '1 / ' + this.reciprocal.toString();
   }
 }
 
