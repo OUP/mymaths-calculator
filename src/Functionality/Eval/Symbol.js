@@ -86,9 +86,7 @@ export class Term {
         break; //WIP
 
       case Term:
-        const invPowers = x.powers.map(p => -p);
-        const invX = new Term(1 / x.coefficient, x.symbols, invPowers);
-        return this.termMultiply(invX);
+        return this.termMultiply(x.reciprocal());
 
       default:
         const coef = this.coefficient / x;
@@ -131,6 +129,11 @@ export class Term {
     }
     return new Term(coef, wipSymbols, wipPowers);
   }
+
+  reciprocal() {
+    const invPowers = this.powers.map(p => -p);
+    return new Term(1 / this.coefficient, this.symbols, invPowers);
+  }
 }
 
 export class Expression {
@@ -140,24 +143,114 @@ export class Expression {
 
   plus(x) {
     switch (x.constructor) {
+      case Expression:
+        return this.expressionAdd(x);
+
       case Term:
         return this.termAdd(x);
 
       default:
-        break;
+        x = new Term(x, [], []);
+        return this.termAdd(x);
     }
-    return;
+  }
+
+  minus(x) {
+    let invX;
+    switch (x.constructor) {
+      case Expression:
+        invX = x.timesMinusOne();
+        return this.expressionAdd(invX);
+
+      case Term:
+        invX = new Term(-x.coefficient, x.symbols, x.powers);
+        return this.termAdd(invX);
+
+      default:
+        invX = new Term(-x, [], []);
+        return this.termAdd(invX);
+    }
+  }
+
+  times(x) {
+    switch (x.constructor) {
+      case Expression:
+        return this.expressionMultiply(x);
+
+      case Term:
+        return this.termMultiply(x);
+
+      default:
+        x = new Term(x, [], []);
+        return this.numMultiply(x);
+    }
+  }
+
+  divBy(x) {
+    switch (x.constructor) {
+      case Expression:
+        return this.expressionDivide(x); //WIP
+
+      case Term:
+        return this.termMultiply(x.reciprocal());
+
+      default:
+        x = new Term(1 / x, [], []);
+        return this.numMultiply(x);
+    }
   }
 
   termAdd(x) {
-    const wipTerms = cloneTerms(this.terms);
-    wipTerms.push(x);
-    console.log('s', wipTerms);
+    const wipTerms = new Expression(this.terms).terms;
+    const matchIndex = findCorrespondingTerms(x, this);
+    if (matchIndex || matchIndex === 0) {
+      wipTerms[matchIndex] = wipTerms[matchIndex].plus(x);
+    } else {
+      wipTerms.push(x);
+    }
     return new Expression(wipTerms);
   }
 
+  expressionAdd(x) {
+    let wipExpression = new Expression(this.terms);
+    for (let i = 0; i < x.terms.length; i++) {
+      wipExpression = wipExpression.termAdd(x.terms[i]);
+    }
+    return wipExpression;
+  }
+
+  numMultiply(num) {
+    const terms = this.terms;
+    return new Expression(terms.map(x => x.times(num)));
+  }
+
+  termMultiply(term) {
+    const terms = this.terms;
+    return new Expression(terms.map(x => x.times(term))).simplify();
+  }
+
+  expressionMultiply(exp) {
+    const terms = this.terms;
+    return new Expression(terms.map(x => x.times(exp))).simplify();
+  }
+
+  simplify() {
+    let wipTerms = new Expression(this.terms).terms[0];
+    for (let i = 1; i < this.terms.length; i++) {
+      wipTerms = wipTerms.plus(this.terms[i]);
+    }
+    return wipTerms;
+  }
+
+  timesMinusOne() {
+    let wipTerms = new Expression(this.terms).terms[0].times(-1);
+    for (let i = 1; i < this.terms.length; i++) {
+      wipTerms = wipTerms.minus(this.terms[i]);
+    }
+    return wipTerms;
+  }
+
   toString() {
-    console.log('terms', this.terms);
     let wipString = this.terms[0].toString();
     for (let i = 1; i < this.terms.length; i++) {
       if (this.terms[i].coefficient > 0) {
@@ -181,6 +274,15 @@ function correspondingTerms(term1, term2) {
   }
 }
 
+function findCorrespondingTerms(term, expression) {
+  for (let i = 0; i < expression.terms.length; i++) {
+    if (correspondingTerms(term, expression.terms[i])) {
+      return i;
+    }
+  }
+  return null;
+}
+
 function findMatchingSymbol(symbolInTerm1, term2Symbols) {
   for (let i = 0; i < term2Symbols.length; i++) {
     if (symbolInTerm1 === term2Symbols[i]) {
@@ -188,16 +290,4 @@ function findMatchingSymbol(symbolInTerm1, term2Symbols) {
     }
   }
   return null;
-}
-
-function cloneTerms(termObjs) {
-  const wipTermsArray = [];
-  let coef, symbols, powers;
-  for (let i = 0; i < termObjs.length; i++) {
-    coef = termObjs[i].coefficient;
-    symbols = termObjs[i].symbols;
-    powers = termObjs[i].powers;
-    wipTermsArray.push(new Term(coef, symbols, powers));
-  }
-  return wipTermsArray;
 }
