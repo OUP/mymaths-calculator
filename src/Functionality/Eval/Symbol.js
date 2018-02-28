@@ -138,8 +138,20 @@ export class Expression {
     this.terms = terms;
   }
 
-  expPlus(x) {
-    const wipTerms = cloneState(this.terms);
+  plus(x) {
+    switch (x.constructor) {
+      case Term:
+        return this.termAdd(x);
+
+      default:
+        break;
+    }
+    return;
+  }
+
+  termAdd(x) {
+    const wipTerms = cloneTerms(this.terms);
+    wipTerms.push(x);
     console.log('s', wipTerms);
     return new Expression(wipTerms);
   }
@@ -176,4 +188,16 @@ function findMatchingSymbol(symbolInTerm1, term2Symbols) {
     }
   }
   return null;
+}
+
+function cloneTerms(termObjs) {
+  const wipTermsArray = [];
+  let coef, symbols, powers;
+  for (let i = 0; i < termObjs.length; i++) {
+    coef = termObjs[i].coefficient;
+    symbols = termObjs[i].symbols;
+    powers = termObjs[i].powers;
+    wipTermsArray.push(new Term(coef, symbols, powers));
+  }
+  return wipTermsArray;
 }

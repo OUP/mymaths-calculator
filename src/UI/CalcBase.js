@@ -10,13 +10,15 @@ import {
 
 import { Term } from '../Functionality/Eval/Symbol';
 
-/*
 function testSymbolMethods() {
   const x = new Term(6, ['x'], [1]);
   const y = new Term(3, ['x'], [2]);
   const z = new Term(7, ['x', 'y'], [2, 3]);
-  return x.plus(y).toString();
-}*/
+  return x
+    .plus(y)
+    .plus(z)
+    .toString();
+}
 
 class CalcBase extends Component {
   constructor(props) {
@@ -41,6 +43,7 @@ class CalcBase extends Component {
           <div className="OutputDisplay">
             <div id="Output" className="OutputText" />
           </div>
+          <div className="OutputDisplay">{testSymbolMethods()}</div>
           <ButtonsGrid
             press={this.press}
             shift={this.state.shift}
