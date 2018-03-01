@@ -335,13 +335,8 @@ class FractionExpression {
   }
 
   simplify() {
-    let fix = multiplyThroughNegPowers(this.numerator);
-    let numerator = fix.expression;
-    let denominator = this.denominator.times(fix.factor);
-    fix = multiplyThroughNegPowers(denominator);
-    numerator = numerator.times(fix.factor).simplify();
-    denominator = fix.expression.simplify();
-    return new FractionExpression(numerator, denominator);
+    const simplified = removeNegPowers(this);
+    return removeFracCoefs(simplified);
   }
 
   timesMinusOne() {
@@ -481,5 +476,54 @@ function isGreaterThan(lhs, rhs) {
     return lhsFrac.n / lhsFrac.d > rhs;
   } else {
     return lhs > rhs;
+  }
+}
+
+function removeNegPowers(fracExpression) {
+  let fix = multiplyThroughNegPowers(fracExpression.numerator);
+  let numerator = fix.expression;
+  let denominator = fracExpression.denominator.times(fix.factor);
+  fix = multiplyThroughNegPowers(denominator);
+  numerator = numerator.times(fix.factor).simplify();
+  denominator = fix.expression.simplify();
+  return new FractionExpression(numerator, denominator);
+}
+
+function removeFracCoefs(fracExpression) {
+  let fix = multiplyThroughDenomCoefs(fracExpression.numerator);
+  let numerator = fix.expression;
+  let denominator = fracExpression.denominator.times(fix.factor);
+  fix = multiplyThroughDenomCoefs(denominator);
+  numerator = numerator.times(fix.factor).simplify();
+  denominator = fix.expression.simplify();
+  return new FractionExpression(numerator, denominator);
+}
+
+function multiplyThroughDenomCoefs(expression) {
+  let fixFactor = new Term(1, [], []);
+  const terms = expression.terms;
+  for (let i = 0; i < terms.length; i++) {
+    fixFactor = fixFactor.times(factorToFixFracCoefInTerm(terms[i]));
+  }
+  return {
+    expression: expression.times(fixFactor).simplify(),
+    factor: fixFactor
+  };
+}
+
+function factorToFixFracCoefInTerm(term) {
+  let factor = 1;
+  const coefStr = term.coefficient.toString();
+  if (checkFraction(coefStr)) {
+    factor = new Fraction(coefStr).d;
+  }
+  return factor;
+}
+
+function checkFraction(coefStr) {
+  if (coefStr.includes('/') || coefStr.includes('.')) {
+    return true;
+  } else {
+    return false;
   }
 }
