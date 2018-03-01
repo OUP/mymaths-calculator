@@ -2,7 +2,7 @@
 //import Decimal from 'decimal.js/decimal';
 import { identicalArrays, cloneState } from '../Utilities';
 
-export class Symbol {
+class Symbol {
   constructor(representation, power) {
     this.representation = representation;
     this.power = power;
@@ -53,6 +53,9 @@ export class Term {
 
   plus(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.plus(this);
+
       case Expression:
         return x.termAdd(this);
 
@@ -66,9 +69,11 @@ export class Term {
 
   minus(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.timesMinusOne().plus(this);
+
       case Expression:
-        const thisAsExp = new Expression([this]);
-        return thisAsExp.expressionSubtract(x);
+        return x.timesMinusOne().plus(this);
 
       case Term:
         const invX = new Term(x.coefficient * -1, x.symbols, x.powers);
@@ -81,6 +86,9 @@ export class Term {
 
   times(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.times(this);
+
       case Expression:
         return x.termMultiply(this);
 
@@ -95,6 +103,9 @@ export class Term {
 
   divBy(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.reciprocal().times(this);
+
       case Expression:
         return x.divBy(this).reciprocal();
 
@@ -157,6 +168,9 @@ export class Expression {
 
   plus(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.plus(this);
+
       case Expression:
         return this.expressionAdd(x);
 
@@ -172,6 +186,9 @@ export class Expression {
   minus(x) {
     let invX;
     switch (x.constructor) {
+      case FractionExpression:
+        return x.timesMinusOne().plus(this);
+
       case Expression:
         invX = x.timesMinusOne();
         return this.expressionAdd(invX);
@@ -188,6 +205,9 @@ export class Expression {
 
   times(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.times(this);
+
       case Expression:
         return this.expressionMultiply(x);
 
@@ -202,8 +222,11 @@ export class Expression {
 
   divBy(x) {
     switch (x.constructor) {
+      case FractionExpression:
+        return x.reciprocal().times(this);
+
       case Expression:
-        return this.expressionDivide(x); //WIP
+        return new FractionExpression(this, x);
 
       case Term:
         return this.termMultiply(x.reciprocal());
@@ -266,7 +289,7 @@ export class Expression {
 
   reciprocal() {
     const numerator = new Expression([new Term(1, [], [])]);
-    return new fractionExpression(numerator, this);
+    return new FractionExpression(numerator, this);
   }
 
   toString() {
@@ -282,18 +305,101 @@ export class Expression {
   }
 }
 
-class fractionExpression {
+class FractionExpression {
   constructor(numerator, denominator) {
     this.numerator = numerator;
     this.denominator = denominator;
   }
 
   reciprocal() {
-    return new fractionExpression(this.denominator, this.numerator);
+    return new FractionExpression(this.denominator, this.numerator);
+  }
+
+  simplify() {
+    let fix = multiplyThroughNegPowers(this.numerator);
+    let numerator = fix.expression;
+    let denominator = this.denominator.times(fix.factor).simplify();
+    fix = multiplyThroughNegPowers(denominator);
+    numerator = numerator.times(fix.factor).simplify();
+    denominator = fix.expression;
+    return new FractionExpression(numerator, denominator);
+  }
+
+  timesMinusOne() {
+    return new FractionExpression(
+      this.denominator.timesMinusOne(),
+      this.numerator
+    );
+  }
+
+  plus(x) {
+    let newNumer;
+    switch (x.constructor) {
+      case FractionExpression:
+        newNumer = this.numerator
+          .times(x.denominator)
+          .plus(x.numerator.times(this.denominator))
+          .simplify();
+        const newDenom = this.denominator.times(x.denominator).simplify();
+        return new FractionExpression(newNumer, newDenom);
+
+      default:
+        newNumer = this.numerator.plus(this.denominator.times(x)).simplify();
+        return new FractionExpression(newNumer, this.denominator);
+    }
+  }
+
+  minus(x) {
+    let newNumer;
+    switch (x.constructor) {
+      case FractionExpression:
+        newNumer = this.numerator
+          .times(x.denominator)
+          .minus(x.numerator.times(this.denominator))
+          .simplify();
+        const newDenom = this.denominator.times(x.denominator).simplify();
+        return new FractionExpression(newNumer, newDenom);
+
+      default:
+        newNumer = this.numerator.minus(this.denominator.times(x)).simplify();
+        return new FractionExpression(newNumer, this.denominator);
+    }
+  }
+
+  times(x) {
+    let newNumer;
+    switch (x.constructor) {
+      case FractionExpression:
+        newNumer = this.numerator.times(x.numerator).simplify();
+        const newDenom = this.denominator.times(x.denominator).simplify();
+        return new FractionExpression(newNumer, newDenom);
+
+      default:
+        newNumer = this.numerator.times(x);
+        return new FractionExpression();
+    }
+  }
+
+  divBy(x) {
+    switch (x.constructor) {
+      case Number:
+        return this.times(1 / x);
+
+      default:
+        return this.times(x.reciprocal());
+    }
   }
 
   toString() {
-    return this.numerator.toString() + ' / ' + this.denominator.toString();
+    return (
+      '{' +
+      this.numerator.toString() +
+      '}' +
+      ' / ' +
+      '{' +
+      this.denominator.toString() +
+      '}'
+    );
   }
 }
 
@@ -324,4 +430,28 @@ function findMatchingSymbol(symbolInTerm1, term2Symbols) {
     }
   }
   return null;
+}
+
+function multiplyThroughNegPowers(expression) {
+  let fixFactor = new Term(1, [], []);
+  const terms = expression.terms;
+  for (let i = 0; i < terms.length; i++) {
+    fixFactor = fixFactor.times(factorToFixNegPowersInTerm(terms[i]));
+  }
+  return {
+    expression: expression.times(fixFactor).simplify(),
+    factor: fixFactor
+  };
+}
+
+function factorToFixNegPowersInTerm(term) {
+  let factor;
+  let fixFactor = new Term(1, [], []);
+  for (let i = 0; i < term.powers.length; i++) {
+    if (term.powers[i] < 0) {
+      factor = new Term(1, [term.symbols[i]], [-term.powers[i]]);
+      fixFactor = fixFactor.times(factor);
+    }
+  }
+  return fixFactor;
 }

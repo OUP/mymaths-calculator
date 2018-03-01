@@ -13,14 +13,11 @@ import { Term } from '../Functionality/Eval/Symbol';
 function testSymbolMethods() {
   const x = new Term(6, ['x'], [1]);
   const y = new Term(3, ['x'], [2]);
-  const z = new Term(7, ['x', 'y'], [2, 3]);
-  const A = x.plus(y).plus(z);
-  const B = x.plus(z);
-  return y
-    .divBy(x)
-    .divBy(x)
-    .simplify()
-    .toString();
+  const z = new Term(4, ['x', 'y'], [2, 3]);
+  const A = x.plus(y).divBy(z);
+  const B = y.plus(z);
+  const C = A.divBy(B).simplify();
+  return C.toString();
 }
 
 class CalcBase extends Component {
