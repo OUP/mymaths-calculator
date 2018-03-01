@@ -1,3 +1,4 @@
+const Fraction = require('fraction.js');
 import { identicalArrays, cloneState } from '../Utilities';
 import { opValue } from './DoArithmeticOp';
 
@@ -140,7 +141,11 @@ export class Term {
   }
 
   termMultiply(term) {
-    const coef = this.coefficient * term.coefficient;
+    const coef = opValue(
+      this.coefficient.toString(),
+      '×',
+      term.coefficient.toString()
+    );
     let wipSymbols = cloneState(term.symbols);
     const wipPowers = cloneState(term.powers);
     let matchIndex, s, t, u;
@@ -165,7 +170,7 @@ export class Term {
   reciprocal() {
     const invPowers = this.powers.map(p => -p);
     return new Term(
-      opValue('1', '×', this.coefficient.toString()),
+      opValue('1', '÷', this.coefficient.toString()),
       this.symbols,
       invPowers
     );
@@ -240,7 +245,7 @@ export class Expression {
         return new FractionExpression(this, x);
 
       case Term:
-        return this.termMultiply(x.reciprocal());
+        return this.times(x.reciprocal());
 
       default:
         x = new Term(opValue('1', '×', x.toString()), [], []);
@@ -309,7 +314,7 @@ export class Expression {
   toString() {
     let wipString = this.terms[0].toString();
     for (let i = 1; i < this.terms.length; i++) {
-      if (this.terms[i].coefficient > 0) {
+      if (isGreaterThan(this.terms[i].coefficient, 0)) {
         wipString += '+' + this.terms[i].toString();
       } else {
         wipString += this.terms[i].toString();
@@ -467,4 +472,14 @@ function factorToFixNegPowersInTerm(term) {
     }
   }
   return fixFactor;
+}
+
+function isGreaterThan(lhs, rhs) {
+  const lhsStr = lhs.toString();
+  if (lhsStr.includes('/')) {
+    const lhsFrac = new Fraction(lhsStr);
+    return lhsFrac.n / lhsFrac.d > rhs;
+  } else {
+    return lhs > rhs;
+  }
 }

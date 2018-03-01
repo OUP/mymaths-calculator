@@ -18,7 +18,9 @@ function testSymbolMethods() {
   const A = x.plus(y).divBy(z);
   const B = y.plus(z);
   const C = A.divBy(B).simplify();
-  return C.toString();
+  return A.divBy(B)
+    .simplify()
+    .numerator.toString();
 }
 
 class CalcBase extends Component {
