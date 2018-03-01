@@ -17,10 +17,13 @@ function evalArithmeticOp(inputArray, position, operation) {
   if (inputArray[position + 1]) {
     valAfter = inputArray[position + 1].value;
   }
+  return opValue(valBefore, operation, valAfter);
+}
+
+export function opValue(valBefore, operation, valAfter) {
   if (!checkIfFraction(valBefore) && !checkIfFraction(valAfter)) {
     return doDecimalOp(valBefore, operation, valAfter);
   } else {
-    console.log('got here', valBefore, valAfter);
     return doFractionOp(valBefore, operation, valAfter);
   }
 }

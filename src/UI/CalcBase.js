@@ -7,6 +7,7 @@ import {
   initialiseInternalState,
   initialiseDisplay
 } from '../Functionality/ManageState';
+import katex from 'katex';
 
 import { Term } from '../Functionality/Eval/Symbol';
 
@@ -29,6 +30,7 @@ class CalcBase extends Component {
 
   componentDidMount() {
     initialiseDisplay(this);
+    katex.render(testSymbolMethods(), document.getElementById('test'));
   }
 
   press(button) {
@@ -43,7 +45,7 @@ class CalcBase extends Component {
           <div className="OutputDisplay">
             <div id="Output" className="OutputText" />
           </div>
-          <div className="OutputDisplay">{testSymbolMethods()}</div>
+          <div id="test" className="OutputDisplay" />
           <ButtonsGrid
             press={this.press}
             shift={this.state.shift}

@@ -1,6 +1,5 @@
-//const Fraction = require('fraction.js');
-//import Decimal from 'decimal.js/decimal';
 import { identicalArrays, cloneState } from '../Utilities';
+import { opValue } from './DoArithmeticOp';
 
 class Symbol {
   constructor(representation, power) {
@@ -9,7 +8,11 @@ class Symbol {
   }
 
   multiply(matchingRepresentation) {
-    const pow = this.power + matchingRepresentation.power;
+    const pow = opValue(
+      this.power.toString(),
+      '+',
+      matchingRepresentation.power.toString()
+    ); //this.power + matchingRepresentation.power;
     return new Symbol(this.representation, pow);
   }
 
@@ -42,7 +45,7 @@ export class Term {
     const wipPowers = cloneState(this.powers);
     const wipSymbols = cloneState(this.symbols);
     for (let i = 0; i < this.symbols.length; i++) {
-      if (wipPowers[i] === 0) {
+      if (wipPowers[i] === 0 || wipPowers[i] === '0') {
         wipSymbols.splice(i, 1);
         wipPowers.splice(i, 1);
         i--;
@@ -76,11 +79,15 @@ export class Term {
         return x.timesMinusOne().plus(this);
 
       case Term:
-        const invX = new Term(x.coefficient * -1, x.symbols, x.powers);
+        const invX = new Term(
+          opValue(x.coefficient.toString(), '×', '-1'),
+          x.symbols,
+          x.powers
+        );
         return this.termAdd(invX);
 
       default:
-        return this.numAdd(-x);
+        return this.numAdd(opValue(x.toString(), '×', '-1'));
     }
   }
 
@@ -96,7 +103,7 @@ export class Term {
         return this.termMultiply(x);
 
       default:
-        const coef = this.coefficient * x;
+        const coef = opValue(this.coefficient.toString(), '×', x.toString()); //this.coefficient * x;
         return new Term(coef, this.symbols, this.powers);
     }
   }
@@ -113,7 +120,7 @@ export class Term {
         return this.termMultiply(x.reciprocal());
 
       default:
-        const coef = this.coefficient / x;
+        const coef = opValue(this.coefficient.toString(), '/', x.toString()); //this.coefficient / x;
         return new Term(coef, this.symbols, this.powers);
     }
   }
@@ -157,7 +164,11 @@ export class Term {
 
   reciprocal() {
     const invPowers = this.powers.map(p => -p);
-    return new Term(1 / this.coefficient, this.symbols, invPowers);
+    return new Term(
+      opValue('1', '×', this.coefficient.toString()),
+      this.symbols,
+      invPowers
+    );
   }
 }
 
@@ -232,7 +243,7 @@ export class Expression {
         return this.termMultiply(x.reciprocal());
 
       default:
-        x = new Term(1 / x, [], []);
+        x = new Term(opValue('1', '×', x.toString()), [], []);
         return this.numMultiply(x);
     }
   }
@@ -273,7 +284,10 @@ export class Expression {
 
   simplify() {
     let wipTerms = new Expression(this.terms).terms[0].simplify();
+    let wipTerm;
     for (let i = 1; i < this.terms.length; i++) {
+      wipTerm = this.terms[i].simplify();
+      console.log('wipTerm', wipTerm);
       wipTerms = wipTerms.plus(this.terms[i].simplify());
     }
     return wipTerms;
@@ -318,10 +332,10 @@ class FractionExpression {
   simplify() {
     let fix = multiplyThroughNegPowers(this.numerator);
     let numerator = fix.expression;
-    let denominator = this.denominator.times(fix.factor).simplify();
+    let denominator = this.denominator.times(fix.factor);
     fix = multiplyThroughNegPowers(denominator);
     numerator = numerator.times(fix.factor).simplify();
-    denominator = fix.expression;
+    denominator = fix.expression.simplify();
     return new FractionExpression(numerator, denominator);
   }
 
@@ -392,11 +406,10 @@ class FractionExpression {
 
   toString() {
     return (
+      '\\frac' +
       '{' +
       this.numerator.toString() +
-      '}' +
-      ' / ' +
-      '{' +
+      '} {' +
       this.denominator.toString() +
       '}'
     );
