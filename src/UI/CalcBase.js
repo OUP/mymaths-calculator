@@ -8,6 +8,7 @@ import {
   initialiseDisplay
 } from '../Functionality/ManageState';
 import katex from 'katex';
+import { generateFactors } from '../Functionality/Eval/GenerateFactors';
 
 import { Term } from '../Functionality/Eval/Symbol';
 
@@ -21,6 +22,10 @@ function testSymbolMethods() {
   return C.toString();
 }
 
+function testGenFactors() {
+  return generateFactors(36);
+}
+
 class CalcBase extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +35,7 @@ class CalcBase extends Component {
 
   componentDidMount() {
     initialiseDisplay(this);
-    katex.render(testSymbolMethods(), document.getElementById('test'));
+    katex.render(testGenFactors(), document.getElementById('test'));
   }
 
   press(button) {
