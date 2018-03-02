@@ -23,7 +23,7 @@ function testSymbolMethods() {
 }
 
 function testGenFactors() {
-  return generateFactors(36);
+  return generateFactors(36).join(',');
 }
 
 class CalcBase extends Component {

@@ -1,15 +1,16 @@
-export function generateFactors(n) {
+export function generateFactors(n, arr = []) {
   if (isNaN(n) || !isFinite(n) || n % 1 !== 0 || n === 0) {
-    return '' + n;
+    return [n];
   }
   if (n < 0) {
-    return '-' + generateFactors(-n);
+    return [-1].concat(generateFactors(-n));
   }
   const minFactor = leastFactor(n);
   if (n === minFactor) {
-    return '' + n;
+    return arr.concat([n]);
   }
-  return minFactor + '*' + generateFactors(n / minFactor);
+  arr.push(minFactor);
+  return arr.concat(generateFactors(n / minFactor));
 }
 
 // find the least factor in n by trial division
