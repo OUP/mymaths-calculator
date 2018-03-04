@@ -567,7 +567,7 @@ function removeCommonFactors(coefficients) {
   const allPrimeFactors = mergeArrays(newCoefficients);
   for (let i = 0; i < allPrimeFactors.length; i++) {
     if (inHCF(allPrimeFactors[i], newCoefficients)) {
-      newCoefficients = removeFactor(2, newCoefficients);
+      newCoefficients = removeFactor(allPrimeFactors[i], newCoefficients);
     }
   }
   return newCoefficients;
@@ -585,17 +585,17 @@ function removeFactor(factor, coefficients) {
 }
 
 function recombineFactors(factorsArray) {
-  const coefReducer = (accumulator, currentValue) => accumulator * currentValue;
   if (factorsArray.length) {
-    const rtn = factorsArray.reduce(coefReducer);
-    return rtn;
+    return factorsArray.reduce(
+      (accumulator, currentValue) => accumulator * currentValue
+    );
   } else {
     return [1];
   }
 }
 
 function mergeArrays(coefficients) {
-  const merger = (accumulator, currentValue) =>
-    currentValue.concat(accumulator);
-  return coefficients.reduce(merger);
+  return coefficients.reduce((accumulator, currentValue) =>
+    currentValue.concat(accumulator)
+  );
 }

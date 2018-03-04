@@ -8,7 +8,6 @@ import {
   initialiseDisplay
 } from '../Functionality/ManageState';
 import katex from 'katex';
-import { generateFactors } from '../Functionality/Eval/GenerateFactors';
 
 import { Term } from '../Functionality/Eval/Symbol';
 
