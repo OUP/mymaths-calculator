@@ -334,6 +334,7 @@ class FractionExpression {
 
   simplify() {
     let simplified = removeNegPowers(this);
+    simplified = cancelPowers(simplified);
     simplified = removeFracCoefs(simplified);
     return cancelCoefs(simplified);
   }
@@ -389,7 +390,7 @@ class FractionExpression {
 
       default:
         newNumer = this.numerator.times(x);
-        return new FractionExpression();
+        return new FractionExpression(newNumer, this.denominator);
     }
   }
 
@@ -598,4 +599,40 @@ function mergeArrays(coefficients) {
   return coefficients.reduce((accumulator, currentValue) =>
     currentValue.concat(accumulator)
   );
+}
+
+function cancelPowers(fracExpression) {
+  const allTerms = fracExpression.numerator.terms.concat(
+    fracExpression.denominator.terms
+  );
+  const firstTerm = allTerms[0];
+  let symbol;
+  for (let i = 0; i < firstTerm.symbols.length; i++) {
+    symbol = firstTerm.symbols[i];
+    const factorInAllTerms = getFactorInAllTerms(symbol, allTerms);
+    if (factorInAllTerms) {
+      const numerator = fracExpression.numerator.divBy(factorInAllTerms);
+      const denominator = fracExpression.denominator.divBy(factorInAllTerms);
+      fracExpression = new FractionExpression(numerator, denominator);
+    }
+  }
+  return fracExpression;
+}
+
+function getFactorInAllTerms(symbol, allTerms) {
+  let index = allTerms[0].symbols.indexOf(symbol);
+  let power = allTerms[0].powers[index];
+  let comparePower;
+  for (let i = 1; i < allTerms.length; i++) {
+    index = allTerms[i].symbols.indexOf(symbol);
+    if (index >= 0) {
+      comparePower = allTerms[i].powers[index];
+      if (comparePower < power) {
+        power = comparePower;
+      }
+    } else {
+      return null;
+    }
+  }
+  return new Term(1, [symbol], [power]);
 }
