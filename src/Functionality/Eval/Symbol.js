@@ -29,7 +29,7 @@ class Symbol {
 }
 
 export class Term {
-  constructor(coefficient, symbols, powers = [1]) {
+  constructor(coefficient, symbols = [], powers = []) {
     this.coefficient = coefficient;
     this.symbols = symbols;
     this.powers = powers;
