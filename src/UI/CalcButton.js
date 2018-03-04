@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import buttonType from '../Functionality/ButtonType';
 import './CalcButton.css';
 
@@ -25,6 +26,12 @@ class CalcButton extends Component {
     );
   }
 }
+
+CalcButton.propTypes = {
+  press: PropTypes.func.isRequired,
+  name: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  shift: PropTypes.bool
+};
 
 function buttonStyle(button, shift = false) {
   const type = buttonType(button);

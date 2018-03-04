@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { genButtonsGrid } from './GenerateButtonsGrid';
 import './ButtonsGrid.css';
 
@@ -16,5 +17,11 @@ class ButtonsGrid extends Component {
     return genButtonsGrid(this, this.props.position, this.props.shift);
   }
 }
+
+ButtonsGrid.propTypes = {
+  press: PropTypes.func.isRequired,
+  position: PropTypes.string.isRequired,
+  shift: PropTypes.bool
+};
 
 export default ButtonsGrid;

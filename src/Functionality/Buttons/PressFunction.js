@@ -1,4 +1,3 @@
-import { cloneState } from '../Utilities';
 import { pressMode } from './PressMode';
 
 export function pressFunction(button, currentState) {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CalcButton from './CalcButton';
 import { generateButtons } from './GenerateButtons';
 import './ButtonsColumn.css';
@@ -38,5 +39,12 @@ class ButtonsColumn extends Component {
     return <div className="ButtonsColumn">{this.renderButtons()}</div>;
   }
 }
+
+ButtonsColumn.propTypes = {
+  press: PropTypes.func.isRequired,
+  position: PropTypes.string.isRequired,
+  column: PropTypes.string.isRequired,
+  shift: PropTypes.bool
+};
 
 export default ButtonsColumn;
