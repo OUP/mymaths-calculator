@@ -22,10 +22,6 @@ function testSymbolMethods() {
   return C.toString();
 }
 
-function testGenFactors() {
-  return generateFactors(36).join(',');
-}
-
 class CalcBase extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +31,7 @@ class CalcBase extends Component {
 
   componentDidMount() {
     initialiseDisplay(this);
-    katex.render(testGenFactors(), document.getElementById('test'));
+    katex.render(testSymbolMethods(), document.getElementById('test'));
   }
 
   press(button) {

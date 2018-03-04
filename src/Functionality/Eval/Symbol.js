@@ -1,6 +1,7 @@
 const Fraction = require('fraction.js');
 import { identicalArrays, cloneState } from '../Utilities';
 import { opValue } from './DoArithmeticOp';
+import { generateFactors } from './GenerateFactors';
 
 class Symbol {
   constructor(representation, power) {
@@ -289,10 +290,7 @@ export class Expression {
 
   simplify() {
     let wipTerms = new Expression(this.terms).terms[0].simplify();
-    let wipTerm;
     for (let i = 1; i < this.terms.length; i++) {
-      wipTerm = this.terms[i].simplify();
-      console.log('wipTerm', wipTerm);
       wipTerms = wipTerms.plus(this.terms[i].simplify());
     }
     return wipTerms;
@@ -335,8 +333,9 @@ class FractionExpression {
   }
 
   simplify() {
-    const simplified = removeNegPowers(this);
-    return removeFracCoefs(simplified);
+    let simplified = removeNegPowers(this);
+    simplified = removeFracCoefs(simplified);
+    return cancelCoefs(simplified);
   }
 
   timesMinusOne() {
@@ -526,4 +525,77 @@ function checkFraction(coefStr) {
   } else {
     return false;
   }
+}
+
+function cancelCoefs(fracExpression) {
+  const terms = fracExpression.numerator.terms.concat(
+    fracExpression.denominator.terms
+  );
+  let coefficients = [];
+  for (let i = 0; i < terms.length; i++) {
+    coefficients.push(terms[i].coefficient);
+  }
+  coefficients = removeCommonFactors(coefficients);
+  for (let i = 0; i < terms.length; i++) {
+    terms[i].coefficient = recombineFactors(coefficients[i]);
+  }
+  const numerator = new Expression(
+    terms.slice(0, fracExpression.numerator.terms.length)
+  );
+  const denominator = new Expression(
+    terms.slice(fracExpression.numerator.terms.length, terms.length + 1)
+  );
+  return new FractionExpression(numerator, denominator);
+}
+
+const inHCF = function(factor, coefficients) {
+  let rtn = true;
+  for (let i = 1; i < coefficients.length; i++) {
+    rtn = rtn && coefficients[i].includes(factor);
+    if (rtn === false) {
+      return rtn;
+    }
+  }
+  return rtn;
+};
+
+function removeCommonFactors(coefficients) {
+  let newCoefficients = cloneState(coefficients);
+  for (let i = 0; i < coefficients.length; i++) {
+    newCoefficients[i] = generateFactors(coefficients[i]);
+  }
+  const allPrimeFactors = mergeArrays(newCoefficients);
+  for (let i = 0; i < allPrimeFactors.length; i++) {
+    if (inHCF(allPrimeFactors[i], newCoefficients)) {
+      newCoefficients = removeFactor(2, newCoefficients);
+    }
+  }
+  return newCoefficients;
+}
+
+function removeFactor(factor, coefficients) {
+  let factorIndex;
+  for (let i = 0; i < coefficients.length; i++) {
+    factorIndex = coefficients[i].indexOf(factor);
+    if (factorIndex >= 0) {
+      coefficients[i].splice(factorIndex, 1);
+    }
+  }
+  return coefficients;
+}
+
+function recombineFactors(factorsArray) {
+  const coefReducer = (accumulator, currentValue) => accumulator * currentValue;
+  if (factorsArray.length) {
+    const rtn = factorsArray.reduce(coefReducer);
+    return rtn;
+  } else {
+    return [1];
+  }
+}
+
+function mergeArrays(coefficients) {
+  const merger = (accumulator, currentValue) =>
+    currentValue.concat(accumulator);
+  return coefficients.reduce(merger);
 }
