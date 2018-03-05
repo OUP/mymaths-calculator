@@ -1,3 +1,5 @@
+import { FractionExpression } from './Eval/Symbol';
+
 export default function buttonType(b) {
   b = safeToString(b);
 
@@ -76,7 +78,7 @@ function checkForOperator(b) {
 }
 
 function checkForSymbol(b) {
-  if (b === 'π') {
+  if (b.includes('π') || b.constructor === FractionExpression) {
     return true;
   } else {
     return false;

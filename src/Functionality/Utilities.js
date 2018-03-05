@@ -119,9 +119,17 @@ export function identicalArrays(arr1, arr2) {
 }
 
 export function checkIfFraction(val) {
-  //x can be undefined
+  //val can be undefined
   if (val) {
-    return val.includes('/');
+    return val.toString().includes('/');
+  }
+  return false;
+}
+
+export function checkForSymbols(val) {
+  //val can be undefined
+  if (val) {
+    return val.toString().includes('π');
   }
   return false;
 }

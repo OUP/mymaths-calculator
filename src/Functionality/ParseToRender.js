@@ -17,12 +17,14 @@ export function parseToRender(
 }
 
 function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
-  if (cursorPosition >= 0) {
-    arr = addCursor(arr, cursorPosition);
+  if (arr.length > 1) {
+    if (cursorPosition >= 0) {
+      arr = addCursor(arr, cursorPosition);
+    }
+    arr = assembleNumbers(arr);
+    arr = assembleArguments(arr);
   }
-  arr = assembleNumbers(arr);
-  arr = assembleArguments(arr);
-  //arr = assemblePreArgs(arr);
+
   return arr
     .map(parseElToMaths, displayMode)
     .join('')
@@ -100,7 +102,7 @@ function parseElToMaths(el) {
       }
 
     case 'symbol':
-      return el;
+      return el.toString();
 
     case 'Ans':
       return '\\text {' + el + '}';

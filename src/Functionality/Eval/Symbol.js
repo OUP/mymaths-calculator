@@ -36,11 +36,21 @@ export class Term {
   }
 
   toString() {
-    let wipString = '';
+    let wipString = '',
+      power;
     for (let i = 0; i < this.symbols.length; i++) {
-      wipString += this.symbols[i] + '^' + this.powers[i].toString();
+      power = this.powers[i];
+      if (power === 1) {
+        wipString += this.symbols[i];
+      } else {
+        wipString += this.symbols[i] + '^{' + this.powers[i].toString() + '}';
+      }
     }
-    return this.coefficient + wipString;
+    if (this.coefficient.toString() === '1' && this.powers.length) {
+      return wipString;
+    } else {
+      return this.coefficient + wipString;
+    }
   }
 
   simplify() {
@@ -129,7 +139,11 @@ export class Term {
 
   termAdd(term) {
     if (correspondingTerms(this, term)) {
-      const coef = this.coefficient + term.coefficient;
+      const coef = opValue(
+        this.coefficient.toString(),
+        '+',
+        term.coefficient.toString()
+      );
       return new Term(coef, this.symbols, this.powers);
     } else {
       return new Expression([this, term]);
@@ -169,7 +183,10 @@ export class Term {
   }
 
   reciprocal() {
-    const invPowers = this.powers.map(p => -p);
+    let invPowers = [];
+    if (this.powers.length) {
+      invPowers = this.powers.map(p => -p);
+    }
     return new Term(
       opValue('1', '÷', this.coefficient.toString()),
       this.symbols,
@@ -180,6 +197,9 @@ export class Term {
 
 export class Expression {
   constructor(terms) {
+    if (terms.constructor === Term) {
+      terms = [terms];
+    }
     this.terms = terms;
   }
 
@@ -322,8 +342,14 @@ export class Expression {
   }
 }
 
-class FractionExpression {
+export class FractionExpression {
   constructor(numerator, denominator) {
+    if (numerator.constructor === Term) {
+      numerator = new Expression([numerator]);
+    }
+    if (denominator.constructor === Term) {
+      denominator = new Expression([denominator]);
+    }
     this.numerator = numerator;
     this.denominator = denominator;
   }
@@ -405,14 +431,19 @@ class FractionExpression {
   }
 
   toString() {
-    return (
-      '\\frac' +
-      '{' +
-      this.numerator.toString() +
-      '} {' +
-      this.denominator.toString() +
-      '}'
-    );
+    const denomString = this.denominator.toString();
+    if (denomString === '1') {
+      return this.numerator.toString();
+    } else {
+      return (
+        '\\frac' +
+        '{' +
+        this.numerator.toString() +
+        '} {' +
+        this.denominator.toString() +
+        '}'
+      );
+    }
   }
 }
 

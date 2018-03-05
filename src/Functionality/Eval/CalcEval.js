@@ -3,7 +3,6 @@ import Decimal from 'decimal.js/decimal';
 import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
-import { checkSymbolicOp, doSymbolicOp } from './DoSymbolicOp';
 import { accurateFunc } from './AccurateMaths';
 
 //Do the calculation on pressing =
@@ -65,11 +64,13 @@ function handleEmptyOutput(inputArray) {
 function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
   const valStr = value.toString();
-  if (!valStr.includes('/') && !valStr.includes('(')) {
+  if (!valStr.includes('/') && !valStr.includes('(') && !valStr.includes('π')) {
     const decVal = new Decimal(value);
     return decVal.toString();
-  } else {
+  } else if (!valStr.includes('π')) {
     return valStr;
+  } else {
+    return value;
   }
 }
 
@@ -82,8 +83,6 @@ function doNextOp(inputArray) {
 function executeOp(inputArray, position) {
   if (checkFunctionOp(inputArray[position])) {
     doFunction(inputArray, position);
-  } else if (checkSymbolicOp(inputArray, position)) {
-    doSymbolicOp(inputArray, position);
   } else {
     doArithmeticOp(inputArray, position);
   }

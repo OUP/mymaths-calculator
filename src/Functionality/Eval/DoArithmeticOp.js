@@ -1,8 +1,10 @@
 import buttonType from '../ButtonType';
 import { accurateOp } from './AccurateMaths';
 import { fractionOp } from './FractionOps';
-import { checkIfFraction } from '../Utilities';
+import { checkForSymbols, checkIfFraction } from '../Utilities';
 import { opPriority } from './OrganiseOps';
+import { symbolicOp } from './SymbolOps';
+import { FractionExpression } from './Symbol';
 
 export function doArithmeticOp(inputArray, position) {
   const operation = inputArray[position].value;
@@ -21,7 +23,9 @@ function evalArithmeticOp(inputArray, position, operation) {
 }
 
 export function opValue(valBefore, operation, valAfter) {
-  if (!checkIfFraction(valBefore) && !checkIfFraction(valAfter)) {
+  if (checkForSymbols(valBefore) || checkForSymbols(valAfter)) {
+    return symbolicOp(valBefore, operation, valAfter);
+  } else if (!checkIfFraction(valBefore) && !checkIfFraction(valAfter)) {
     return doDecimalOp(valBefore, operation, valAfter);
   } else {
     return doFractionOp(valBefore, operation, valAfter);
@@ -43,7 +47,10 @@ function updateArrayFromOp(inputArray, position, operation, output) {
 }
 
 function outputFactory(value) {
-  const output = { value: value.toString(), type: buttonType(value) };
+  if (value.constructor !== FractionExpression) {
+    value = value.toString();
+  }
+  const output = { value: value, type: buttonType(value) };
   output.priority = opPriority(output);
   return output;
 }
