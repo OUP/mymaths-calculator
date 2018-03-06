@@ -545,10 +545,7 @@ function removeFracCoefs(fracExpression) {
   let denominator = fracExpression.denominator.times(fix.factor);
   fix = multiplyThroughDenomCoefs(denominator);
   numerator = numerator.times(fix.factor).simplify();
-  console.log('denominator', denominator);
   denominator = fix.expression.simplify();
-  console.log('denominator', fix.expression);
-  console.log('denominator', denominator);
   return new FractionExpression(numerator, denominator);
 }
 
@@ -605,9 +602,11 @@ function cancelCoefs(fracExpression) {
 const inHCF = function(factor, coefficients) {
   let rtn = true;
   for (let i = 1; i < coefficients.length; i++) {
-    rtn = rtn && coefficients[i].includes(factor);
-    if (rtn === false) {
-      return rtn;
+    for (let j = 0; j < coefficients[i].length; j++) {
+      rtn = rtn && coefficients[i][j].toString().includes(factor);
+      if (rtn === false) {
+        return rtn;
+      }
     }
   }
   return rtn;
