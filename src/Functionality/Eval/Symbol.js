@@ -48,8 +48,19 @@ export class Term {
     }
     if (this.coefficient.toString() === '1' && this.powers.length) {
       return wipString;
+    } else if (this.coefficient.toString().includes('/')) {
+      const frac = new Fraction(this.coefficient.toString());
+      return (
+        '\\frac {' +
+        skipOne(frac.n.toString()) +
+        wipString +
+        '}' +
+        '{' +
+        frac.d.toString() +
+        '}'
+      );
     } else {
-      return this.coefficient + wipString;
+      return this.coefficient.toString() + wipString;
     }
   }
 
@@ -197,7 +208,7 @@ export class Term {
 
 export class Expression {
   constructor(terms) {
-    if (terms.constructor === Term) {
+    if (terms.constructor !== Array) {
       terms = [terms];
     }
     this.terms = terms;
@@ -313,7 +324,7 @@ export class Expression {
     for (let i = 1; i < this.terms.length; i++) {
       wipTerms = wipTerms.plus(this.terms[i].simplify());
     }
-    return wipTerms;
+    return new Expression(wipTerms);
   }
 
   timesMinusOne() {
@@ -421,12 +432,10 @@ export class FractionExpression {
   }
 
   divBy(x) {
-    switch (x.constructor) {
-      case Number:
-        return this.times(1 / x);
-
-      default:
-        return this.times(x.reciprocal());
+    if (checkNumber(x)) {
+      return this.times(opValue('1', '÷', x.toString()));
+    } else {
+      return this.times(x.reciprocal());
     }
   }
 
@@ -444,6 +453,16 @@ export class FractionExpression {
         '}'
       );
     }
+  }
+}
+
+function checkNumber(x) {
+  if (x.constructor === Number) {
+    return true;
+  } else if (x.d !== 'undefined') {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -526,7 +545,10 @@ function removeFracCoefs(fracExpression) {
   let denominator = fracExpression.denominator.times(fix.factor);
   fix = multiplyThroughDenomCoefs(denominator);
   numerator = numerator.times(fix.factor).simplify();
+  console.log('denominator', denominator);
   denominator = fix.expression.simplify();
+  console.log('denominator', fix.expression);
+  console.log('denominator', denominator);
   return new FractionExpression(numerator, denominator);
 }
 
@@ -543,12 +565,12 @@ function multiplyThroughDenomCoefs(expression) {
 }
 
 function factorToFixFracCoefInTerm(term) {
-  let factor = 1;
   const coefStr = term.coefficient.toString();
   if (checkFraction(coefStr)) {
-    factor = new Fraction(coefStr).d;
+    return new Fraction(coefStr).d;
+  } else {
+    return 1;
   }
-  return factor;
 }
 
 function checkFraction(coefStr) {
@@ -666,4 +688,12 @@ function getFactorInAllTerms(symbol, allTerms) {
     }
   }
   return new Term(1, [symbol], [power]);
+}
+
+function skipOne(str) {
+  if (str === '1') {
+    return '';
+  } else {
+    return str;
+  }
 }

@@ -1,5 +1,7 @@
 //Arbitrary precision arithmetic
 import Decimal from 'decimal.js/decimal';
+import buttonType from '../ButtonType';
+import { funcOnSymbol } from './SymbolOps';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
@@ -56,9 +58,12 @@ function initOp(v, operation) {
     operation !== '÷' &&
     operation !== 'numerator' &&
     operation !== '%' &&
-    !v.toString().includes('/')
+    !v.toString().includes('/') //&&
+    //buttonType(v) !== 'symbol'
   ) {
     return new Decimal(v);
+  } else if (buttonType(v) === 'symbol') {
+    return v;
   } else {
     return new Fraction(v);
   }
@@ -67,45 +72,49 @@ function initOp(v, operation) {
 export function accurateFunc(func, arg, arg2) {
   arg = initOp(arg, func);
   arg2 = initOp(arg2, func);
-  switch (func) {
-    case 'numerator':
-      return arg.div(arg2).toFraction();
+  if (buttonType(arg) === 'symbol' || buttonType(arg2) === 'symbol') {
+    return funcOnSymbol(func, arg, arg2);
+  } else {
+    switch (func) {
+      case 'numerator':
+        return arg.div(arg2).toFraction();
 
-    case '|x|':
-      return arg.abs();
+      case '|x|':
+        return arg.abs();
 
-    case 'base':
-      return arg.toPower(arg2);
+      case 'base':
+        return arg.toPower(arg2);
 
-    case 'log(x)':
-      return arg.log(10);
+      case 'log(x)':
+        return arg.log(10);
 
-    case 'ln(x)':
-      return arg.ln();
+      case 'ln(x)':
+        return arg.ln();
 
-    case '√(x)':
-      return arg.sqrt();
+      case '√(x)':
+        return arg.sqrt();
 
-    case 'sin(x)':
-      return arg.sin();
+      case 'sin(x)':
+        return arg.sin();
 
-    case 'cos(x)':
-      return arg.cos();
+      case 'cos(x)':
+        return arg.cos();
 
-    case 'tan(x)':
-      return arg.tan();
+      case 'tan(x)':
+        return arg.tan();
 
-    case 'sin⁻¹':
-      return arg.asin();
+      case 'sin⁻¹':
+        return arg.asin();
 
-    case 'cos⁻¹':
-      return arg.acos();
+      case 'cos⁻¹':
+        return arg.acos();
 
-    case 'tan⁻¹':
-      return arg.atan();
+      case 'tan⁻¹':
+        return arg.atan();
 
-    case '(':
-      return arg;
+      case '(':
+        return arg;
+    }
   }
 }
 

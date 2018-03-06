@@ -4,14 +4,14 @@ export default function buttonType(b) {
   b = safeToString(b);
 
   switch (true) {
+    case checkForSymbol(b):
+      return 'symbol';
+
     case checkForNumber(b):
       return 'number';
 
     case checkForOperator(b):
       return 'operator';
-
-    case checkForSymbol(b):
-      return 'symbol';
 
     case checkForMode(b):
       return 'mode';

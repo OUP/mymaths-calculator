@@ -117,8 +117,8 @@ function funcEval(inputArray, funcIndex) {
   if (inputEl.parts === 2) {
     const inputEl2 = inputArray[funcIndex + 1].value;
     const arg2 = calcEval(inputEl2.argument);
-    return accurateFunc(func, arg, arg2).toString();
+    return accurateFunc(func, arg, arg2);
   } else {
-    return accurateFunc(func, arg).toString();
+    return accurateFunc(func, arg);
   }
 }
