@@ -318,7 +318,6 @@ export class Expression {
     }
     const matchIndex = findCorrespondingTerms(x, this);
     if (matchIndex || matchIndex === 0) {
-      console.log(wipTerms[matchIndex]);
       wipTerms[matchIndex] = wipTerms[matchIndex].plus(x);
     } else {
       wipTerms.push(x);
@@ -328,10 +327,8 @@ export class Expression {
 
   expressionAdd(x) {
     let wipExpression = new Expression(this.terms);
-    console.log(x.terms.length);
     for (let i = 0; i < x.terms.length; i++) {
       wipExpression = wipExpression.termAdd(x.terms[i]);
-      console.log(cloneState(wipExpression));
     }
     return wipExpression;
   }
@@ -343,15 +340,19 @@ export class Expression {
 
   termMultiply(term) {
     const terms = this.terms;
-    console.log('termMultiply', new Expression(terms.map(x => x.times(term))));
     return new Expression(terms.map(x => x.times(term)));
   }
 
   expressionMultiply(exp) {
-    const terms = this.terms;
-    //console.log('expressionMultiply', this, exp);
-    //console.log('exp', exp);
-    return new Expression(terms.map(x => x.times(exp))).simplify();
+    const thisExp = this.clone();
+    const expTerms = exp.clone().terms;
+    let adder;
+    let cumExp = new Term(0);
+    for (let i = 0; i < expTerms.length; i++) {
+      adder = thisExp.times(expTerms[i]);
+      cumExp = cumExp.plus(adder);
+    }
+    return cumExp;
   }
 
   simplify() {
@@ -427,7 +428,6 @@ export class FractionExpression {
           .plus(x.numerator.times(this.denominator))
           .simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
-        console.log('newNumer', newNumer);
         return new FractionExpression(newNumer, newDenom);
 
       default:
@@ -534,7 +534,6 @@ function findMatchingSymbol(symbolInTerm1, term2Symbols) {
 function multiplyThroughNegPowers(expression) {
   let fixFactor = new Term(1, [], []);
   const terms = expression.terms;
-  console.log('expression', expression);
   for (let i = 0; i < terms.length; i++) {
     fixFactor = fixFactor.times(factorToFixNegPowersInTerm(terms[i]));
   }

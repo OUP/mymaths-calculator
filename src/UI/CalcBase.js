@@ -20,7 +20,8 @@ function testSymbolMethods() {
   const C = A.plus(B);
   const D = A.plus(B);
   const E = A.plus(B);
-  const F = C.times(D).times(E);
+  const F = C.times(C).times(C);
+  console.log(F);
   return F;
 }
 
