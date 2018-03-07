@@ -382,7 +382,7 @@ export class Expression {
   toString() {
     let wipString = this.terms[0].toString();
     for (let i = 1; i < this.terms.length; i++) {
-      if (isGreaterThan(this.terms[i].coefficient, 0)) {
+      if (isGreaterThanOrEqualTo(this.terms[i].coefficient, 0)) {
         wipString += '+' + this.terms[i].toString();
       } else {
         wipString += this.terms[i].toString();
@@ -558,13 +558,13 @@ function factorToFixNegPowersInTerm(term) {
   return fixFactor;
 }
 
-function isGreaterThan(lhs, rhs) {
+function isGreaterThanOrEqualTo(lhs, rhs) {
   const lhsStr = lhs.toString();
   if (lhsStr.includes('/')) {
     const lhsFrac = new Fraction(lhsStr);
-    return lhsFrac.n / lhsFrac.d > rhs;
+    return lhsFrac.n / lhsFrac.d >= rhs;
   } else {
-    return lhs > rhs;
+    return lhs >= rhs;
   }
 }
 

@@ -16,7 +16,7 @@ import {
 
 function testSymbolMethods() {
   const A = new Term(2, ['x'], [1]);
-  const B = new Term(3);
+  const B = new Term(0);
   const C = A.plus(B);
   const D = A.plus(B);
   const E = A.plus(B);
