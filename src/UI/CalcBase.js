@@ -20,8 +20,8 @@ function testSymbolMethods() {
   const C = A.plus(B);
   const D = A.plus(B);
   const E = A.plus(B);
-  C.plus(D).plus(E);
-  return C;
+  const F = C.times(D).times(E);
+  return F;
 }
 
 class CalcBase extends Component {

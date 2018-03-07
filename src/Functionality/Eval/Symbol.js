@@ -33,6 +33,17 @@ export class Term {
     this.coefficient = coefficient;
     this.symbols = symbols;
     this.powers = powers;
+    Object.freeze(this);
+    Object.freeze(this.coefficient);
+    Object.freeze(this.symbols);
+    Object.freeze(this.powers);
+  }
+
+  clone() {
+    const coefficient = this.coefficient;
+    const symbols = this.symbols;
+    const powers = this.powers;
+    return new Term(coefficient, symbols, powers);
   }
 
   toString() {
@@ -211,9 +222,21 @@ export class Expression {
     if (terms.constructor !== Array) {
       this.terms = [terms];
     } else {
-      this.terms = terms;
+      this.terms = [];
+      for (let i = 0; i < terms.length; i++) {
+        this.terms.push(terms[i].clone());
+      }
     }
+    Object.freeze(this);
     Object.freeze(this.terms);
+  }
+
+  clone() {
+    const cloneTerms = [];
+    for (let i = 0; i < this.terms.length; i++) {
+      cloneTerms.push(this.terms[i].clone());
+    }
+    return new Expression(cloneTerms);
   }
 
   plus(x) {
@@ -288,9 +311,14 @@ export class Expression {
   }
 
   termAdd(x) {
-    const wipTerms = new Expression(this.terms).terms;
+    const terms = this.clone().terms;
+    const wipTerms = [];
+    for (let i = 0; i < terms.length; i++) {
+      wipTerms.push(terms[i]);
+    }
     const matchIndex = findCorrespondingTerms(x, this);
     if (matchIndex || matchIndex === 0) {
+      console.log(wipTerms[matchIndex]);
       wipTerms[matchIndex] = wipTerms[matchIndex].plus(x);
     } else {
       wipTerms.push(x);
@@ -394,9 +422,10 @@ export class FractionExpression {
     let newNumer;
     switch (x.constructor) {
       case FractionExpression:
-        newNumer = this.numerator.times(x.denominator);
-        //.plus(x.numerator.times(this.denominator))
-        //.simplify();
+        newNumer = this.numerator
+          .times(x.denominator)
+          .plus(x.numerator.times(this.denominator))
+          .simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
         console.log('newNumer', newNumer);
         return new FractionExpression(newNumer, newDenom);
