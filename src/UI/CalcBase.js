@@ -7,6 +7,22 @@ import {
   initialiseInternalState,
   initialiseDisplay
 } from '../Functionality/ManageState';
+import katex from 'katex';
+import {
+  FractionExpression,
+  Term,
+  Expression
+} from '../Functionality/Eval/Symbol';
+
+function testSymbolMethods() {
+  const A = new Term(2, ['x'], [1]);
+  const B = new Term(3);
+  const C = A.plus(B);
+  const D = A.plus(B);
+  const E = A.plus(B);
+  C.plus(D).plus(E);
+  return C;
+}
 
 class CalcBase extends Component {
   constructor(props) {
@@ -17,6 +33,10 @@ class CalcBase extends Component {
 
   componentDidMount() {
     initialiseDisplay(this);
+    katex.render(
+      testSymbolMethods().toString(),
+      document.getElementById('Output')
+    );
   }
 
   press(button) {

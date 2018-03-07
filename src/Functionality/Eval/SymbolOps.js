@@ -37,7 +37,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
       return v1.minus(v2);
 
     case '+':
-      return v1.plus(v2);
+      return v1.plus(v2).simplify();
 
     default:
       console.error("Don't know how to do the operation " + operation);
@@ -74,7 +74,6 @@ export function funcOnSymbol(func, arg, arg2) {
   switch (func) {
     case 'numerator':
       if (arg.constructor === FractionExpression) {
-        console.log('ans', arg.divBy(arg2).simplify());
         return arg.divBy(arg2).simplify();
       } else if (arg2.constructor === FractionExpression) {
         return arg2

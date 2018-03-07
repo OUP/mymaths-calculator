@@ -209,9 +209,11 @@ export class Term {
 export class Expression {
   constructor(terms) {
     if (terms.constructor !== Array) {
-      terms = [terms];
+      this.terms = [terms];
+    } else {
+      this.terms = terms;
     }
-    this.terms = terms;
+    Object.freeze(this.terms);
   }
 
   plus(x) {
@@ -298,8 +300,10 @@ export class Expression {
 
   expressionAdd(x) {
     let wipExpression = new Expression(this.terms);
+    console.log(x.terms.length);
     for (let i = 0; i < x.terms.length; i++) {
       wipExpression = wipExpression.termAdd(x.terms[i]);
+      console.log(cloneState(wipExpression));
     }
     return wipExpression;
   }
@@ -311,11 +315,14 @@ export class Expression {
 
   termMultiply(term) {
     const terms = this.terms;
-    return new Expression(terms.map(x => x.times(term))).simplify();
+    console.log('termMultiply', new Expression(terms.map(x => x.times(term))));
+    return new Expression(terms.map(x => x.times(term)));
   }
 
   expressionMultiply(exp) {
     const terms = this.terms;
+    //console.log('expressionMultiply', this, exp);
+    //console.log('exp', exp);
     return new Expression(terms.map(x => x.times(exp))).simplify();
   }
 
@@ -387,11 +394,11 @@ export class FractionExpression {
     let newNumer;
     switch (x.constructor) {
       case FractionExpression:
-        newNumer = this.numerator
-          .times(x.denominator)
-          .plus(x.numerator.times(this.denominator))
-          .simplify();
+        newNumer = this.numerator.times(x.denominator);
+        //.plus(x.numerator.times(this.denominator))
+        //.simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
+        console.log('newNumer', newNumer);
         return new FractionExpression(newNumer, newDenom);
 
       default:
@@ -498,6 +505,7 @@ function findMatchingSymbol(symbolInTerm1, term2Symbols) {
 function multiplyThroughNegPowers(expression) {
   let fixFactor = new Term(1, [], []);
   const terms = expression.terms;
+  console.log('expression', expression);
   for (let i = 0; i < terms.length; i++) {
     fixFactor = fixFactor.times(factorToFixNegPowersInTerm(terms[i]));
   }
@@ -601,12 +609,10 @@ function cancelCoefs(fracExpression) {
 
 const inHCF = function(factor, coefficients) {
   let rtn = true;
-  for (let i = 1; i < coefficients.length; i++) {
-    for (let j = 0; j < coefficients[i].length; j++) {
-      rtn = rtn && coefficients[i][j].toString().includes(factor);
-      if (rtn === false) {
-        return rtn;
-      }
+  for (let i = 0; i < coefficients.length; i++) {
+    rtn = rtn && coefficients[i].includes(factor);
+    if (rtn === false) {
+      return rtn;
     }
   }
   return rtn;
@@ -619,19 +625,22 @@ function removeCommonFactors(coefficients) {
   }
   const allPrimeFactors = mergeArrays(newCoefficients);
   for (let i = 0; i < allPrimeFactors.length; i++) {
-    if (inHCF(allPrimeFactors[i], newCoefficients)) {
-      newCoefficients = removeFactor(allPrimeFactors[i], newCoefficients);
-    }
+    newCoefficients = removeFactor(allPrimeFactors[i], newCoefficients);
   }
   return newCoefficients;
 }
 
 function removeFactor(factor, coefficients) {
-  let factorIndex;
+  const factorIndex = [];
   for (let i = 0; i < coefficients.length; i++) {
-    factorIndex = coefficients[i].indexOf(factor);
-    if (factorIndex >= 0) {
-      coefficients[i].splice(factorIndex, 1);
+    if (coefficients[i].indexOf(factor) >= 0) {
+      factorIndex.push(coefficients[i].indexOf(factor));
+    }
+  }
+  console.log(factorIndex, coefficients);
+  if (factorIndex.length === coefficients.length) {
+    for (let i = 0; i < coefficients.length; i++) {
+      coefficients[i].splice(factorIndex[i], 1);
     }
   }
   return coefficients;
