@@ -352,15 +352,18 @@ export class Expression {
       adder = thisExp.times(expTerms[i]);
       cumExp = cumExp.plus(adder);
     }
-    return cumExp;
+    return cumExp.simplify();
   }
 
   simplify() {
-    let wipTerms = new Expression(this.terms).terms[0].simplify();
+    const thisExp = this.clone();
+    let wipExp = thisExp.terms[0].simplify();
+    let adder;
     for (let i = 1; i < this.terms.length; i++) {
-      wipTerms = wipTerms.plus(this.terms[i].simplify());
+      adder = thisExp.terms[i].simplify();
+      wipExp = wipExp.plus(adder);
     }
-    return new Expression(wipTerms);
+    return wipExp;
   }
 
   timesMinusOne() {
