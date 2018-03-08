@@ -627,7 +627,12 @@ function cancelCoefs(fracExpression) {
   }
   coefficients = removeCommonFactors(coefficients);
   for (let i = 0; i < terms.length; i++) {
-    terms[i].coefficient = recombineFactors(coefficients[i]);
+    coefficients[i] = recombineFactors(coefficients[i]);
+  }
+
+  const newTerms = [];
+  for (let i = 0; i < terms.length; i++) {
+    newTerms.push(new Term(coefficients[i], terms[i].symbols, terms[i].powers));
   }
   const numerator = new Expression(
     terms.slice(0, fracExpression.numerator.terms.length)
