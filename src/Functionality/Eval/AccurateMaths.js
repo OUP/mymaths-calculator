@@ -58,8 +58,8 @@ function initOp(v, operation) {
     operation !== '÷' &&
     operation !== 'numerator' &&
     operation !== '%' &&
-    !v.toString().includes('/') //&&
-    //buttonType(v) !== 'symbol'
+    !v.toString().includes('/') &&
+    buttonType(v) !== 'symbol'
   ) {
     return new Decimal(v);
   } else if (buttonType(v) === 'symbol') {
