@@ -2,6 +2,7 @@ const Fraction = require('fraction.js');
 import { identicalArrays, cloneState } from '../Utilities';
 import { opValue } from './DoArithmeticOp';
 import { generateFactors } from './GenerateFactors';
+import { substitute } from './Substitute';
 
 class Symbol {
   constructor(representation, power) {
@@ -44,6 +45,21 @@ export class Term {
     const symbols = this.symbols;
     const powers = this.powers;
     return new Term(coefficient, symbols, powers);
+  }
+
+  evaluate() {
+    let result = 1,
+      multiplier = 1;
+    const symbolValues = substitute(this.symbols);
+    for (let i = 0; i < symbolValues.length; i++) {
+      multiplier = opValue(symbolValues[i], 'xⁿ', this.powers[i]);
+      result = opValue(result.toString(), '×', multiplier.toString());
+    }
+    return opValue(
+      this.coefficient.toString(),
+      '×',
+      result.toString()
+    ).toString();
   }
 
   toString() {
@@ -239,6 +255,18 @@ export class Expression {
     return new Expression(cloneTerms);
   }
 
+  evaluate() {
+    let runningValue = 0;
+    for (let i = 0; i < this.terms.length; i++) {
+      runningValue = opValue(
+        runningValue.toString(),
+        '+',
+        this.terms[i].evaluate()
+      );
+    }
+    return runningValue.toString();
+  }
+
   plus(x) {
     switch (x.constructor) {
       case FractionExpression:
@@ -412,6 +440,14 @@ export class FractionExpression {
 
   reciprocal() {
     return new FractionExpression(this.denominator, this.numerator);
+  }
+
+  evaluate() {
+    return opValue(
+      this.numerator.evaluate(),
+      '÷',
+      this.denominator.evaluate()
+    ).toString();
   }
 
   simplify() {
