@@ -382,13 +382,19 @@ export class Expression {
   toString() {
     let wipString = this.terms[0].toString();
     for (let i = 1; i < this.terms.length; i++) {
-      if (isGreaterThanOrEqualTo(this.terms[i].coefficient, 0)) {
+      if (isGreaterThan(this.terms[i].coefficient, 0)) {
         wipString += '+' + this.terms[i].toString();
-      } else {
+      } else if (!isEqualTo(this.terms[i].coefficient, 0)) {
         wipString += this.terms[i].toString();
+      } else {
+        //do nothing
       }
     }
-    return wipString;
+    if (wipString === '') {
+      return '0';
+    } else {
+      return wipString;
+    }
   }
 }
 
@@ -558,13 +564,23 @@ function factorToFixNegPowersInTerm(term) {
   return fixFactor;
 }
 
-function isGreaterThanOrEqualTo(lhs, rhs) {
+function isGreaterThan(lhs, rhs) {
   const lhsStr = lhs.toString();
   if (lhsStr.includes('/')) {
     const lhsFrac = new Fraction(lhsStr);
-    return lhsFrac.n / lhsFrac.d >= rhs;
+    return lhsFrac.n / lhsFrac.d > rhs;
   } else {
-    return lhs >= rhs;
+    return lhs > rhs;
+  }
+}
+
+function isEqualTo(lhs, rhs) {
+  const lhsStr = lhs.toString();
+  if (lhsStr.includes('/')) {
+    const lhsFrac = new Fraction(lhsStr);
+    return lhsFrac.n / lhsFrac.d === rhs;
+  } else {
+    return lhsStr === rhs.toString();
   }
 }
 
