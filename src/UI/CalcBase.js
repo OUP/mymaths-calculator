@@ -18,8 +18,6 @@ function testSymbolMethods() {
   const A = new Term(2, ['π'], [1]);
   const B = new Term(3);
   const C = A.plus(B);
-  const D = A.plus(B);
-  const E = A.plus(B);
   const F = C.times(C).times(C);
   console.log(F);
   return F.evaluate();
