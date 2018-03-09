@@ -15,12 +15,12 @@ import {
 } from '../Functionality/Eval/Symbol';
 
 function testSymbolMethods() {
-  const A = new Term(2, ['π'], [1]);
-  const B = new Term(3);
-  const C = A.plus(B);
-  const F = C.times(C).times(C);
+  const A = new Expression([new Term(1, ['π'], [1])]);
+  const B = new Expression([new Term(2)]);
+  const C = A.divBy(B);
+  const F = C.plus(C).plus(C);
   console.log(F);
-  return F.evaluate();
+  return F.simplify();
 }
 
 class CalcBase extends Component {

@@ -391,7 +391,7 @@ export class Expression {
       adder = thisExp.terms[i].simplify();
       wipExp = wipExp.plus(adder);
     }
-    return wipExp;
+    return filterZeroes(wipExp);
   }
 
   timesMinusOne() {
@@ -715,6 +715,7 @@ function removeCommonFactors(coefficients) {
   for (let i = 0; i < allPrimeFactors.length; i++) {
     newCoefficients = removeFactor(allPrimeFactors[i], newCoefficients);
   }
+  console.log('newCoefficients', newCoefficients);
   return newCoefficients;
 }
 
@@ -723,9 +724,11 @@ function removeFactor(factor, coefficients) {
   for (let i = 0; i < coefficients.length; i++) {
     if (coefficients[i].indexOf(factor) >= 0) {
       factorIndex.push(coefficients[i].indexOf(factor));
+    } else {
+      console.log('here', coefficients[i]);
     }
+    console.log(factorIndex, coefficients);
   }
-  console.log(factorIndex, coefficients);
   if (factorIndex.length === coefficients.length) {
     for (let i = 0; i < coefficients.length; i++) {
       coefficients[i].splice(factorIndex[i], 1);
@@ -792,4 +795,27 @@ function skipOne(str) {
   } else {
     return str;
   }
+}
+
+function filterZeroes(expression) {
+  const terms = expression.clone().terms;
+  if (terms.length === 1) {
+    return expression;
+  }
+
+  const coefficients = [];
+  for (let i = 0; i < terms.length; i++) {
+    coefficients.push(terms[i].coefficient.toString());
+  }
+
+  let index;
+  for (let i = 0; i < coefficients.length; i++) {
+    index = coefficients.indexOf('0');
+    console.log('terms', terms, index);
+    if (index >= 0) {
+      terms.splice(index, 1);
+    }
+  }
+
+  return new Expression(terms);
 }
