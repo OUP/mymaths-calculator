@@ -391,6 +391,9 @@ export class Expression {
       adder = thisExp.terms[i].simplify();
       wipExp = wipExp.plus(adder);
     }
+    if (wipExp.constructor === Term) {
+      wipExp = new Expression([wipExp]);
+    }
     return filterZeroes(wipExp);
   }
 
@@ -687,10 +690,10 @@ function cancelCoefs(fracExpression) {
     newTerms.push(new Term(coefficients[i], terms[i].symbols, terms[i].powers));
   }
   const numerator = new Expression(
-    terms.slice(0, fracExpression.numerator.terms.length)
+    newTerms.slice(0, fracExpression.numerator.terms.length)
   );
   const denominator = new Expression(
-    terms.slice(fracExpression.numerator.terms.length, terms.length + 1)
+    newTerms.slice(fracExpression.numerator.terms.length, terms.length + 1)
   );
   return new FractionExpression(numerator, denominator);
 }
@@ -715,7 +718,6 @@ function removeCommonFactors(coefficients) {
   for (let i = 0; i < allPrimeFactors.length; i++) {
     newCoefficients = removeFactor(allPrimeFactors[i], newCoefficients);
   }
-  console.log('newCoefficients', newCoefficients);
   return newCoefficients;
 }
 
@@ -724,14 +726,13 @@ function removeFactor(factor, coefficients) {
   for (let i = 0; i < coefficients.length; i++) {
     if (coefficients[i].indexOf(factor) >= 0) {
       factorIndex.push(coefficients[i].indexOf(factor));
-    } else {
-      console.log('here', coefficients[i]);
     }
-    console.log(factorIndex, coefficients);
   }
   if (factorIndex.length === coefficients.length) {
     for (let i = 0; i < coefficients.length; i++) {
-      coefficients[i].splice(factorIndex[i], 1);
+      if (coefficients.length > 1) {
+        coefficients[i].splice(factorIndex[i], 1);
+      }
     }
   }
   return coefficients;
@@ -798,7 +799,7 @@ function skipOne(str) {
 }
 
 function filterZeroes(expression) {
-  const terms = expression.clone().terms;
+  let terms = expression.clone().terms;
   if (terms.length === 1) {
     return expression;
   }
@@ -811,11 +812,19 @@ function filterZeroes(expression) {
   let index;
   for (let i = 0; i < coefficients.length; i++) {
     index = coefficients.indexOf('0');
-    console.log('terms', terms, index);
     if (index >= 0) {
-      terms.splice(index, 1);
+      terms = filterTerm(index, terms);
     }
   }
-
   return new Expression(terms);
+}
+
+function filterTerm(filterIndex, termsArray) {
+  const newTerms = [];
+  for (let i = 0; i < termsArray.length; i++) {
+    if (i !== filterIndex) {
+      newTerms.push(termsArray[i]);
+    }
+  }
+  return newTerms;
 }
