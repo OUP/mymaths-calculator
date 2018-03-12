@@ -1,5 +1,6 @@
 import { splitInputAtCursor } from '../Utilities';
 import { pressFunction } from './PressFunction';
+import { pressMode } from './PressMode';
 
 export const pressInput = function recur(button, bType, currentState) {
   if (currentState.cursorPosition === -1) {
@@ -29,7 +30,69 @@ export const pressInput = function recur(button, bType, currentState) {
 };
 
 function pressButton(button, currentState) {
-  currentState.inputValue.push(button.toString());
-  currentState.cursorPosition++;
+  if (!isCompositeButton(button)) {
+    currentState.inputValue.push(button.toString());
+    currentState.cursorPosition++;
+    return currentState;
+  } else {
+    return pressCompositeButton(button, currentState);
+  }
+}
+
+function isCompositeButton(button) {
+  switch (button) {
+    case '×10ⁿ':
+    case 'x²':
+    case 'x³':
+    case 'x⁻¹':
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+function pressCompositeButton(button, currentState) {
+  switch (button) {
+    case '×10ⁿ':
+      return pressPow10(currentState);
+
+    case 'x²':
+      return pressXSquared(currentState);
+
+    case 'x³':
+      return pressXCubed(currentState);
+
+    case 'x⁻¹':
+      return pressReciprocal(currentState);
+  }
+}
+
+function pressPow10(currentState) {
+  currentState = pressButton('×', currentState);
+  currentState = pressButton('1', currentState);
+  currentState = pressButton('0', currentState);
+  return pressFunction('xⁿ', currentState);
+}
+
+function pressXSquared(currentState) {
+  currentState = pressFunction('xⁿ', currentState);
+  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '2');
+  currentState.cursorPosition += 2;
+  return currentState;
+}
+
+function pressXCubed(currentState) {
+  currentState = pressFunction('xⁿ', currentState);
+  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '3');
+  currentState.cursorPosition += 2;
+  return currentState;
+}
+
+function pressReciprocal(currentState) {
+  currentState = pressFunction('xⁿ', currentState);
+  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '-');
+  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '1');
+  currentState.cursorPosition += 2;
   return currentState;
 }
