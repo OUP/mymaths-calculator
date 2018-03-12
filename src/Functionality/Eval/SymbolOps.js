@@ -289,9 +289,117 @@ function sinWithPi(coefStr) {
   }
 }
 
-function cosWithPi(coefStr) {}
+function cosWithPi(coefStr) {
+  switch (coefStr) {
+    case '0':
+    case '2':
+      return '1';
 
-function tanWithPi(coefStr) {}
+    case '1/6':
+    case '0.1(6)':
+    case '11/6':
+    case '1.8(3)':
+      return '√3/2';
+
+    case '0.25':
+    case '1/4':
+    case '1.75':
+    case '7/4':
+      return '√2/2';
+
+    case '0.(3)':
+    case '1/3':
+    case '5/3':
+    case '1.(6)':
+      return '0.5';
+
+    case '0.5':
+    case '1/2':
+    case '1.5':
+    case '3/2':
+      return '0';
+
+    case '2/3':
+    case '0.(6)':
+    case '4/3':
+    case '1.(3)':
+      return '-0.5';
+
+    case '0.75':
+    case '3/4':
+    case '1.25':
+    case '5/4':
+      return '-√2/2';
+
+    case '0.8(3)':
+    case '5/6':
+    case '1.1(6)':
+    case '7/6':
+      return '-√3/2';
+
+    case '1':
+      return '-1';
+
+    default:
+      const coef = convertFracStringToDecimal(coefStr);
+      return standardTrigFunc('cos', coef.times(Math.PI));
+  }
+}
+
+function tanWithPi(coefStr) {
+  switch (coefStr) {
+    case '0':
+    case '1':
+    case '2':
+      return '0';
+
+    case '1/6':
+    case '0.1(6)':
+    case '7/6':
+    case '1.1(6)':
+      return '√3/3';
+
+    case '0.25':
+    case '1/4':
+    case '1.25':
+    case '5/4':
+      return '1';
+
+    case '0.(3)':
+    case '1/3':
+    case '4/3':
+    case '1.(3)':
+      return '√3';
+
+    case '0.5':
+    case '1/2':
+    case '1.5':
+    case '3/2':
+      return 'Maths error';
+
+    case '2/3':
+    case '0.(6)':
+    case '5/3':
+    case '1.(6)':
+      return '-√3';
+
+    case '0.75':
+    case '3/4':
+    case '1.75':
+    case '7/4':
+      return '-1';
+
+    case '0.8(3)':
+    case '5/6':
+    case '1.8(3)':
+    case '11/6':
+      return '-√3/3';
+
+    default:
+      const coef = convertFracStringToDecimal(coefStr);
+      return standardTrigFunc('tan', coef.times(Math.PI));
+  }
+}
 
 function convertFracStringToDecimal(fracString) {
   if (fracString.includes('/')) {

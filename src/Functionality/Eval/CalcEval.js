@@ -64,8 +64,6 @@ function handleEmptyOutput(inputArray) {
 function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
   const valStr = value.toString();
-  console.log('value', value);
-  console.log('valStr', valStr);
   if (!valStr.includes('/') && !valStr.includes('(') && !valStr.includes('π')) {
     const decVal = new Decimal(value);
     return decVal.toString();
