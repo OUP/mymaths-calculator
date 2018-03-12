@@ -83,7 +83,13 @@ export function accurateFunc(func, arg, arg2) {
         return arg.abs();
 
       case 'base':
-        return arg.toPower(arg2);
+        if (!arg2.toString().includes('-')) {
+          //case with +ve power
+          return arg.toPower(arg2);
+        } else {
+          //case with -ve power
+          return new Fraction('1/' + arg.toPower(arg2.abs()).toString());
+        }
 
       case 'log(x)':
         return arg.log(10);
