@@ -698,17 +698,6 @@ function cancelCoefs(fracExpression) {
   return new FractionExpression(numerator, denominator);
 }
 
-const inHCF = function(factor, coefficients) {
-  let rtn = true;
-  for (let i = 0; i < coefficients.length; i++) {
-    rtn = rtn && coefficients[i].includes(factor);
-    if (rtn === false) {
-      return rtn;
-    }
-  }
-  return rtn;
-};
-
 function removeCommonFactors(coefficients) {
   let newCoefficients = cloneState(coefficients);
   for (let i = 0; i < coefficients.length; i++) {
