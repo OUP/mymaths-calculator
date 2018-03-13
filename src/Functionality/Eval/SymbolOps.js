@@ -16,17 +16,8 @@ export function symbolicOp(v1, operation, v2 = 0) {
       if (!v2ValStr.includes('/') && !v2ValStr.includes('.')) {
         return symbolPow(v1, v2Val);
       } else {
-        return opValue(v1.evaluate(), v2Val);
+        return opValue(v1.evaluate(), 'xⁿ', v2Val);
       }
-
-    case 'x²':
-      return v1.times(v1);
-
-    case 'x³':
-      return v1.times(v1).times(v1);
-
-    case 'x⁻¹':
-      return v1.reciprocal();
 
     case 'x!':
       break; //WiP
@@ -39,9 +30,6 @@ export function symbolicOp(v1, operation, v2 = 0) {
 
     case '×':
       return v1.times(v2);
-
-    case '×10ⁿ':
-      break; //WiP
 
     case '–':
       return v1.minus(v2);
@@ -104,7 +92,6 @@ export function funcOnSymbol(func, arg, arg2) {
       return arg.abs();
 
     case 'base':
-      console.log('arg2', arg2);
       const arg2Val = arg2.evaluate();
       const arg2ValStr = arg2Val.toString();
       if (!arg2ValStr.includes('/') && !arg2ValStr.includes('.')) {
@@ -147,11 +134,20 @@ export function funcOnSymbol(func, arg, arg2) {
 
 function symbolPow(base, exponent) {
   exponent = parseInt(exponent.toString(), 10);
-  let result = 1;
-  for (let i = 1; i <= exponent; i++) {
-    result = base.times(result);
+  switch (true) {
+    case exponent > 0:
+      let result = 1;
+      for (let i = 1; i <= exponent; i++) {
+        result = base.times(result);
+      }
+      return result;
+
+    case exponent === 0:
+      return '1';
+
+    case exponent < 0:
+      return symbolPow(base, -exponent).reciprocal();
   }
-  return result;
 }
 
 function symbolTrig(trigFunc, arg) {
