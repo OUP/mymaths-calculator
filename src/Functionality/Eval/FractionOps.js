@@ -6,15 +6,6 @@ export function fractionOp(v1, operation, v2 = 0) {
     case 'xⁿ':
       return fracPow(v1, v2);
 
-    case 'x²':
-      return fracMultiply(v1, v1);
-
-    case 'x³':
-      return fracMultiply(fracMultiply(v1, v1), v1);
-
-    case 'x⁻¹':
-      return fracDivide('1', v1);
-
     case 'x!':
       return fracFactorial(v1);
 
@@ -26,10 +17,6 @@ export function fractionOp(v1, operation, v2 = 0) {
 
     case '×':
       return fracMultiply(v1, v2);
-
-    case '×10ⁿ':
-      return fracPow10(v1, v2);
-    //v1 * Math.pow(10, v2);
 
     case '–':
       return fracSubtract(v1, v2);
@@ -78,12 +65,6 @@ function fracPow(v1, v2) {
     v2 = convertFracToDecimal(v2);
     return new Fraction(v1.toPower(v2).toString());
   }
-}
-
-function fracPow10(v1, v2) {
-  const f = new Fraction(v1);
-  const g = new Fraction(v2);
-  return f.mul(fracPow(10, g)).toString();
 }
 
 function fracFactorial(v1) {

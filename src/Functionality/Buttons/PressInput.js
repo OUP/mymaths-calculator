@@ -1,6 +1,5 @@
 import { splitInputAtCursor } from '../Utilities';
 import { pressFunction } from './PressFunction';
-import { pressMode } from './PressMode';
 
 export const pressInput = function recur(button, bType, currentState) {
   if (currentState.cursorPosition === -1) {

@@ -11,16 +11,6 @@ export function accurateOp(v1, operation, v2 = 0) {
     case 'xⁿ':
       return v1.toPower(v2);
 
-    case 'x²':
-      return v1.times(v1);
-
-    case 'x³':
-      return v1.times(v1).times(v1);
-
-    case 'x⁻¹':
-      const one = new Fraction(1);
-      return one.div(v1).toFraction();
-
     case 'x!':
       return factorial(v1);
 
@@ -33,10 +23,6 @@ export function accurateOp(v1, operation, v2 = 0) {
 
     case '×':
       return v1.times(v2);
-
-    case '×10ⁿ':
-      const ten = new Decimal(10);
-      return v1.times(ten.toPower(v2));
 
     case '–':
       return v1.minus(v2);

@@ -33,13 +33,7 @@ export function opValue(valBefore, operation, valAfter) {
 }
 
 function updateArrayFromOp(inputArray, position, operation, output) {
-  if (
-    operation !== 'x²' &&
-    operation !== 'x!' &&
-    operation !== 'x³' &&
-    operation !== 'x⁻¹' &&
-    operation !== '%'
-  ) {
+  if (operation !== 'x!' && operation !== '%') {
     inputArray.splice(position - 1, 3, output);
   } else {
     inputArray.splice(position - 1, 2, output);
