@@ -17,10 +17,10 @@ import {
 function testSymbolMethods() {
   const A = new Expression([new Term(1, ['π'], [1])]);
   const B = new Expression([new Term(2)]);
-  const C = A.divBy(B);
+  const C = B.minus(A);
   const F = C.plus(C).plus(C);
   console.log(F);
-  return F.simplify();
+  return C.simplify();
 }
 
 class CalcBase extends Component {

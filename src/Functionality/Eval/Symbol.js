@@ -75,6 +75,8 @@ export class Term {
     }
     if (this.coefficient.toString() === '1' && this.powers.length) {
       return wipString;
+    } else if (this.coefficient.toString() === '-1' && this.powers.length) {
+      return '-' + wipString;
     } else if (this.coefficient.toString().includes('/')) {
       const frac = new Fraction(this.coefficient.toString());
       return (
@@ -129,12 +131,7 @@ export class Term {
         return x.timesMinusOne().plus(this);
 
       case Term:
-        const invX = new Term(
-          opValue(x.coefficient.toString(), '×', '-1'),
-          x.symbols,
-          x.powers
-        );
-        return this.termAdd(invX);
+        return this.termAdd(x.timesMinusOne());
 
       default:
         return this.numAdd(opValue(x.toString(), '×', '-1'));
@@ -230,6 +227,10 @@ export class Term {
       this.symbols,
       invPowers
     );
+  }
+
+  timesMinusOne() {
+    return this.clone().times(-1);
   }
 }
 
@@ -398,11 +399,7 @@ export class Expression {
   }
 
   timesMinusOne() {
-    let wipTerms = new Expression(this.terms).terms[0].times(-1);
-    for (let i = 1; i < this.terms.length; i++) {
-      wipTerms = wipTerms.minus(this.terms[i]);
-    }
-    return wipTerms;
+    return this.clone().times(-1);
   }
 
   reciprocal() {
