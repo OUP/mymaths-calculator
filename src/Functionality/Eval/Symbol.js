@@ -31,6 +31,12 @@ class Symbol {
 
 export class Term {
   constructor(coefficient, symbols = [], powers = []) {
+    if (symbols.constructor !== Array) {
+      symbols = [symbols];
+    }
+    if (powers.constructor !== Array) {
+      powers = [powers];
+    }
     this.coefficient = coefficient;
     this.symbols = symbols;
     this.powers = powers;

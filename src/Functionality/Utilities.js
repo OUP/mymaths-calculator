@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js/decimal';
+const Fraction = require('fraction.js');
 import buttonType from './ButtonType';
 
 export function assembleNumbers(outputArray) {
@@ -132,4 +134,12 @@ export function checkForSymbols(val) {
     return val.toString().includes('π');
   }
   return false;
+}
+
+//v is a string 'n/d'
+export function convertFracToDecimal(v) {
+  const f = new Fraction(v);
+  const vn = new Decimal(f.n);
+  const vd = new Decimal(f.d);
+  return vn.dividedBy(vd);
 }

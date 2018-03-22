@@ -13,14 +13,19 @@ import {
   Term,
   Expression
 } from '../Functionality/Eval/Symbol';
+import { SquareRoot } from '../Functionality/Eval/Surd';
 
 function testSymbolMethods() {
+  /*
   const A = new Expression([new Term(1, ['π'], [1])]);
   const B = new Expression([new Term(2)]);
   const C = B.minus(A);
   const F = C.plus(C).plus(C);
-  console.log(F);
-  return C.simplify();
+  console.log(F); */
+  const A = new SquareRoot('-3√2');
+  const B = A.plus(A);
+  console.log('B', B);
+  return B;
 }
 
 class CalcBase extends Component {

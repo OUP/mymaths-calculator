@@ -1,5 +1,5 @@
 const Fraction = require('fraction.js');
-import { Decimal } from 'decimal.js';
+import { convertFracToDecimal } from '../Utilities';
 
 export function fractionOp(v1, operation, v2 = 0) {
   switch (operation) {
@@ -69,12 +69,4 @@ function fracPow(v1, v2) {
 
 function fracFactorial(v1) {
   return 'syntax error';
-}
-
-//v is a string 'n/d'
-function convertFracToDecimal(v) {
-  const f = new Fraction(v);
-  const vn = new Decimal(f.n);
-  const vd = new Decimal(f.d);
-  return vn.dividedBy(vd);
 }
