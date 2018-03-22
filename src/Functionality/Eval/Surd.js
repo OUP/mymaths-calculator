@@ -2,7 +2,7 @@ import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 import { Term, Expression, FractionExpression } from './Symbol';
 import { opValue } from './DoArithmeticOp';
-import { convertFracToDecimal } from '../Utilities';
+import { cloneState, convertFracToDecimal, removeElement } from '../Utilities';
 
 export class SquareRoot extends Term {
   constructor(constructionParameter) {
@@ -34,7 +34,11 @@ export class SquareRoot extends Term {
   }
 
   toString() {
-    return `${this.coefficient} \\sqrt ${this.symbols[0].slice(1)}`;
+    if (this.symbols.length) {
+      return `${this.coefficient} \\sqrt ${this.symbols[0].slice(1)}`;
+    } else {
+      return this.coefficient.toString();
+    }
   }
 
   clone() {
@@ -53,6 +57,7 @@ export class SquareRoot extends Term {
         currentSqrt = reduceSqrt(currentSqrt, i);
       }
     }
+    return currentSqrt;
   }
 
   plus(x) {
@@ -251,22 +256,32 @@ function reduceSqrt(sqrt, index) {
     power = new Decimal(powerStr);
   }
 
-  if (!power.mod(2)) {
+  if (power.mod(2).equals(0)) {
     return collapseSqrtIntoCoefficient(sqrt, index, power);
-  } else {
+  } else if (power.isInt()) {
     return updateSqrtCoefficient(sqrt, index, power);
+  } else {
+    return specialCaseSqrtCoefficient(sqrt, index, power);
   }
 }
 
 function collapseSqrtIntoCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = new Decimal(sqrtArgStr).pow(power);
+  const factor = new Decimal(sqrtArgStr).pow(power.div(2));
   const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
-  const newSymbols = sqrt.symbols.splice(index, 1);
-  const newPowers = sqrt.powers.splice(index, 1);
+  const newSymbols = removeElement(sqrt.symbols, index);
+  const newPowers = removeElement(sqrt.powers, index);
   return new SquareRoot(new Term(newCoef, newSymbols, newPowers));
 }
 
 function updateSqrtCoefficient(sqrt, index, power) {
+  const sqrtArgStr = sqrt.symbols[index].slice(1);
+  const factor = new Decimal(sqrtArgStr).pow(power.minus(1));
+  const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
+  const newPowers = cloneState(sqrt.powers).splice(index, 1, '1');
+  return new SquareRoot(new Term(newCoef, sqrt.symbols, newPowers));
+}
+
+function specialCaseSqrtCoefficient(sqrt, index, power) {
   //WiP
 }

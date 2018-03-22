@@ -143,3 +143,11 @@ export function convertFracToDecimal(v) {
   const vd = new Decimal(f.d);
   return vn.dividedBy(vd);
 }
+
+export function removeElement(array, index) {
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    i !== index ? newArray.push(array[i]) : newArray;
+  }
+  return newArray;
+}
