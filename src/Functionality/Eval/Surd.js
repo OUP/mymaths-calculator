@@ -34,10 +34,13 @@ export class SquareRoot extends Term {
   }
 
   toString() {
-    if (this.symbols.length) {
-      return `${this.coefficient} \\sqrt ${this.symbols[0].slice(1)}`;
+    const simplified = this.simplify();
+    if (simplified.symbols.length) {
+      return `${simplified.coefficient} \\sqrt ${simplified.symbols[0].slice(
+        1
+      )}`;
     } else {
-      return this.coefficient.toString();
+      return simplified.coefficient.toString();
     }
   }
 
@@ -257,7 +260,7 @@ function reduceSqrt(sqrt, index) {
   } else if (power.isInt()) {
     return updateSqrtCoefficient(sqrt, index, power);
   } else {
-    return specialCaseSqrtCoefficient(sqrt, index, power);
+    return nonIntSqrtPowerToCoef(sqrt, index, power);
   }
 }
 
@@ -282,15 +285,19 @@ function pullOutSquareFactors(sqrt) {
   const sqrtArg = sqrt.symbols[0].slice(1);
   const argFactors = generateFactors(parseFloat(sqrtArg));
   const output = getDuplicateFactors(argFactors);
-  const multiplier = (accumulator, currentValue) =>
-    opValue(accumulator.toString(), '×', currentValue.toString());
-  const newSqrt = '√' + output.factors.reduce(multiplier);
   const newCoef = opValue(
     sqrt.coefficient.toString(),
     '×',
     output.coefMultiplier.toString()
   );
-  return new SquareRoot(new Term(newCoef, [newSqrt], [1]));
+  if (output.factors.length) {
+    const multiplier = (accumulator, currentValue) =>
+      opValue(accumulator.toString(), '×', currentValue.toString());
+    const newSqrt = '√' + output.factors.reduce(multiplier);
+    return new SquareRoot(new Term(newCoef, [newSqrt], [1]));
+  } else {
+    return new Term(newCoef);
+  }
 }
 
 function getDuplicateFactors(factors) {
@@ -300,6 +307,7 @@ function getDuplicateFactors(factors) {
     if (safeCompare(reducedFactors[i], reducedFactors[i + 1])) {
       coefMultiplier = opValue(coefMultiplier, '×', reducedFactors[i]);
       reducedFactors.splice(i, 2);
+      i--;
     }
   }
   return { coefMultiplier: coefMultiplier, factors: reducedFactors };
@@ -345,6 +353,6 @@ function updateSqrtCoefficient(sqrt, index, power) {
   return new SquareRoot(new Term(newCoef, sqrt.symbols, newPowers));
 }
 
-function specialCaseSqrtCoefficient(sqrt, index, power) {
+function nonIntSqrtPowerToCoef(sqrt, index, power) {
   //WiP
 }
