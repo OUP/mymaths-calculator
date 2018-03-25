@@ -140,11 +140,6 @@ export class SqrtExpression extends Expression {
   timesMinusOne() {
     return new SqrtExpression(super.timesMinusOne());
   }
-
-  toString() {
-    //WiP
-    return;
-  }
 }
 
 export class SqrtFractionExpression extends FractionExpression {
@@ -206,11 +201,6 @@ export class SqrtFractionExpression extends FractionExpression {
   timesMinusOne() {
     return new SqrtFractionExpression(super.timesMinusOne());
   }
-
-  toString() {
-    //WiP
-    return;
-  }
 }
 
 function construct(constructionParameter) {
@@ -220,13 +210,18 @@ function construct(constructionParameter) {
       return new SquareRoot(constructionParameter);
 
     case Expression:
-      return new SqrtExpression(constructionParameter);
+      const newExpression = new Expression(
+        constructionParameter.terms.map(x => construct(x))
+      );
+      return new SqrtExpression(newExpression);
 
     case FractionExpression:
-      return new SqrtFractionExpression(constructionParameter);
+      const newNumerator = construct(constructionParameter.numerator);
+      const newDenominator = construct(constructionParameter.denominator);
+      return new SqrtFractionExpression(newNumerator, newDenominator);
 
     default:
-      return;
+      return constructionParameter;
   }
 }
 
