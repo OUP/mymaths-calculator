@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js/decimal';
-const Fraction = require('fraction.js');
 import { Term, Expression, FractionExpression } from './Symbol';
 import { opValue } from './DoArithmeticOp';
 import { cloneState, convertFracToDecimal, removeElement } from '../Utilities';
@@ -297,15 +296,10 @@ function pullOutSquareFactors(sqrt) {
 function getDuplicateFactors(factors) {
   const reducedFactors = cloneState(factors);
   let coefMultiplier = '1';
-  for (let i = 0; i < factors.length; i++) {
-    if (safeCompare(factors[i], factors[i + 1])) {
-      coefMultiplier = opValue(
-        opValue(coefMultiplier, '×', factors[i]),
-        '×',
-        factors[i + 1]
-      );
+  for (let i = 0; i < reducedFactors.length; i++) {
+    if (safeCompare(reducedFactors[i], reducedFactors[i + 1])) {
+      coefMultiplier = opValue(coefMultiplier, '×', reducedFactors[i]);
       reducedFactors.splice(i, 2);
-      i--;
     }
   }
   return { coefMultiplier: coefMultiplier, factors: reducedFactors };
@@ -346,7 +340,8 @@ function updateSqrtCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
   const factor = new Decimal(sqrtArgStr).pow(power.minus(1));
   const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
-  const newPowers = cloneState(sqrt.powers).splice(index, 1, '1');
+  const newPowers = cloneState(sqrt.powers);
+  newPowers.splice(index, 1, '1');
   return new SquareRoot(new Term(newCoef, sqrt.symbols, newPowers));
 }
 
