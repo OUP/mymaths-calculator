@@ -3,6 +3,7 @@ const Fraction = require('fraction.js');
 import { Term, Expression, FractionExpression } from './Symbol';
 import { opValue } from './DoArithmeticOp';
 import { cloneState, convertFracToDecimal, removeElement } from '../Utilities';
+import { generateFactors } from './GenerateFactors';
 
 export class SquareRoot extends Term {
   constructor(constructionParameter) {
@@ -51,13 +52,14 @@ export class SquareRoot extends Term {
   }
 
   simplify() {
-    let currentSqrt = this.clone();
-    for (let i = 0; i < this.symbols.length; i++) {
-      if (currentSqrt.symbols[i].includes('√')) {
-        currentSqrt = reduceSqrt(currentSqrt, i);
-      }
+    let currentSqrt = new SquareRoot(super.simplify());
+    currentSqrt = removeSqrtPowers(currentSqrt);
+    if (currentSqrt.constructor === SquareRoot) {
+      currentSqrt = combineSqrts(currentSqrt);
+      return pullOutSquareFactors(currentSqrt);
+    } else {
+      return currentSqrt;
     }
-    return currentSqrt;
   }
 
   plus(x) {
@@ -260,13 +262,84 @@ function reduceSqrt(sqrt, index) {
   }
 }
 
+function combineSqrts(sqrt) {
+  const sqrtFactors = getSqrtArgs(sqrt);
+  const multiplier = (accumulator, currentValue) =>
+    opValue(accumulator.toString(), '×', currentValue.toString());
+  const newSqrt = '√' + sqrtFactors.reduce(multiplier);
+  return new SquareRoot(new Term(sqrt.coefficient, newSqrt, [1]));
+}
+
+function getSqrtArgs(sqrt) {
+  const sqrtArgs = [];
+  const sqrts = sqrt.symbols;
+  for (let i = 0; i < sqrts.length; i++) {
+    sqrtArgs.push(sqrts[i].slice(1));
+  }
+  return sqrtArgs;
+}
+
+function pullOutSquareFactors(sqrt) {
+  const sqrtArg = sqrt.symbols[0].slice(1);
+  const argFactors = generateFactors(parseFloat(sqrtArg));
+  const output = getDuplicateFactors(argFactors);
+  const multiplier = (accumulator, currentValue) =>
+    opValue(accumulator.toString(), '×', currentValue.toString());
+  const newSqrt = '√' + output.factors.reduce(multiplier);
+  const newCoef = opValue(
+    sqrt.coefficient.toString(),
+    '×',
+    output.coefMultiplier.toString()
+  );
+  return new SquareRoot(new Term(newCoef, [newSqrt], [1]));
+}
+
+function getDuplicateFactors(factors) {
+  const reducedFactors = cloneState(factors);
+  let coefMultiplier = '1';
+  for (let i = 0; i < factors.length; i++) {
+    if (safeCompare(factors[i], factors[i + 1])) {
+      coefMultiplier = opValue(
+        opValue(coefMultiplier, '×', factors[i]),
+        '×',
+        factors[i + 1]
+      );
+      reducedFactors.splice(i, 2);
+      i--;
+    }
+  }
+  return { coefMultiplier: coefMultiplier, factors: reducedFactors };
+}
+
+function safeCompare(el1, el2) {
+  if (typeof el1 !== 'undefined' && typeof el2 !== 'undefined') {
+    return el1.toString() === el2.toString();
+  } else {
+    return false;
+  }
+}
+
+function removeSqrtPowers(sqrt) {
+  let newSqrt = sqrt.clone();
+  for (let i = 0; i < newSqrt.symbols.length; i++) {
+    if (newSqrt.symbols[i].includes('√')) {
+      newSqrt = reduceSqrt(newSqrt, i);
+    }
+  }
+  return newSqrt;
+}
+
 function collapseSqrtIntoCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
   const factor = new Decimal(sqrtArgStr).pow(power.div(2));
   const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
   const newSymbols = removeElement(sqrt.symbols, index);
   const newPowers = removeElement(sqrt.powers, index);
-  return new SquareRoot(new Term(newCoef, newSymbols, newPowers));
+  if (newSymbols.length) {
+    return new SquareRoot(new Term(newCoef, newSymbols, newPowers));
+  } else {
+    return new Term(newCoef, newSymbols, newPowers);
+  }
 }
 
 function updateSqrtCoefficient(sqrt, index, power) {
