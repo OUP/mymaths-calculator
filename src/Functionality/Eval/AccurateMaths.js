@@ -47,11 +47,11 @@ function initOp(v, operation) {
     !v.toString().includes('/') &&
     buttonType(v) !== 'symbol'
   ) {
-    return new Decimal(v);
+    return new Decimal(v.toString());
   } else if (buttonType(v) === 'symbol') {
     return v;
   } else {
-    return new Fraction(v);
+    return new Fraction(v.toString());
   }
 }
 
@@ -69,13 +69,7 @@ export function accurateFunc(func, arg, arg2) {
         return arg.abs();
 
       case 'base':
-        if (!arg2.toString().includes('-')) {
-          //case with +ve power
-          return arg.toPower(arg2);
-        } else {
-          //case with -ve power
-          return new Fraction('1/' + arg.toPower(arg2.abs()).toString());
-        }
+        return accPower(arg, arg2);
 
       case 'log(x)':
         return arg.log(10);
@@ -123,3 +117,13 @@ const factorial = function recur(v1, index = 1, result = 1) {
     return 'Syntax error. Use integers for x!';
   }
 };
+
+export function accPower(base, exponent) {
+  if (!exponent.toString().includes('-')) {
+    //case with +ve power
+    return base.toPower(exponent);
+  } else {
+    //case with -ve power
+    return new Fraction('1/' + base.toPower(exponent.abs()).toString());
+  }
+}

@@ -151,3 +151,14 @@ export function removeElement(array, index) {
   }
   return newArray;
 }
+
+export function makeString(decOrFrac) {
+  if (decOrFrac) {
+    if (decOrFrac.toFraction) {
+      if (decOrFrac.toFraction().constructor === String) {
+        return decOrFrac.toFraction();
+      }
+    }
+  }
+  return decOrFrac.toString();
+}

@@ -1,7 +1,13 @@
 import Decimal from 'decimal.js/decimal';
 import { Term, Expression, FractionExpression } from './Symbol';
 import { opValue } from './DoArithmeticOp';
-import { cloneState, convertFracToDecimal, removeElement } from '../Utilities';
+import { accurateFunc } from './AccurateMaths';
+import {
+  cloneState,
+  convertFracToDecimal,
+  removeElement,
+  makeString
+} from '../Utilities';
 import { generateFactors } from './GenerateFactors';
 
 export class SquareRoot extends Term {
@@ -40,7 +46,7 @@ export class SquareRoot extends Term {
         1
       )}`;
     } else {
-      return simplified.coefficient.toString();
+      return makeString(simplified.coefficient);
     }
   }
 
@@ -248,7 +254,7 @@ function deconstruct(deconstructionParameter) {
 
 function reduceSqrt(sqrt, index) {
   let power;
-  const powerStr = sqrt.powers[index].toString();
+  const powerStr = makeString(sqrt.powers[index]);
   if (powerStr.includes('/')) {
     power = convertFracToDecimal(powerStr);
   } else {
@@ -267,7 +273,7 @@ function reduceSqrt(sqrt, index) {
 function combineSqrts(sqrt) {
   const sqrtFactors = getSqrtArgs(sqrt);
   const multiplier = (accumulator, currentValue) =>
-    opValue(accumulator.toString(), '×', currentValue.toString());
+    opValue(makeString(accumulator), '×', makeString(currentValue));
   const newSqrt = '√' + sqrtFactors.reduce(multiplier);
   return new SquareRoot(new Term(sqrt.coefficient, newSqrt, [1]));
 }
@@ -286,13 +292,13 @@ function pullOutSquareFactors(sqrt) {
   const argFactors = generateFactors(parseFloat(sqrtArg));
   const output = getDuplicateFactors(argFactors);
   const newCoef = opValue(
-    sqrt.coefficient.toString(),
+    makeString(sqrt.coefficient),
     '×',
-    output.coefMultiplier.toString()
+    makeString(output.coefMultiplier)
   );
   if (output.factors.length) {
     const multiplier = (accumulator, currentValue) =>
-      opValue(accumulator.toString(), '×', currentValue.toString());
+      opValue(makeString(accumulator), '×', makeString(currentValue));
     const newSqrt = '√' + output.factors.reduce(multiplier);
     return new SquareRoot(new Term(newCoef, [newSqrt], [1]));
   } else {
@@ -333,8 +339,12 @@ function removeSqrtPowers(sqrt) {
 
 function collapseSqrtIntoCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = new Decimal(sqrtArgStr).pow(power.div(2));
-  const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
+  const factor = intPower(sqrtArgStr, makeString(opValue(power, '÷', '2'))); //new Decimal(sqrtArgStr).pow(power.div(2));
+  const newCoef = opValue(
+    makeString(sqrt.coefficient),
+    '×',
+    makeString(factor)
+  );
   const newSymbols = removeElement(sqrt.symbols, index);
   const newPowers = removeElement(sqrt.powers, index);
   if (newSymbols.length) {
@@ -346,8 +356,13 @@ function collapseSqrtIntoCoefficient(sqrt, index, power) {
 
 function updateSqrtCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = new Decimal(sqrtArgStr).pow(power.minus(1));
-  const newCoef = opValue(sqrt.coefficient.toString(), '×', factor.toString());
+  const factor = intPower(sqrtArgStr, makeString(opValue(power, '–', '1')));
+  //new Decimal(sqrtArgStr).pow(power.minus(1));
+  const newCoef = opValue(
+    makeString(sqrt.coefficient),
+    '×',
+    makeString(factor)
+  );
   const newPowers = cloneState(sqrt.powers);
   newPowers.splice(index, 1, '1');
   return new SquareRoot(new Term(newCoef, sqrt.symbols, newPowers));
@@ -355,4 +370,8 @@ function updateSqrtCoefficient(sqrt, index, power) {
 
 function nonIntSqrtPowerToCoef(sqrt, index, power) {
   //WiP
+}
+
+function intPower(baseStr, exponentStr) {
+  return accurateFunc('base', baseStr, exponentStr);
 }
