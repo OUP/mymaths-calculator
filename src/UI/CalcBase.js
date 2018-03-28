@@ -23,10 +23,12 @@ function testSymbolMethods() {
   const F = C.plus(C).plus(C);
   console.log(F); */
   const A = new SquareRoot('√2');
-  const B = new SquareRoot('-3√12');
-  const C = A.divBy(B);
-  console.log('C', C);
-  return C;
+  const B = new SquareRoot('√3');
+  const C = A.plus(B);
+  const D = C.times(C)
+    .times(C)
+    .times(C);
+  return D;
 }
 
 class CalcBase extends Component {

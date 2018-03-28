@@ -50,6 +50,10 @@ export class SquareRoot extends Term {
     }
   }
 
+  conString() {
+    return 'SquareRoot';
+  }
+
   clone() {
     return new SquareRoot(super.clone());
   }
@@ -64,10 +68,12 @@ export class SquareRoot extends Term {
     currentSqrt = removeSqrtPowers(currentSqrt);
     if (currentSqrt.constructor === SquareRoot) {
       currentSqrt = combineSqrts(currentSqrt);
-      return pullOutSquareFactors(currentSqrt);
-    } else {
-      return currentSqrt;
+      if (currentSqrt.constructor === SquareRoot) {
+        return pullOutSquareFactors(currentSqrt);
+      }
     }
+    const term = currentSqrt;
+    return term;
   }
 
   plus(x) {
@@ -116,6 +122,14 @@ export class SqrtExpression extends Expression {
 
   toExpression() {
     return new Expression(this.terms);
+  }
+
+  conString() {
+    return 'SqrtExpression';
+  }
+
+  simplify() {
+    return construct(super.simplify());
   }
 
   clone() {
@@ -177,6 +191,10 @@ export class SqrtFractionExpression extends FractionExpression {
 
   toFractionExpression() {
     return new FractionExpression(this.numerator, this.denominator);
+  }
+
+  conString() {
+    return 'SqrtFractionExpression';
   }
 
   clone() {
@@ -272,10 +290,14 @@ function reduceSqrt(sqrt, index) {
 
 function combineSqrts(sqrt) {
   const sqrtFactors = getSqrtArgs(sqrt);
-  const multiplier = (accumulator, currentValue) =>
-    opValue(makeString(accumulator), '×', makeString(currentValue));
-  const newSqrt = '√' + sqrtFactors.reduce(multiplier);
-  return new SquareRoot(new Term(sqrt.coefficient, newSqrt, [1]));
+  if (sqrtFactors.length) {
+    const multiplier = (accumulator, currentValue) =>
+      opValue(makeString(accumulator), '×', makeString(currentValue));
+    const newSqrt = '√' + sqrtFactors.reduce(multiplier);
+    return new SquareRoot(new Term(sqrt.coefficient, newSqrt, [1]));
+  } else {
+    return new Term(sqrt.coefficient);
+  }
 }
 
 function getSqrtArgs(sqrt) {
@@ -339,7 +361,7 @@ function removeSqrtPowers(sqrt) {
 
 function collapseSqrtIntoCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = intPower(sqrtArgStr, makeString(opValue(power, '÷', '2'))); //new Decimal(sqrtArgStr).pow(power.div(2));
+  const factor = intPower(sqrtArgStr, makeString(opValue(power, '÷', '2')));
   const newCoef = opValue(
     makeString(sqrt.coefficient),
     '×',

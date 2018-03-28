@@ -27,6 +27,10 @@ class Symbol {
   toString() {
     return this.representation + '^' + this.power.toString();
   }
+
+  conString() {
+    return 'Symbol';
+  }
 }
 
 export class Term {
@@ -99,6 +103,10 @@ export class Term {
     }
   }
 
+  conString() {
+    return 'Term';
+  }
+
   simplify() {
     const wipPowers = cloneState(this.powers);
     const wipSymbols = cloneState(this.symbols);
@@ -113,14 +121,17 @@ export class Term {
   }
 
   plus(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.plus(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return x.termAdd(this);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termAdd(x);
 
       default:
@@ -129,14 +140,17 @@ export class Term {
   }
 
   minus(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.timesMinusOne().plus(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return x.timesMinusOne().plus(this);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termAdd(x.timesMinusOne());
 
       default:
@@ -145,14 +159,17 @@ export class Term {
   }
 
   times(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.times(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return x.termMultiply(this);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termMultiply(x);
 
       default:
@@ -162,14 +179,17 @@ export class Term {
   }
 
   divBy(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.reciprocal().times(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return x.divBy(this).reciprocal();
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termMultiply(x.reciprocal());
 
       default:
@@ -275,14 +295,17 @@ export class Expression {
   }
 
   plus(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.plus(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return this.expressionAdd(x);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termAdd(x);
 
       default:
@@ -293,15 +316,18 @@ export class Expression {
 
   minus(x) {
     let invX;
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.timesMinusOne().plus(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         invX = x.timesMinusOne();
         return this.expressionAdd(invX);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         invX = new Term(-x.coefficient, x.symbols, x.powers);
         return this.termAdd(invX);
 
@@ -312,14 +338,17 @@ export class Expression {
   }
 
   times(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.times(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return this.expressionMultiply(x);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.termMultiply(x);
 
       default:
@@ -329,14 +358,17 @@ export class Expression {
   }
 
   divBy(x) {
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         return x.reciprocal().times(this);
 
-      case Expression:
+      case 'Expression':
+      case 'SqrtExpression':
         return new FractionExpression(this, x);
 
-      case Term:
+      case 'Term':
+      case 'SquareRoot':
         return this.times(x.reciprocal());
 
       default:
@@ -430,6 +462,10 @@ export class Expression {
       return wipString;
     }
   }
+
+  conString() {
+    return 'Expression';
+  }
 }
 
 export class FractionExpression {
@@ -472,8 +508,9 @@ export class FractionExpression {
 
   plus(x) {
     let newNumer;
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         newNumer = this.numerator
           .times(x.denominator)
           .plus(x.numerator.times(this.denominator))
@@ -489,8 +526,9 @@ export class FractionExpression {
 
   minus(x) {
     let newNumer;
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         newNumer = this.numerator
           .times(x.denominator)
           .minus(x.numerator.times(this.denominator))
@@ -506,8 +544,9 @@ export class FractionExpression {
 
   times(x) {
     let newNumer;
-    switch (x.constructor) {
-      case FractionExpression:
+    switch (x.conString()) {
+      case 'FractionExpression':
+      case 'SqrtFractionExpression':
         newNumer = this.numerator.times(x.numerator).simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
         return new FractionExpression(newNumer, newDenom);
@@ -540,6 +579,10 @@ export class FractionExpression {
         '}'
       );
     }
+  }
+
+  conString() {
+    return 'FractionExpression';
   }
 }
 
