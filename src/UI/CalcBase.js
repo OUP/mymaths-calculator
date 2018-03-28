@@ -22,7 +22,7 @@ function testSymbolMethods() {
   const C = B.minus(A);
   const F = C.plus(C).plus(C);
   console.log(F); */
-  const A = new SquareRoot('-3√2');
+  const A = new SquareRoot('√2');
   const B = new SquareRoot('-3√12');
   const C = A.divBy(B);
   console.log('C', C);

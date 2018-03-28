@@ -266,7 +266,7 @@ function reduceSqrt(sqrt, index) {
   } else if (power.isInt()) {
     return updateSqrtCoefficient(sqrt, index, power);
   } else {
-    return nonIntSqrtPowerToCoef(sqrt, index, power);
+    return nonIntSqrtPowerToCoef(sqrt, index, power); //WiP
   }
 }
 
@@ -356,8 +356,10 @@ function collapseSqrtIntoCoefficient(sqrt, index, power) {
 
 function updateSqrtCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = intPower(sqrtArgStr, makeString(opValue(power, '–', '1')));
-  //new Decimal(sqrtArgStr).pow(power.minus(1));
+  const factor = intPower(
+    sqrtArgStr,
+    opValue(makeString(opValue(power, '–', '1')), '÷', '2')
+  );
   const newCoef = opValue(
     makeString(sqrt.coefficient),
     '×',
