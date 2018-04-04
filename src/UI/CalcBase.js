@@ -24,10 +24,8 @@ function testSymbolMethods() {
   console.log(F); */
   const A = new SquareRoot('√2');
   const B = new SquareRoot('√3');
-  const C = A.plus(B);
-  const D = C.times(C)
-    .times(C)
-    .times(C);
+  const C = A.plus(new Term(1));
+  const D = C.divBy(B);
   return D;
 }
 

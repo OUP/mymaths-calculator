@@ -121,6 +121,10 @@ export class Term {
   }
 
   plus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.plus(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -140,6 +144,10 @@ export class Term {
   }
 
   minus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.minus(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -159,6 +167,10 @@ export class Term {
   }
 
   times(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.times(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -179,6 +191,10 @@ export class Term {
   }
 
   divBy(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.divBy(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -295,6 +311,10 @@ export class Expression {
   }
 
   plus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.plus(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -315,6 +335,10 @@ export class Expression {
   }
 
   minus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.minus(new Term(x)); //Forces conString() to exist
+    }
+
     let invX;
     switch (x.conString()) {
       case 'FractionExpression':
@@ -338,6 +362,10 @@ export class Expression {
   }
 
   times(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.times(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -358,6 +386,10 @@ export class Expression {
   }
 
   divBy(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.divBy(new Term(x)); //Forces conString() to exist
+    }
+
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
@@ -507,6 +539,10 @@ export class FractionExpression {
   }
 
   plus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.plus(new Term(x)); //Forces conString() to exist
+    }
+
     let newNumer;
     switch (x.conString()) {
       case 'FractionExpression':
@@ -525,6 +561,10 @@ export class FractionExpression {
   }
 
   minus(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.minus(new Term(x)); //Forces conString() to exist
+    }
+
     let newNumer;
     switch (x.conString()) {
       case 'FractionExpression':
@@ -543,6 +583,10 @@ export class FractionExpression {
   }
 
   times(x) {
+    if (x.constructor === String || x.constructor === Number) {
+      return this.times(new Term(x)); //Forces conString() to exist
+    }
+
     let newNumer;
     switch (x.conString()) {
       case 'FractionExpression':
