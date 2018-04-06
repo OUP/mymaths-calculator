@@ -25,8 +25,8 @@ function testSymbolMethods() {
   const A = new SquareRoot('√2');
   const B = new SquareRoot('√3');
   const C = A.plus(new Term(1));
-  const D = C.divBy(B);
-  return D;
+  const D = A.divBy(C);
+  return C;
 }
 
 class CalcBase extends Component {

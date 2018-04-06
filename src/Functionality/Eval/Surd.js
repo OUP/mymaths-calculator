@@ -42,9 +42,18 @@ export class SquareRoot extends Term {
   toString() {
     const simplified = this.simplify();
     if (simplified.symbols.length) {
-      return `${simplified.coefficient} \\sqrt ${simplified.symbols[0].slice(
-        1
-      )}`;
+      switch (simplified.coefficient.toString()) {
+        case '1':
+          return `\\sqrt ${simplified.symbols[0].slice(1)}`;
+
+        case '-1':
+          return `-\\sqrt ${simplified.symbols[0].slice(1)}`;
+
+        default:
+          return `${
+            simplified.coefficient
+          } \\sqrt ${simplified.symbols[0].slice(1)}`;
+      }
     } else {
       return makeString(simplified.coefficient);
     }
