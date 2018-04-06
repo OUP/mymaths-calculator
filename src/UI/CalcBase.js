@@ -26,7 +26,7 @@ function testSymbolMethods() {
   const B = new SquareRoot('√3');
   const C = A.plus(new Term(1));
   console.log('C', C);
-  const D = A.divBy(C);
+  const D = A.divBy(C).minus(1);
   console.log('D', D);
   return D;
 }

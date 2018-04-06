@@ -251,15 +251,23 @@ function construct(constructionParameter) {
       return new SquareRoot(constructionParameter);
 
     case Expression:
-      const newExpression = new Expression(
-        constructionParameter.terms.map(x => construct(x))
-      );
-      return new SqrtExpression(newExpression);
+      if (constructionParameter.terms.length) {
+        const newExpression = new Expression(
+          constructionParameter.terms.map(x => construct(x))
+        );
+        return new SqrtExpression(newExpression);
+      } else {
+        return '0';
+      }
 
     case FractionExpression:
       const newNumerator = construct(constructionParameter.numerator);
-      const newDenominator = construct(constructionParameter.denominator);
-      return new SqrtFractionExpression(newNumerator, newDenominator);
+      if (newNumerator === '0') {
+        return '0';
+      } else {
+        const newDenominator = construct(constructionParameter.denominator);
+        return new SqrtFractionExpression(newNumerator, newDenominator);
+      }
 
     default:
       return constructionParameter;
