@@ -202,6 +202,10 @@ export class SqrtFractionExpression extends FractionExpression {
     return new FractionExpression(this.numerator, this.denominator);
   }
 
+  simplify() {
+    return construct(super.simplify());
+  }
+
   conString() {
     return 'SqrtFractionExpression';
   }
