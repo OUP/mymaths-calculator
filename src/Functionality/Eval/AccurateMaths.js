@@ -78,7 +78,7 @@ export function accurateFunc(func, arg, arg2) {
         return arg.ln();
 
       case '√(x)':
-        return arg.sqrt();
+        return `√${arg}`;
 
       case 'sin(x)':
         return arg.sin();

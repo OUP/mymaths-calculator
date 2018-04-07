@@ -14,6 +14,7 @@ export const pressInput = function recur(button, bType, currentState) {
 
   switch (bType) {
     case 'function':
+    case 'sqrt':
       pressFunction(button, currentState);
       break;
 

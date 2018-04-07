@@ -7,6 +7,9 @@ export default function buttonType(b) {
     case checkForSymbol(b):
       return 'symbol';
 
+    case checkForSqrt(b):
+      return 'sqrt';
+
     case checkForNumber(b):
       return 'number';
 
@@ -85,6 +88,14 @@ function checkForSymbol(b) {
   }
 }
 
+function checkForSqrt(b) {
+  if (b.includes('√') || b.includes('\\sqrt')) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function checkForMode(b) {
   if (b === 'shift' || b === '⬅' || b === '➡' || b === '⬆' || b === '⬇') {
     return true;
@@ -136,12 +147,13 @@ function checkForNull(b) {
 export function buttonSuperType(button) {
   const type = buttonType(button);
 
-  switch (true) {
-    case type === 'number' ||
-      type === 'operator' ||
-      type === 'symbol' ||
-      type === 'function' ||
-      type === 'Ans':
+  switch (type) {
+    case 'number':
+    case 'operator':
+    case 'symbol':
+    case 'sqrt':
+    case 'function':
+    case 'Ans':
       return 'input';
 
     default:

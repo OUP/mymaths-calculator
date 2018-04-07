@@ -1,9 +1,15 @@
 import buttonType from '../ButtonType';
 import Decimal from 'decimal.js/decimal';
-import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
+import {
+  assembleArguments,
+  assembleNumbers,
+  cloneState,
+  checkForSymbols
+} from '../Utilities';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
+import { SquareRoot } from './Surd';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -64,13 +70,20 @@ function handleEmptyOutput(inputArray) {
 function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
   const valStr = value.toString();
-  if (!valStr.includes('/') && !valStr.includes('(') && !valStr.includes('π')) {
+  if (!valStr.includes('/') && !checkForSymbols(valStr)) {
     const decVal = new Decimal(value);
     return decVal.toString();
-  } else if (!valStr.includes('π')) {
-    return valStr;
   } else {
-    return value;
+    switch (true) {
+      case valStr.includes('π'):
+        return valStr;
+
+      case valStr.includes('√'):
+        return new SquareRoot(valStr);
+
+      default:
+        return value;
+    }
   }
 }
 

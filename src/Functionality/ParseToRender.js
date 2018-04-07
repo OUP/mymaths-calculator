@@ -102,6 +102,7 @@ function parseElToMaths(el) {
       }
 
     case 'symbol':
+    case 'sqrt':
       return el.toString();
 
     case 'Ans':

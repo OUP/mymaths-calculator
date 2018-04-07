@@ -131,7 +131,13 @@ export function checkIfFraction(val) {
 export function checkForSymbols(val) {
   //val can be undefined
   if (val) {
-    return val.toString().includes('π');
+    const valString = val.toString();
+    switch (true) {
+      case valString.includes('π'):
+      case valString.includes('√'):
+      case valString.includes('\\sqrt'):
+        return true;
+    }
   }
   return false;
 }
