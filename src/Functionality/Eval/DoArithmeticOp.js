@@ -55,16 +55,16 @@ function doDecimalOp(valBefore, operation, valAfter) {
   if (valAfter) {
     numAfter = parseFloat(valAfter);
   }
-  return catchSyntaxError(accurateOp(numBefore, operation, numAfter));
+  return catchError(accurateOp(numBefore, operation, numAfter));
 }
 
 function doFractionOp(valBefore, operation, valAfter) {
-  return catchSyntaxError(fractionOp(valBefore, operation, valAfter));
+  return catchError(fractionOp(valBefore, operation, valAfter));
 }
 
-function catchSyntaxError(value) {
-  if (value === 'NaN') {
-    return ['syntax error'];
+function catchError(value) {
+  if (value === 'NaN' || typeof value === 'undefined' || value === 'error') {
+    return ['error'];
   }
   return value;
 }
