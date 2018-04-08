@@ -1,9 +1,10 @@
+import Decimal from 'decimal.js/decimal';
+const Fraction = require('fraction.js');
 import buttonType from '../ButtonType';
 import { checkForSymbols } from '../Utilities';
 import { opPriority } from './OrganiseOps';
 import { symbolicOp } from './SymbolOps';
 import { numericOp } from './NumericOp';
-import { FractionExpression } from './Symbol';
 
 export function doArithmeticOp(inputArray, position) {
   const operation = inputArray[position].value;
@@ -38,7 +39,7 @@ function updateArrayFromOp(inputArray, position, operation, output) {
 }
 
 function outputFactory(value) {
-  if (value.constructor !== FractionExpression) {
+  if (value.constructor === Decimal || value.constructor === Fraction) {
     value = value.toString();
   }
   const output = { value: value, type: buttonType(value) };
