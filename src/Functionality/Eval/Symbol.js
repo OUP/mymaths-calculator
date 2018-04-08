@@ -462,7 +462,7 @@ export class Expression {
       adder = thisExp.terms[i].simplify();
       wipExp = wipExp.plus(adder);
     }
-    if (wipExp.constructor === Term) {
+    if (wipExp.conString() === 'Term' || wipExp.conString() === 'SquareRoot') {
       wipExp = new Expression([wipExp]);
     }
     return filterZeroes(wipExp);
