@@ -45,10 +45,12 @@ function initOp(v, operation) {
     operation !== 'numerator' &&
     operation !== '%' &&
     !v.toString().includes('/') &&
+    !v.toString().includes('\\sqrt') &&
+    !v.toString().includes('√') &&
     buttonType(v) !== 'symbol'
   ) {
     return new Decimal(v.toString());
-  } else if (buttonType(v) === 'symbol') {
+  } else if (buttonType(v) === 'symbol' || buttonType(v) === 'sqrt') {
     return v;
   } else {
     return new Fraction(v.toString());
