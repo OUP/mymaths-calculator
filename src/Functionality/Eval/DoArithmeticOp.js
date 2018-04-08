@@ -1,9 +1,8 @@
 import buttonType from '../ButtonType';
-import { accurateOp } from './AccurateMaths';
-import { fractionOp } from './FractionOps';
-import { checkForSymbols, checkIfFraction } from '../Utilities';
+import { checkForSymbols } from '../Utilities';
 import { opPriority } from './OrganiseOps';
 import { symbolicOp } from './SymbolOps';
+import { numericOp } from './NumericOp';
 import { FractionExpression } from './Symbol';
 
 export function doArithmeticOp(inputArray, position) {
@@ -22,13 +21,11 @@ function evalArithmeticOp(inputArray, position, operation) {
   return opValue(valBefore, operation, valAfter);
 }
 
-export function opValue(valBefore, operation, valAfter) {
+function opValue(valBefore, operation, valAfter) {
   if (checkForSymbols(valBefore) || checkForSymbols(valAfter)) {
-    return symbolicOp(valBefore, operation, valAfter);
-  } else if (!checkIfFraction(valBefore) && !checkIfFraction(valAfter)) {
-    return doDecimalOp(valBefore, operation, valAfter);
+    return catchError(symbolicOp(valBefore, operation, valAfter));
   } else {
-    return doFractionOp(valBefore, operation, valAfter);
+    return catchError(numericOp(valBefore, operation, valAfter));
   }
 }
 
@@ -47,19 +44,6 @@ function outputFactory(value) {
   const output = { value: value, type: buttonType(value) };
   output.priority = opPriority(output);
   return output;
-}
-
-function doDecimalOp(valBefore, operation, valAfter) {
-  const numBefore = parseFloat(valBefore);
-  let numAfter = 0;
-  if (valAfter) {
-    numAfter = parseFloat(valAfter);
-  }
-  return catchError(accurateOp(numBefore, operation, numAfter));
-}
-
-function doFractionOp(valBefore, operation, valAfter) {
-  return catchError(fractionOp(valBefore, operation, valAfter));
 }
 
 function catchError(value) {

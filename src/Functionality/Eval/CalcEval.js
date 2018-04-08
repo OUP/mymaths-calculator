@@ -75,9 +75,6 @@ function processValue(value) {
     return decVal.toString();
   } else {
     switch (true) {
-      case valStr.includes('π'):
-        return valStr;
-
       case valStr.includes('√'):
         return new SquareRoot(valStr);
 

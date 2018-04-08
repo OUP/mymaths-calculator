@@ -1,8 +1,9 @@
 import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 import { FractionExpression, Term, Expression } from './Symbol';
-import { opValue } from './DoArithmeticOp';
+import { numericOp } from './NumericOp';
 import { identicalArrays } from '../Utilities';
+import { SquareRoot, SqrtExpression, SqrtFractionExpression } from './Surd';
 
 export function symbolicOp(v1, operation, v2 = 0) {
   v1 = construct(v1);
@@ -16,7 +17,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
       if (!v2ValStr.includes('/') && !v2ValStr.includes('.')) {
         return symbolPow(v1, v2Val);
       } else {
-        return opValue(v1.evaluate(), 'xⁿ', v2Val);
+        return numericOp(v1.evaluate(), 'xⁿ', v2Val);
       }
 
     case 'x!':
@@ -56,6 +57,10 @@ function construct(x) {
         term = new Term(parseFloat(x));
         exp = new Expression([term]);
         return new FractionExpression(exp, defaultDenom);
+      } else if (x.includes('√')) {
+        term = new SquareRoot(x);
+        exp = new SqrtExpression([term]);
+        return new SqrtFractionExpression(exp, defaultDenom);
       }
       break;
 
@@ -97,7 +102,7 @@ export function funcOnSymbol(func, arg, arg2) {
       if (!arg2ValStr.includes('/') && !arg2ValStr.includes('.')) {
         return symbolPow(arg, arg2Val);
       } else {
-        return opValue(arg.evaluate(), arg2Val);
+        return numericOp(arg.evaluate(), arg2Val);
       }
 
     case 'log(x)':
@@ -248,7 +253,7 @@ function trigWithPi(trigFunc, arg) {
 }
 
 function setCoefficient(arg) {
-  const coefficient = opValue(
+  const coefficient = numericOp(
     arg.numerator.terms[0].coefficient.toString(),
     '÷',
     arg.denominator.terms[0].coefficient.toString()

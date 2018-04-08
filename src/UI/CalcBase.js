@@ -7,29 +7,6 @@ import {
   initialiseInternalState,
   initialiseDisplay
 } from '../Functionality/ManageState';
-import katex from 'katex';
-import {
-  FractionExpression,
-  Term,
-  Expression
-} from '../Functionality/Eval/Symbol';
-import { SquareRoot } from '../Functionality/Eval/Surd';
-
-function testSymbolMethods() {
-  /*
-  const A = new Expression([new Term(1, ['π'], [1])]);
-  const B = new Expression([new Term(2)]);
-  const C = B.minus(A);
-  const F = C.plus(C).plus(C);
-  console.log(F); */
-  const A = new SquareRoot('√2');
-  const B = new SquareRoot('√3');
-  const C = A.plus(new Term(1));
-  console.log('C', C);
-  const D = A.divBy(C).minus(1);
-  console.log('D', D);
-  return D;
-}
 
 class CalcBase extends Component {
   constructor(props) {
@@ -40,10 +17,6 @@ class CalcBase extends Component {
 
   componentDidMount() {
     initialiseDisplay(this);
-    katex.render(
-      testSymbolMethods().toString(),
-      document.getElementById('Output')
-    );
   }
 
   press(button) {

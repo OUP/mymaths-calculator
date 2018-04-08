@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js/decimal';
 import { Term, Expression, FractionExpression } from './Symbol';
-import { opValue } from './DoArithmeticOp';
+import { numericOp } from './NumericOp';
 import { accurateFunc } from './AccurateMaths';
 import {
   cloneState,
@@ -313,7 +313,7 @@ function combineSqrts(sqrt) {
   const sqrtFactors = getSqrtArgs(sqrt);
   if (sqrtFactors.length) {
     const multiplier = (accumulator, currentValue) =>
-      opValue(makeString(accumulator), '×', makeString(currentValue));
+      numericOp(makeString(accumulator), '×', makeString(currentValue));
     const newSqrt = '√' + sqrtFactors.reduce(multiplier);
     return new SquareRoot(new Term(sqrt.coefficient, newSqrt, [1]));
   } else {
@@ -334,14 +334,14 @@ function pullOutSquareFactors(sqrt) {
   const sqrtArg = sqrt.symbols[0].slice(1);
   const argFactors = generateFactors(parseFloat(sqrtArg));
   const output = getDuplicateFactors(argFactors);
-  const newCoef = opValue(
+  const newCoef = numericOp(
     makeString(sqrt.coefficient),
     '×',
     makeString(output.coefMultiplier)
   );
   if (output.factors.length) {
     const multiplier = (accumulator, currentValue) =>
-      opValue(makeString(accumulator), '×', makeString(currentValue));
+      numericOp(makeString(accumulator), '×', makeString(currentValue));
     const newSqrt = '√' + output.factors.reduce(multiplier);
     return new SquareRoot(new Term(newCoef, [newSqrt], [1]));
   } else {
@@ -354,7 +354,7 @@ function getDuplicateFactors(factors) {
   let coefMultiplier = '1';
   for (let i = 0; i < reducedFactors.length; i++) {
     if (safeCompare(reducedFactors[i], reducedFactors[i + 1])) {
-      coefMultiplier = opValue(coefMultiplier, '×', reducedFactors[i]);
+      coefMultiplier = numericOp(coefMultiplier, '×', reducedFactors[i]);
       reducedFactors.splice(i, 2);
       i--;
     }
@@ -382,8 +382,8 @@ function removeSqrtPowers(sqrt) {
 
 function collapseSqrtIntoCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
-  const factor = intPower(sqrtArgStr, makeString(opValue(power, '÷', '2')));
-  const newCoef = opValue(
+  const factor = intPower(sqrtArgStr, makeString(numericOp(power, '÷', '2')));
+  const newCoef = numericOp(
     makeString(sqrt.coefficient),
     '×',
     makeString(factor)
@@ -401,9 +401,9 @@ function updateSqrtCoefficient(sqrt, index, power) {
   const sqrtArgStr = sqrt.symbols[index].slice(1);
   const factor = intPower(
     sqrtArgStr,
-    opValue(makeString(opValue(power, '–', '1')), '÷', '2')
+    numericOp(makeString(numericOp(power, '–', '1')), '÷', '2')
   );
-  const newCoef = opValue(
+  const newCoef = numericOp(
     makeString(sqrt.coefficient),
     '×',
     makeString(factor)

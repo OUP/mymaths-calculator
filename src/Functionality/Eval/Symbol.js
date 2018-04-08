@@ -1,6 +1,6 @@
 const Fraction = require('fraction.js');
 import { identicalArrays, cloneState } from '../Utilities';
-import { opValue } from './DoArithmeticOp';
+import { numericOp } from './NumericOp';
 import { generateFactors } from './GenerateFactors';
 import { substitute } from './Substitute';
 
@@ -11,7 +11,7 @@ class Symbol {
   }
 
   multiply(matchingRepresentation) {
-    const pow = opValue(
+    const pow = numericOp(
       this.power.toString(),
       '+',
       matchingRepresentation.power.toString()
@@ -62,10 +62,10 @@ export class Term {
       multiplier = 1;
     const symbolValues = substitute(this.symbols);
     for (let i = 0; i < symbolValues.length; i++) {
-      multiplier = opValue(symbolValues[i], 'xⁿ', this.powers[i]);
-      result = opValue(result.toString(), '×', multiplier.toString());
+      multiplier = numericOp(symbolValues[i], 'xⁿ', this.powers[i]);
+      result = numericOp(result.toString(), '×', multiplier.toString());
     }
-    return opValue(
+    return numericOp(
       this.coefficient.toString(),
       '×',
       result.toString()
@@ -162,7 +162,7 @@ export class Term {
         return this.termAdd(x.timesMinusOne());
 
       default:
-        return this.numAdd(opValue(x.toString(), '×', '-1'));
+        return this.numAdd(numericOp(x.toString(), '×', '-1'));
     }
   }
 
@@ -185,7 +185,7 @@ export class Term {
         return this.termMultiply(x);
 
       default:
-        const coef = opValue(this.coefficient.toString(), '×', x.toString()); //this.coefficient * x;
+        const coef = numericOp(this.coefficient.toString(), '×', x.toString()); //this.coefficient * x;
         return new Term(coef, this.symbols, this.powers);
     }
   }
@@ -209,14 +209,14 @@ export class Term {
         return this.termMultiply(x.reciprocal());
 
       default:
-        const coef = opValue(this.coefficient.toString(), '/', x.toString()); //this.coefficient / x;
+        const coef = numericOp(this.coefficient.toString(), '/', x.toString()); //this.coefficient / x;
         return new Term(coef, this.symbols, this.powers);
     }
   }
 
   termAdd(term) {
     if (correspondingTerms(this, term)) {
-      const coef = opValue(
+      const coef = numericOp(
         this.coefficient.toString(),
         '+',
         term.coefficient.toString()
@@ -233,7 +233,7 @@ export class Term {
   }
 
   termMultiply(term) {
-    const coef = opValue(
+    const coef = numericOp(
       this.coefficient.toString(),
       '×',
       term.coefficient.toString()
@@ -265,7 +265,7 @@ export class Term {
       invPowers = this.powers.map(p => -p);
     }
     return new Term(
-      opValue('1', '÷', this.coefficient.toString()),
+      numericOp('1', '÷', this.coefficient.toString()),
       this.symbols,
       invPowers
     );
@@ -301,7 +301,7 @@ export class Expression {
   evaluate() {
     let runningValue = 0;
     for (let i = 0; i < this.terms.length; i++) {
-      runningValue = opValue(
+      runningValue = numericOp(
         runningValue.toString(),
         '+',
         this.terms[i].evaluate()
@@ -404,7 +404,7 @@ export class Expression {
         return this.times(x.reciprocal());
 
       default:
-        x = new Term(opValue('1', '×', x.toString()), [], []);
+        x = new Term(numericOp('1', '×', x.toString()), [], []);
         return this.numMultiply(x);
     }
   }
@@ -517,7 +517,7 @@ export class FractionExpression {
   }
 
   evaluate() {
-    return opValue(
+    return numericOp(
       this.numerator.evaluate(),
       '÷',
       this.denominator.evaluate()
@@ -603,7 +603,7 @@ export class FractionExpression {
 
   divBy(x) {
     if (checkNumber(x)) {
-      return this.times(opValue('1', '÷', x.toString()));
+      return this.times(numericOp('1', '÷', x.toString()));
     } else {
       return this.times(x.reciprocal());
     }
