@@ -2,6 +2,7 @@
 import Decimal from 'decimal.js/decimal';
 import buttonType from '../ButtonType';
 import { funcOnSymbol } from './SymbolOps';
+import { checkForSymbols } from '../Utilities';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
@@ -60,7 +61,7 @@ function initOp(v, operation) {
 export function accurateFunc(func, arg, arg2) {
   arg = initOp(arg, func);
   arg2 = initOp(arg2, func);
-  if (buttonType(arg) === 'symbol' || buttonType(arg2) === 'symbol') {
+  if (checkForSymbols(arg) || checkForSymbols(arg2)) {
     return funcOnSymbol(func, arg, arg2);
   } else {
     switch (func) {
