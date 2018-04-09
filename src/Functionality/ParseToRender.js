@@ -2,7 +2,11 @@ import katex from 'katex';
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import buttonType from './ButtonType';
-import { assembleNumbers, assembleArguments } from './Utilities';
+import {
+  assembleNumbers,
+  assembleArguments,
+  convertFracToDecimal
+} from './Utilities';
 import '../UI/Maths.css';
 import { identicalArrays } from './Utilities';
 
@@ -103,7 +107,13 @@ function parseElToMaths(el) {
 
     case 'symbol':
     case 'sqrt':
-      return el.toString();
+      switch (this) {
+        case 'decimal':
+          return convertFracToDecimal(el.evaluate().toString());
+
+        default:
+          return el.toString();
+      }
 
     case 'Ans':
       return '\\text {' + el + '}';
