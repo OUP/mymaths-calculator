@@ -35,7 +35,7 @@ export class SquareRoot extends Term {
     }
   }
 
-  toTerm() {
+  toSymbol() {
     return new Term(this.coefficient, this.symbols, this.powers);
   }
 
@@ -72,7 +72,11 @@ export class SquareRoot extends Term {
 
   evaluate() {
     const simplified = this.simplify();
-    return simplified.toTerm().evaluate();
+    if (simplified.toSymbol) {
+      return simplified.toSymbol().evaluate();
+    } else {
+      return simplified.evaluate();
+    }
   }
 
   simplify() {
@@ -132,7 +136,7 @@ export class SqrtExpression extends Expression {
     super(terms);
   }
 
-  toExpression() {
+  toSymbol() {
     return new Expression(this.terms);
   }
 
@@ -150,7 +154,7 @@ export class SqrtExpression extends Expression {
 
   evaluate() {
     const simplified = this.simplify();
-    return simplified.toTerm().evaluate();
+    return simplified.toSymbol().evaluate();
   }
 
   plus(x) {
@@ -201,7 +205,7 @@ export class SqrtFractionExpression extends FractionExpression {
     super(numerator, denominator);
   }
 
-  toFractionExpression() {
+  toSymbol() {
     return new FractionExpression(this.numerator, this.denominator);
   }
 
@@ -219,7 +223,7 @@ export class SqrtFractionExpression extends FractionExpression {
 
   evaluate() {
     const simplified = this.simplify();
-    return simplified.toTerm().evaluate();
+    return simplified.toSymbol().evaluate();
   }
 
   plus(x) {
@@ -260,13 +264,15 @@ function construct(constructionParameter) {
         );
         return new SqrtExpression(newExpression);
       } else {
-        return '0';
+        return new SqrtExpression(new Term('0'));
       }
 
     case FractionExpression:
       const newNumerator = construct(constructionParameter.numerator);
-      if (newNumerator === '0') {
-        return '0';
+      if (newNumerator.evaluate().toString() === '0') {
+        const zero = new Expression(new Term('0'));
+        const one = new Expression(new Term('1'));
+        return new SqrtFractionExpression(zero, one);
       } else {
         const newDenominator = construct(constructionParameter.denominator);
         return new SqrtFractionExpression(newNumerator, newDenominator);
@@ -281,13 +287,9 @@ function deconstruct(deconstructionParameter) {
   //Decides which type of symbolic representation to go to and constructs it
   switch (deconstructionParameter.constructor) {
     case SquareRoot:
-      return deconstructionParameter.toTerm();
-
     case SqrtExpression:
-      return deconstructionParameter.toExpression();
-
     case SqrtFractionExpression:
-      return deconstructionParameter.toFractionExpression();
+      return deconstructionParameter.toSymbol();
 
     default:
       return deconstructionParameter;

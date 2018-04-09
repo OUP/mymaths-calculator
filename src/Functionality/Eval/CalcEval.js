@@ -70,7 +70,9 @@ function handleEmptyOutput(inputArray) {
 function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
   const valStr = value.toString();
-  if (!valStr.includes('/') && !checkForSymbols(valStr)) {
+  if (valStr === '0') {
+    return '0';
+  } else if (!valStr.includes('/') && !checkForSymbols(valStr)) {
     const decVal = new Decimal(value);
     return decVal.toString();
   } else {
