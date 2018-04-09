@@ -128,14 +128,14 @@ export class Term {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.plus(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return x.termAdd(this);
 
       case 'Term':
-      case 'SquareRoot':
         return this.termAdd(x);
 
       default:
@@ -151,14 +151,14 @@ export class Term {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.timesMinusOne().plus(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return x.timesMinusOne().plus(this);
 
       case 'Term':
-      case 'SquareRoot':
         return this.termAdd(x.timesMinusOne());
 
       default:
@@ -174,14 +174,14 @@ export class Term {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.times(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return x.termMultiply(this);
 
       case 'Term':
-      case 'SquareRoot':
         return this.termMultiply(x);
 
       default:
@@ -198,14 +198,14 @@ export class Term {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.reciprocal().times(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return x.divBy(this).reciprocal();
 
       case 'Term':
-      case 'SquareRoot':
         return this.termMultiply(x.reciprocal());
 
       default:
@@ -318,14 +318,14 @@ export class Expression {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.plus(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return this.expressionAdd(x);
 
       case 'Term':
-      case 'SquareRoot':
         return this.termAdd(x);
 
       default:
@@ -343,15 +343,15 @@ export class Expression {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.timesMinusOne().plus(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         invX = x.timesMinusOne();
         return this.expressionAdd(invX);
 
       case 'Term':
-      case 'SquareRoot':
         invX = new Term(-x.coefficient, x.symbols, x.powers);
         return this.termAdd(invX);
 
@@ -369,14 +369,14 @@ export class Expression {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.times(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return this.expressionMultiply(x);
 
       case 'Term':
-      case 'SquareRoot':
         return this.termMultiply(x);
 
       default:
@@ -393,14 +393,14 @@ export class Expression {
     switch (x.conString()) {
       case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
         return x.reciprocal().times(this);
 
       case 'Expression':
-      case 'SqrtExpression':
         return new FractionExpression(this, x);
 
       case 'Term':
-      case 'SquareRoot':
         return this.times(x.reciprocal());
 
       default:
@@ -545,8 +545,12 @@ export class FractionExpression {
 
     let newNumer;
     switch (x.conString()) {
-      case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
+        return x.plus(this);
+
+      case 'FractionExpression':
         newNumer = this.numerator
           .times(x.denominator)
           .plus(x.numerator.times(this.denominator))
@@ -567,8 +571,12 @@ export class FractionExpression {
 
     let newNumer;
     switch (x.conString()) {
-      case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
+        return x.timesMinusOne().plus(this);
+
+      case 'FractionExpression':
         newNumer = this.numerator
           .times(x.denominator)
           .minus(x.numerator.times(this.denominator))
@@ -589,8 +597,12 @@ export class FractionExpression {
 
     let newNumer;
     switch (x.conString()) {
-      case 'FractionExpression':
       case 'SqrtFractionExpression':
+      case 'SqrtExpression':
+      case 'SquareRoot':
+        return x.times(this);
+
+      case 'FractionExpression':
         newNumer = this.numerator.times(x.numerator).simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
         return new FractionExpression(newNumer, newDenom);
@@ -605,7 +617,19 @@ export class FractionExpression {
     if (checkNumber(x)) {
       return this.times(numericOp('1', '÷', x.toString()));
     } else {
-      return this.times(x.reciprocal());
+      if (x.constructor === String || x.constructor === Number) {
+        return this.times(new Term(x)); //Forces conString() to exist
+      }
+
+      switch (x.conString()) {
+        case 'SqrtFractionExpression':
+        case 'SqrtExpression':
+        case 'SquareRoot':
+          return x.reciprocal().times(this);
+
+        default:
+          return this.times(x.reciprocal());
+      }
     }
   }
 

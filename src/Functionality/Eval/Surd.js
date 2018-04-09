@@ -49,6 +49,9 @@ export class SquareRoot extends Term {
         case '-1':
           return `-\\sqrt ${simplified.symbols[0].slice(1)}`;
 
+        case '0':
+          return '0';
+
         default:
           return `${
             simplified.coefficient

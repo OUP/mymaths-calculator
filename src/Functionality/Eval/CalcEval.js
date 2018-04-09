@@ -75,7 +75,7 @@ function processValue(value) {
     return decVal.toString();
   } else {
     switch (true) {
-      case valStr.includes('√'):
+      case valStr.includes('√') && valStr === value:
         return new SquareRoot(valStr);
 
       default:

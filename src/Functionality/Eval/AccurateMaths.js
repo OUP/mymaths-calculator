@@ -46,8 +46,7 @@ function initOp(v, operation) {
     operation !== 'numerator' &&
     operation !== '%' &&
     !v.toString().includes('/') &&
-    !v.toString().includes('\\sqrt') &&
-    !v.toString().includes('√') &&
+    buttonType(v) !== 'sqrt' &&
     buttonType(v) !== 'symbol'
   ) {
     return new Decimal(v.toString());

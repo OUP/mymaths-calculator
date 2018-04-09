@@ -7,7 +7,7 @@ import { SquareRoot, SqrtExpression, SqrtFractionExpression } from './Surd';
 
 export function symbolicOp(v1, operation, v2 = 0) {
   v1 = construct(v1);
-  if (v2 !== 'undefined') {
+  if (typeof v2 !== 'undefined') {
     v2 = construct(v2);
   }
   switch (operation) {
