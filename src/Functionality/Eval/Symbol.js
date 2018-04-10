@@ -1,5 +1,5 @@
 const Fraction = require('fraction.js');
-import { identicalArrays, cloneState } from '../Utilities';
+import { identicalArrays, cloneState, checkForSymbols } from '../Utilities';
 import { numericOp } from './NumericOp';
 import { generateFactors } from './GenerateFactors';
 import { substitute } from './Substitute';
@@ -121,9 +121,7 @@ export class Term {
   }
 
   plus(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.plus(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -144,9 +142,7 @@ export class Term {
   }
 
   minus(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.minus(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -167,9 +163,7 @@ export class Term {
   }
 
   times(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.times(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -191,9 +185,7 @@ export class Term {
   }
 
   divBy(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.divBy(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -311,9 +303,7 @@ export class Expression {
   }
 
   plus(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.plus(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -362,9 +352,7 @@ export class Expression {
   }
 
   times(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.times(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -386,9 +374,7 @@ export class Expression {
   }
 
   divBy(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.divBy(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     switch (x.conString()) {
       case 'FractionExpression':
@@ -539,9 +525,7 @@ export class FractionExpression {
   }
 
   plus(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.plus(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     let newNumer;
     switch (x.conString()) {
@@ -565,9 +549,7 @@ export class FractionExpression {
   }
 
   minus(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.minus(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     let newNumer;
     switch (x.conString()) {
@@ -591,9 +573,7 @@ export class FractionExpression {
   }
 
   times(x) {
-    if (x.constructor === String || x.constructor === Number) {
-      return this.times(new Term(x)); //Forces conString() to exist
-    }
+    x = forceConString(x);
 
     let newNumer;
     switch (x.conString()) {
@@ -617,9 +597,7 @@ export class FractionExpression {
     if (checkNumber(x)) {
       return this.times(numericOp('1', '÷', x.toString()));
     } else {
-      if (x.constructor === String || x.constructor === Number) {
-        return this.times(new Term(x)); //Forces conString() to exist
-      }
+      x = forceConString(x);
 
       switch (x.conString()) {
         case 'SqrtFractionExpression':
@@ -930,4 +908,12 @@ function filterTerm(filterIndex, termsArray) {
     }
   }
   return newTerms;
+}
+
+function forceConString(x) {
+  if (!checkForSymbols(x)) {
+    return new Term(x.toString());
+  } else {
+    return x;
+  }
 }
