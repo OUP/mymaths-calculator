@@ -40,7 +40,6 @@ function prioritiseOps(inputArray) {
   const prioritised = [];
   let element = {};
   let i;
-  console.log(inputArray);
   for (i = 0; i < inputArray.length; i++) {
     element.value = inputArray[i];
     element.type = buttonType(inputArray[i]);

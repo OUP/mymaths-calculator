@@ -1,4 +1,5 @@
 const Fraction = require('fraction.js');
+import Decimal from 'decimal.js/decimal';
 import { identicalArrays, cloneState, checkForSymbols } from '../Utilities';
 import { numericOp } from './NumericOp';
 import { generateFactors } from './GenerateFactors';
@@ -633,9 +634,9 @@ export class FractionExpression {
 }
 
 function checkNumber(x) {
-  if (x.constructor === Number) {
+  if (x.constructor === Number || x.constructor === Decimal) {
     return true;
-  } else if (x.d !== 'undefined') {
+  } else if (typeof x.d !== 'undefined') {
     return true;
   } else {
     return false;
