@@ -9,7 +9,8 @@ import {
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
-import { SquareRoot } from './Surd';
+import { SquareRoot, SqrtExpression, SqrtFractionExpression } from './Surd';
+import { Term } from './Symbol';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -75,7 +76,7 @@ function processValue(value) {
   } else {
     switch (true) {
       case valStr.includes('√') && valStr === value:
-        return new SquareRoot(valStr);
+        return squareRootFactory(valStr);
 
       default:
         return value;
@@ -85,7 +86,6 @@ function processValue(value) {
 
 function doNextOp(inputArray) {
   const nextOp = findNextOp(inputArray);
-  console.log('nextOp.position', nextOp.position);
   return executeOp(nextOp.array, nextOp.position);
 }
 
@@ -108,7 +108,6 @@ function checkFunctionOp(opEl) {
 }
 
 function doFunction(inputArray, position) {
-  console.log('found argument', inputArray[position].value.argument);
   const output = {
     value: funcEval(inputArray, position),
     priority: 0,
@@ -121,7 +120,6 @@ function doFunction(inputArray, position) {
 function funcEval(inputArray, funcIndex) {
   const inputEl = inputArray[funcIndex].value;
   const func = inputEl.function;
-  console.log('inputEl.argument', inputEl.argument);
   const arg = calcEval(inputEl.argument);
   if (inputEl.parts === 2) {
     const inputEl2 = inputArray[funcIndex + 1].value;
@@ -130,4 +128,10 @@ function funcEval(inputArray, funcIndex) {
   } else {
     return accurateFunc(func, arg);
   }
+}
+
+function squareRootFactory(str) {
+  const numerator = new SqrtExpression([new SquareRoot(str)]);
+  const one = new SqrtExpression([new Term('1')]);
+  return new SqrtFractionExpression(numerator, one);
 }
