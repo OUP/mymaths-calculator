@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
-import buttonType from './ButtonType';
+import buttonType, { makeString } from './ButtonType';
 
 export function assembleNumbers(outputArray) {
   const updatedArray = cloneState(outputArray);
@@ -123,7 +123,7 @@ export function identicalArrays(arr1, arr2) {
 export function checkIfFraction(val) {
   //val can be undefined
   if (val) {
-    return val.toString().includes('/');
+    return makeString(val).includes('/');
   }
   return false;
 }
@@ -156,15 +156,4 @@ export function removeElement(array, index) {
     i !== index ? newArray.push(array[i]) : newArray;
   }
   return newArray;
-}
-
-export function makeString(decOrFrac) {
-  if (decOrFrac) {
-    if (decOrFrac.toFraction) {
-      if (decOrFrac.toFraction().constructor === String) {
-        return decOrFrac.toFraction();
-      }
-    }
-  }
-  return decOrFrac.toString();
 }

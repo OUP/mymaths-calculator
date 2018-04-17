@@ -2,7 +2,7 @@ import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 import { FractionExpression, Term, Expression } from '../Classes/Symbol';
 import { numericOp } from './NumericOp';
-import { identicalArrays } from '../Utilities';
+import { identicalArrays, checkIfFraction } from '../Utilities';
 import {
   SquareRoot,
   SqrtExpression,
@@ -18,7 +18,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
     case 'xⁿ':
       const v2Val = v2.evaluate();
       const v2ValStr = v2Val.toString();
-      if (!v2ValStr.includes('/') && !v2ValStr.includes('.')) {
+      if (!checkIfFraction(v2ValStr) && !v2ValStr.includes('.')) {
         return symbolPow(v1, v2Val);
       } else {
         return numericOp(v1.evaluate(), 'xⁿ', v2Val);
@@ -99,15 +99,6 @@ export function funcOnSymbol(func, arg, arg2) {
 
     case '|x|':
       return arg.abs();
-
-    case 'base':
-      const arg2Val = arg2.evaluate();
-      const arg2ValStr = arg2Val.toString();
-      if (!arg2ValStr.includes('/') && !arg2ValStr.includes('.')) {
-        return symbolPow(arg, arg2Val);
-      } else {
-        return numericOp(arg.evaluate(), arg2Val);
-      }
 
     case 'log(x)':
       return arg.log(10);
@@ -435,7 +426,7 @@ function tanWithPi(coefStr) {
 }
 
 function convertFracStringToDecimal(fracString) {
-  if (fracString.includes('/')) {
+  if (checkIfFraction(fracString)) {
     const fraction = new Fraction(fracString);
     return new Decimal(fraction.n).div(fraction.d).times(fraction.s);
   } else {

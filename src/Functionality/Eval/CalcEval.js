@@ -1,10 +1,11 @@
-import buttonType from '../ButtonType';
+import buttonType, { makeString } from '../ButtonType';
 import Decimal from 'decimal.js/decimal';
 import {
   assembleArguments,
   assembleNumbers,
   cloneState,
-  checkForSymbols
+  checkForSymbols,
+  checkIfFraction
 } from '../Utilities';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
@@ -74,8 +75,8 @@ function handleEmptyOutput(inputArray) {
 
 function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
-  const valStr = value.toString();
-  if (!valStr.includes('/') && !checkForSymbols(valStr)) {
+  const valStr = makeString(value);
+  if (!checkIfFraction(valStr) && !checkForSymbols(valStr)) {
     return new Decimal(valStr).toString();
   } else {
     switch (true) {

@@ -6,8 +6,9 @@ import {
   cloneState,
   convertFracToDecimal,
   removeElement,
-  makeString
+  checkIfFraction
 } from '../Utilities';
+import { makeString } from '../ButtonType';
 import { generateFactors } from '../Eval/GenerateFactors';
 
 export class SquareRoot extends Term {
@@ -299,7 +300,7 @@ function deconstruct(deconstructionParameter) {
 function reduceSqrt(sqrt, index) {
   let power;
   const powerStr = makeString(sqrt.powers[index]);
-  if (powerStr.includes('/')) {
+  if (checkIfFraction(powerStr)) {
     power = convertFracToDecimal(powerStr);
   } else {
     power = new Decimal(powerStr);

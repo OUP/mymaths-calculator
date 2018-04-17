@@ -2,7 +2,7 @@
 import Decimal from 'decimal.js/decimal';
 import buttonType from '../ButtonType';
 import { funcOnSymbol } from './SymbolOps';
-import { checkForSymbols } from '../Utilities';
+import { checkForSymbols, checkIfFraction } from '../Utilities';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
@@ -45,7 +45,7 @@ function initOp(v, operation) {
     operation !== '÷' &&
     operation !== 'numerator' &&
     operation !== '%' &&
-    !v.toString().includes('/') &&
+    !checkIfFraction(v) &&
     buttonType(v) !== 'sqrt' &&
     buttonType(v) !== 'symbol'
   ) {

@@ -1,7 +1,11 @@
 //See https://khan.github.io/KaTeX/function-support.html for reference
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
-import { convertFracToDecimal, identicalArrays } from '../Utilities';
+import {
+  convertFracToDecimal,
+  identicalArrays,
+  checkIfFraction
+} from '../Utilities';
 
 const TeX = {
   number: parseNumber,
@@ -33,7 +37,7 @@ function parseNumber(num, displayMode) {
 }
 
 function parseNumInputMode(num) {
-  if (!num.includes('/')) {
+  if (!checkIfFraction(num)) {
     return num.toString();
   } else {
     num = new Fraction(num);
@@ -42,7 +46,7 @@ function parseNumInputMode(num) {
 }
 
 function parseNumFractionMode(num) {
-  if (!num.includes('/') && !num.includes('(')) {
+  if (!checkIfFraction(num) && !num.includes('(')) {
     num = new Decimal(num);
     const testFracEl = num.toFraction(1000);
     const fracEl = num.toFraction();
@@ -58,7 +62,7 @@ function parseNumFractionMode(num) {
 }
 
 function parseNumDecimalMode(num) {
-  if (!num.includes('/')) {
+  if (!checkIfFraction(num)) {
     return num.toString();
   } else {
     num = new Fraction(num);

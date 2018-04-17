@@ -39,7 +39,7 @@ export default function buttonType(b) {
 
 function safeToString(b) {
   if (b || b === 0) {
-    return b.toString();
+    return makeString(b);
   } else {
     return '';
   }
@@ -158,4 +158,15 @@ export function buttonSuperType(button) {
     default:
       return type;
   }
+}
+
+export function makeString(decOrFrac) {
+  if (decOrFrac) {
+    if (decOrFrac.toFraction) {
+      if (decOrFrac.toFraction().constructor === String) {
+        return decOrFrac.toFraction();
+      }
+    }
+  }
+  return decOrFrac.toString();
 }

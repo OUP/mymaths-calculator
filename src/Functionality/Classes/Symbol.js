@@ -1,6 +1,11 @@
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
-import { identicalArrays, cloneState, checkForSymbols } from '../Utilities';
+import {
+  identicalArrays,
+  cloneState,
+  checkForSymbols,
+  checkIfFraction
+} from '../Utilities';
 import { numericOp } from '../Eval/NumericOp';
 import { generateFactors } from '../Eval/GenerateFactors';
 import { substitute } from './Substitute';
@@ -88,7 +93,7 @@ export class Term {
       return wipString;
     } else if (this.coefficient.toString() === '-1' && this.powers.length) {
       return '-' + wipString;
-    } else if (this.coefficient.toString().includes('/')) {
+    } else if (checkIfFraction(this.coefficient)) {
       const frac = new Fraction(this.coefficient.toString());
       return (
         '\\frac {' +
@@ -698,7 +703,7 @@ function factorToFixNegPowersInTerm(term) {
 
 function isGreaterThan(lhs, rhs) {
   const lhsStr = lhs.toString();
-  if (lhsStr.includes('/')) {
+  if (checkIfFraction(lhsStr)) {
     const lhsFrac = new Fraction(lhsStr);
     return lhsFrac.n / lhsFrac.d > rhs;
   } else {
@@ -708,7 +713,7 @@ function isGreaterThan(lhs, rhs) {
 
 function isEqualTo(lhs, rhs) {
   const lhsStr = lhs.toString();
-  if (lhsStr.includes('/')) {
+  if (checkIfFraction(lhsStr)) {
     const lhsFrac = new Fraction(lhsStr);
     return lhsFrac.n / lhsFrac.d === rhs;
   } else {
@@ -758,7 +763,7 @@ function factorToFixFracCoefInTerm(term) {
 }
 
 function checkFraction(coefStr) {
-  if (coefStr.includes('/') || coefStr.includes('.')) {
+  if (checkIfFraction(coefStr) || coefStr.includes('.')) {
     return true;
   } else {
     return false;
