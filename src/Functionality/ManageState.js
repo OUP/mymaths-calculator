@@ -1,5 +1,5 @@
 import { buttonAction } from './ButtonAction';
-import { parseToRender } from './ParseToRender';
+import { parseToRender } from './ParseToRender/ParseToRender';
 
 export function updateState(context, button) {
   const buttonEffect = buttonAction(button, context.state);
