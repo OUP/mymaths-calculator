@@ -2,17 +2,20 @@ const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { convertFracToDecimal, identicalArrays } from '../Utilities';
 
-const TeXMaps = {
-  parseNumber: parseNumber,
-  parseOperator: parseOperator,
-  parseSymbol: parseSymbol,
-  funcToTeXMap: funcToTeXMap,
-  parseAns: parseAns,
-  parseCursor: parseCursor,
-  parseError: parseError
+const TeX = {
+  number: parseNumber,
+  operator: parseOperator,
+  symbol: parseSymbol,
+  func: funcToTeXMap,
+  openBracket: '\\left(',
+  closeBracket: '\\right)',
+  ans: '\\text {Ans}',
+  cursor: '{\\text{|}}',
+  box: '{\\Box}',
+  error: '\\text{TeX error}'
 };
 
-export default TeXMaps;
+export default TeX;
 
 function parseNumber(num, displayMode) {
   switch (displayMode) {
@@ -97,6 +100,12 @@ function parseSymbol(symbol, displayMode) {
 
 function funcToTeXMap(func) {
   switch (func) {
+    case 'numerator':
+      return '\\large \\frac';
+
+    case 'exponent':
+      return '^';
+
     case '|x|':
       return '\\text {Abs}'; // vertical bars would conflict with cursor character
 
@@ -137,10 +146,6 @@ function funcToTeXMap(func) {
       return func;
   }
 }
-
-const parseAns = () => '\\text {Ans}';
-const parseCursor = () => '{\\text{|}}';
-const parseError = () => '\\text{TeX error}';
 
 function genRecurringDecimal(decimal) {
   const decArray = decimal.split('');

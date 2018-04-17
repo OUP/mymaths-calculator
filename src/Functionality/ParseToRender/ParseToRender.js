@@ -2,7 +2,7 @@
 import katex from 'katex';
 import buttonType from '../ButtonType';
 import { assembleNumbers, assembleArguments } from '../Utilities';
-import TeXMaps from './TeXMaps';
+import TeX from './TeXMaps';
 
 export function parseToRender(
   arr,
@@ -23,10 +23,10 @@ function parseToTeX(arr, cursorPosition = -1, displayMode = 'default') {
     arr = assembleArguments(arr);
   }
 
-  return arr
+  return `{${arr
     .map(parseElToTeX, displayMode)
     .join('')
-    .toString();
+    .toString()}}`;
 }
 
 function addCursor(arr, position) {
@@ -39,17 +39,17 @@ function parseElToTeX(el) {
   const bType = buttonType(el);
   switch (bType) {
     case 'number':
-      return TeXMaps.parseNumber(el, this); //this is the displayMode
+      return TeX.number(el, this); //this is the displayMode
 
     case 'operator':
-      return TeXMaps.parseOperator(el);
+      return TeX.operator(el);
 
     case 'symbol':
     case 'sqrt':
-      return TeXMaps.parseSymbol(el, this); //this is the displayMode
+      return TeX.symbol(el, this); //this is the displayMode
 
     case 'Ans':
-      return TeXMaps.parseAns;
+      return TeX.ans;
 
     case 'function':
       return parseFunc(el);
@@ -59,38 +59,34 @@ function parseElToTeX(el) {
       return ''; //hidden characters
 
     case '|':
-      return TeXMaps.parseCursor;
+      return TeX.cursor;
 
     default:
       console.error('unexpected character', el);
-      return TeXMaps.parseError;
+      return TeX.error;
   }
 }
 
 function parseFunc(func) {
   let arg;
-  let preArg;
 
   if (func.argument) {
     arg = prepareArg(func.argument);
   }
-  if (func.preArgument) {
-    preArg = prepareArg(func.preArgument);
-  }
 
   switch (func.function) {
     case 'numerator':
-      return '\\large \\frac {' + parseToTeX(arg) + '}';
+    case '√(x)':
+    case 'exponent':
+      return TeX.func(func.function) + parseToTeX(arg);
 
     case 'denominator':
-      return '{' + parseToTeX(arg) + '} \\normalsize';
-
-    case '√(x)':
-      return '\\sqrt {' + parseToTeX(arg) + '}';
+      return parseToTeX(arg) + '\\normalsize';
 
     case '(':
       if (safeArgClosed(func)) {
-        return '\\left(' + parseToTeX(arg) + '\\right)';
+        console.log('here');
+        return TeX.openBracket + parseToTeX(arg) + TeX.closeBracket;
       } else {
         return '(' + parseToTeX(func.argument);
       }
@@ -98,35 +94,29 @@ function parseFunc(func) {
     case 'base':
       return parseToTeX(arg);
 
-    case 'exponent':
-      return '^{' + parseToTeX(arg) + '}';
-
-    case 'xⁿ':
-      return preArg + '^{' + parseToTeX(arg) + '}';
-
     default:
-      if (safeArgClosed(func)) {
-        return (
-          TeXMaps.funcToTeXMap(func.function) +
-          '\\left(' +
-          parseToTeX(arg) +
-          '\\right)'
-        );
-      } else if (func !== ')' && func !== 'cArg' && func !== 'box') {
-        return (
-          TeXMaps.funcToTeXMap(func.function) +
-          '(' +
-          parseToTeX(func.argument, this)
-        );
-      } else {
-        switch (func) {
-          case ')':
-            return ')';
+      return parseDefaultFunc(func, arg);
+  }
+}
 
-          case 'box':
-            return '{\\Box}';
-        }
-      }
+function parseDefaultFunc(func, arg) {
+  if (safeArgClosed(func)) {
+    return (
+      TeX.func(func.function) +
+      TeX.openBracket +
+      parseToTeX(arg) +
+      TeX.closeBracket
+    );
+  } else if (func !== ')' && func !== 'cArg' && func !== 'box') {
+    return TeX.func(func.function) + '(' + parseToTeX(func.argument, this);
+  } else {
+    switch (func) {
+      case ')':
+        return ')';
+
+      case 'box':
+        return TeX.box;
+    }
   }
 }
 
