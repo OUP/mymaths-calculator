@@ -1,4 +1,5 @@
 //Map elements in an array to a TeX string, which is rendered as maths by KaTeX
+//See https://khan.github.io/KaTeX/function-support.html
 import katex from 'katex';
 import buttonType from '../ButtonType';
 import { assembleNumbers, assembleArguments } from '../Utilities';

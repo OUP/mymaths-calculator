@@ -1,3 +1,4 @@
+//See https://khan.github.io/KaTeX/function-support.html for reference
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { convertFracToDecimal, identicalArrays } from '../Utilities';
@@ -74,12 +75,6 @@ function parseOperator(op) {
     case 'xⁿ':
       return '^';
 
-    case 'x²':
-      return '^{2}';
-
-    case 'x³':
-      return '^{3}';
-
     case 'x!':
       return '{!}';
 
@@ -106,9 +101,6 @@ function funcToTeXMap(func) {
     case 'numerator':
     case 'fraction':
       return '\\large \\frac';
-
-    case 'exponent':
-      return '^';
 
     case '|x|':
       return '\\text {Abs}'; // vertical bars would conflict with cursor character
