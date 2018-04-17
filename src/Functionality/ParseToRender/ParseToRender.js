@@ -2,7 +2,7 @@
 import katex from 'katex';
 import buttonType from '../ButtonType';
 import { assembleNumbers, assembleArguments } from '../Utilities';
-import { TeXMaps } from './TeXMaps';
+import TeXMaps from './TeXMaps';
 
 export function parseToRender(
   arr,

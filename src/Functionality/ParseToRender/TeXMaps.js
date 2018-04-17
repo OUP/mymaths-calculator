@@ -2,7 +2,9 @@ const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { convertFracToDecimal, identicalArrays } from '../Utilities';
 
-export const TeXMaps = {
+export default TeXMaps;
+
+const TeXMaps = {
   parseNumber: parseNumber,
   parseOperator: parseOperator,
   parseSymbol: parseSymbol,
