@@ -72,27 +72,21 @@ function pressPow10(currentState) {
   currentState = pressButton('×', currentState);
   currentState = pressButton('1', currentState);
   currentState = pressButton('0', currentState);
-  return pressFunction('xⁿ', currentState);
+  return pressInput('xⁿ', 'operator', currentState);
 }
 
 function pressXSquared(currentState) {
-  currentState = pressFunction('xⁿ', currentState);
-  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '2');
-  currentState.cursorPosition += 2;
-  return currentState;
+  currentState = pressInput('xⁿ', 'operator', currentState);
+  return pressInput('2', 'number', currentState);
 }
 
 function pressXCubed(currentState) {
-  currentState = pressFunction('xⁿ', currentState);
-  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '3');
-  currentState.cursorPosition += 2;
-  return currentState;
+  currentState = pressInput('xⁿ', 'operator', currentState);
+  return pressInput('3', 'number', currentState);
 }
 
 function pressReciprocal(currentState) {
-  currentState = pressFunction('xⁿ', currentState);
-  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '-');
-  currentState.inputValue.splice(currentState.inputValue.length - 1, 0, '1');
-  currentState.cursorPosition += 2;
-  return currentState;
+  currentState = pressInput('xⁿ', 'operator', currentState);
+  currentState = pressInput('-', 'number', currentState);
+  return pressInput('1', 'number', currentState);
 }

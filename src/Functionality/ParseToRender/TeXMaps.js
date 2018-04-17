@@ -71,6 +71,9 @@ function parseOperator(op) {
     case '–':
       return '-';
 
+    case 'xⁿ':
+      return '^';
+
     case 'x²':
       return '^{2}';
 

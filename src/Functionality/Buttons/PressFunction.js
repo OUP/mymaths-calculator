@@ -1,5 +1,3 @@
-import { pressMode } from './PressMode';
-
 export function pressFunction(button, currentState) {
   const fType = funcType(button);
 
@@ -33,7 +31,7 @@ function funcType(button) {
     button === 'tan⁻¹'
   ) {
     return 'argAfter';
-  } else if (button === 'xⁿ' || button === 'frac') {
+  } else if (button === 'frac') {
     return 'argBothSides';
   } else {
     return button;
@@ -68,8 +66,6 @@ function pressArgBothSides(button, currentState) {
   currentState.cursorPosition++;
   if (button === 'frac') {
     pressFrac(currentState);
-  } else if (button === 'xⁿ') {
-    pressPow(currentState);
   }
   return currentState;
 }
@@ -92,36 +88,5 @@ function pressFrac(currentState) {
     key: currentState.functionKey
   });
   currentState.inputValue.push('cArg' + currentState.functionKey);
-  return;
-}
-
-function pressPow(currentState) {
-  let base;
-  if (currentState.inputValue.length) {
-    base = currentState.inputValue.pop();
-  }
-  currentState.inputValue.push({
-    type: 'function',
-    function: 'base',
-    argument: [],
-    parts: 2,
-    key: currentState.functionKey
-    //Key used to destroy hidden characters that go with the function if the function is deleted
-  });
-  if (base) {
-    currentState.inputValue.push(base);
-  }
-  currentState.functionKey++;
-  currentState.inputValue.push('cArg' + currentState.functionKey);
-  currentState.inputValue.push({
-    type: 'function',
-    function: 'exponent',
-    argument: [],
-    key: currentState.functionKey
-  });
-  currentState.inputValue.push('cArg' + currentState.functionKey);
-  if (base) {
-    currentState = pressMode('➡', currentState);
-  }
   return;
 }

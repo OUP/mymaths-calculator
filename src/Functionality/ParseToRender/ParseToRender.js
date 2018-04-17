@@ -77,7 +77,6 @@ function parseFunc(func) {
   switch (func.function) {
     case 'numerator':
     case '√(x)':
-    case 'exponent':
       return `${TeX.func(func.function)} ${parseToTeX(arg)}`;
 
     case 'denominator':
@@ -89,9 +88,6 @@ function parseFunc(func) {
       } else {
         return `( ${parseToTeX(func.argument)}`;
       }
-
-    case 'base': //always goes with exponent
-      return parseToTeX(arg);
 
     default:
       return parseDefaultFunc(func, arg);
