@@ -78,20 +78,19 @@ function parseFunc(func) {
     case 'numerator':
     case '√(x)':
     case 'exponent':
-      return TeX.func(func.function) + parseToTeX(arg);
+      return `${TeX.func(func.function)} ${parseToTeX(arg)}`;
 
     case 'denominator':
-      return parseToTeX(arg) + '\\normalsize';
+      return `${parseToTeX(arg)} \\normalsize`;
 
     case '(':
       if (safeArgClosed(func)) {
-        console.log('here');
-        return TeX.openBracket + parseToTeX(arg) + TeX.closeBracket;
+        return `${TeX.openBracket} ${parseToTeX(arg)} ${TeX.closeBracket}`;
       } else {
-        return '(' + parseToTeX(func.argument);
+        return `( ${parseToTeX(func.argument)}`;
       }
 
-    case 'base':
+    case 'base': //always goes with exponent
       return parseToTeX(arg);
 
     default:
@@ -101,14 +100,12 @@ function parseFunc(func) {
 
 function parseDefaultFunc(func, arg) {
   if (safeArgClosed(func)) {
-    return (
-      TeX.func(func.function) +
-      TeX.openBracket +
-      parseToTeX(arg) +
-      TeX.closeBracket
-    );
+    return `${TeX.func(func.function)}
+      ${TeX.openBracket}
+      ${parseToTeX(arg)}
+      ${TeX.closeBracket}`;
   } else if (func !== ')' && func !== 'cArg' && func !== 'box') {
-    return TeX.func(func.function) + '(' + parseToTeX(func.argument, this);
+    return `${TeX.func(func.function)} ( ${parseToTeX(func.argument, this)}`;
   } else {
     switch (func) {
       case ')':

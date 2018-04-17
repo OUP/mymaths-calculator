@@ -36,7 +36,7 @@ function parseNumInputMode(num) {
     return num.toString();
   } else {
     num = new Fraction(num);
-    return '\\large \\frac {' + num.n + '} {' + num.d + '}';
+    return genFraction(num.n, num.d);
   }
 }
 
@@ -46,13 +46,13 @@ function parseNumFractionMode(num) {
     const testFracEl = num.toFraction(1000);
     const fracEl = num.toFraction();
     if (fracEl[1].toString() !== '1' && identicalArrays(fracEl, testFracEl)) {
-      return '\\large \\frac {' + fracEl[0] + '} {' + fracEl[1] + '}';
+      return genFraction(fracEl[0], fracEl[1]);
     } else {
       return num;
     }
   } else {
     num = new Fraction(num);
-    return '\\large \\frac {' + num.n + '} {' + num.d + '}';
+    return genFraction(num.n, num.d);
   }
 }
 
@@ -101,6 +101,7 @@ function parseSymbol(symbol, displayMode) {
 function funcToTeXMap(func) {
   switch (func) {
     case 'numerator':
+    case 'fraction':
       return '\\large \\frac';
 
     case 'exponent':
@@ -147,16 +148,21 @@ function funcToTeXMap(func) {
   }
 }
 
+const genFraction = (numerator, denominator) =>
+  `${funcToTeXMap('fraction')}
+  { ${numerator} } { ${denominator} }
+  \\normalsize`;
+
 function genRecurringDecimal(decimal) {
   const decArray = decimal.split('');
   for (let i = 0; i < decArray.length; i++) {
     if (decArray[i] === '(') {
-      decArray.splice(i, 2, '\\dot{' + decArray[i + 1] + '}');
+      decArray.splice(i, 2, `\\dot{ ${decArray[i + 1]} }`);
     } else if (decArray[i] === ')') {
       if (decArray[i - 1].includes('\\dot')) {
         decArray.pop();
       } else {
-        decArray.splice(i - 1, 2, '\\dot{' + decArray[i - 1] + '}');
+        decArray.splice(i - 1, 2, `\\dot{ ${decArray[i - 1]} }`);
       }
     }
   }
