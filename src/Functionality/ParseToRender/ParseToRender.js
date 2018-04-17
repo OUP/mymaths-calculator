@@ -15,7 +15,7 @@ export function parseToRender(
 }
 
 function parseToTeX(arr, cursorPosition = -1, displayMode = 'default') {
-  if (arr.length > 1) {
+  if (arr.length >= 1) {
     if (cursorPosition >= 0) {
       arr = addCursor(arr, cursorPosition);
     }
