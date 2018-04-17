@@ -9,8 +9,12 @@ import {
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
-import { SquareRoot, SqrtExpression, SqrtFractionExpression } from './Surd';
-import { Term } from './Symbol';
+import {
+  SquareRoot,
+  SqrtExpression,
+  SqrtFractionExpression
+} from '../Classes/Surd';
+import { Term } from '../Classes/Symbol';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {

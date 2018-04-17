@@ -1,8 +1,8 @@
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
 import { identicalArrays, cloneState, checkForSymbols } from '../Utilities';
-import { numericOp } from './NumericOp';
-import { generateFactors } from './GenerateFactors';
+import { numericOp } from '../Eval/NumericOp';
+import { generateFactors } from '../Eval/GenerateFactors';
 import { substitute } from './Substitute';
 
 class Symbol {

@@ -1,9 +1,13 @@
 import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
-import { FractionExpression, Term, Expression } from './Symbol';
+import { FractionExpression, Term, Expression } from '../Classes/Symbol';
 import { numericOp } from './NumericOp';
 import { identicalArrays } from '../Utilities';
-import { SquareRoot, SqrtExpression, SqrtFractionExpression } from './Surd';
+import {
+  SquareRoot,
+  SqrtExpression,
+  SqrtFractionExpression
+} from '../Classes/Surd';
 
 export function symbolicOp(v1, operation, v2 = 0) {
   v1 = construct(v1);

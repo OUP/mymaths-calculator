@@ -1,14 +1,14 @@
 import Decimal from 'decimal.js/decimal';
 import { Term, Expression, FractionExpression } from './Symbol';
-import { numericOp } from './NumericOp';
-import { accurateFunc } from './AccurateMaths';
+import { numericOp } from '../Eval/NumericOp';
+import { accurateFunc } from '../Eval/AccurateMaths';
 import {
   cloneState,
   convertFracToDecimal,
   removeElement,
   makeString
 } from '../Utilities';
-import { generateFactors } from './GenerateFactors';
+import { generateFactors } from '../Eval/GenerateFactors';
 
 export class SquareRoot extends Term {
   constructor(constructionParameter) {
