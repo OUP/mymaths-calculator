@@ -1,3 +1,5 @@
+//Map elements in an array to a TeX string, which is rendered as maths by KaTeX
+
 import katex from 'katex';
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
@@ -16,11 +18,11 @@ export function parseToRender(
   cursorPosition = -1,
   displayMode = 'default'
 ) {
-  const maths = parseToMaths(arr, cursorPosition, displayMode);
+  const maths = parseToTeX(arr, cursorPosition, displayMode);
   katex.render(maths, document.getElementById(id));
 }
 
-function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
+function parseToTeX(arr, cursorPosition = -1, displayMode = 'default') {
   if (arr.length > 1) {
     if (cursorPosition >= 0) {
       arr = addCursor(arr, cursorPosition);
@@ -30,185 +32,53 @@ function parseToMaths(arr, cursorPosition = -1, displayMode = 'default') {
   }
 
   return arr
-    .map(parseElToMaths, displayMode)
+    .map(parseElToTeX, displayMode)
     .join('')
     .toString();
 }
 
 function addCursor(arr, position) {
-  arr = arr.filter(x => x !== '¦');
-  arr.splice(position, 0, '¦');
+  arr = arr.filter(x => x !== '|');
+  arr.splice(position, 0, '|');
   return arr;
 }
 
-//Note: cArg denotes a hidden character
-function parseElToMaths(el) {
+function parseElToTeX(el) {
   const bType = buttonType(el);
   switch (bType) {
     case 'number':
-      switch (this) { //this is the displayMode
-        case 'fraction':
-          if (!el.includes('/') && !el.includes('(')) {
-            el = new Decimal(el);
-            const testFracEl = el.toFraction(1000);
-            const fracEl = el.toFraction();
-            if (
-              fracEl[1].toString() !== '1' &&
-              identicalArrays(fracEl, testFracEl)
-            ) {
-              return '\\large \\frac {' + fracEl[0] + '} {' + fracEl[1] + '}';
-            } else {
-              return el;
-            }
-          } else {
-            el = new Fraction(el);
-            return '\\large \\frac {' + el.n + '} {' + el.d + '}';
-          }
-
-        case 'default':
-          if (!el.includes('/')) {
-            return el.toString();
-          } else {
-            el = new Fraction(el);
-            return '\\large \\frac {' + el.n + '} {' + el.d + '}';
-          }
-
-        case 'decimal':
-          if (!el.includes('/')) {
-            return el.toString();
-          } else {
-            el = new Fraction(el);
-            el = el.toString();
-            return genRecurringDecimal(el);
-          }
-      }
-      break;
+      return parseNumber(el, this); //this is the displayMode
 
     case 'operator':
-      switch (el) {
-        case '–':
-          return '-';
-
-        case 'x²':
-          return '^{2}';
-
-        case 'x³':
-          return '^{3}';
-
-        case 'x!':
-          return '{!}';
-
-        case '%':
-          return '{\\%}';
-
-        default:
-          return el;
-      }
+      return parseOperator(el);
 
     case 'symbol':
     case 'sqrt':
-      switch (this) {
-        case 'decimal':
-          return convertFracToDecimal(el.evaluate().toString());
-
-        default:
-          return el.toString();
-      }
+      return parseSymbol(el, this); //this is the displayMode
 
     case 'Ans':
       return '\\text {' + el + '}';
 
     case 'function':
-      let dispArg;
-      let dispPreArg;
-      switch (el.function) {
-        case 'numerator':
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return '\\large \\frac {' + parseToMaths(dispArg) + '}';
-
-        case 'denominator':
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return '{' + parseToMaths(dispArg) + '} \\normalsize';
-
-        case '√(x)':
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return '\\sqrt {' + parseToMaths(dispArg) + '}';
-
-        case '(':
-          if (safeArgClosed(el)) {
-            dispArg = el.argument.filter(x => x !== ')');
-            dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
-            dispArg = boxIfArgEmpty(dispArg);
-            return '\\left(' + parseToMaths(dispArg) + '\\right)';
-          } else {
-            return '(' + parseToMaths(el.argument);
-          }
-
-        case 'base':
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return parseToMaths(dispArg);
-
-        case 'exponent':
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return '^{' + parseToMaths(dispArg) + '}';
-
-        case 'xⁿ':
-          dispPreArg = el.preArgument;
-          dispPreArg = dispPreArg.filter(x => buttonType(x) !== 'cArg');
-          dispPreArg = boxIfArgEmpty(dispPreArg);
-          dispArg = el.argument.filter(x => buttonType(x) !== 'cArg');
-          dispArg = boxIfArgEmpty(dispArg);
-          return dispPreArg + '^{' + parseToMaths(dispArg) + '}';
-
-        default:
-          if (safeArgClosed(el)) {
-            dispArg = el.argument.filter(x => x !== ')');
-            dispArg = dispArg.filter(x => buttonType(x) !== 'cArg');
-            dispArg = boxIfArgEmpty(dispArg);
-            return (
-              funcToStringMap(el.function) +
-              '\\left(' +
-              parseToMaths(dispArg) +
-              '\\right)'
-            );
-          } else if (el !== ')' && el !== 'cArg' && el !== 'box') {
-            return (
-              funcToStringMap(el.function) +
-              '(' +
-              parseToMaths(el.argument, this)
-            );
-          } else {
-            switch (el) {
-              case ')':
-                return ')';
-
-              case 'box':
-                return '{\\Box}';
-            }
-          }
-      }
-      break;
+      return parseFunc(el);
 
     case 'cArg':
-      break;
-
     case 'oArg':
-      return 'oArg';
+      return ''; //hidden characters
+
+    case '|':
+      return '{\\text{|}}'; //cursor
 
     default:
-      return '{\\text{|}}';
+      console.error('unexpected character', el);
+      return '';
   }
 }
 
 function boxIfArgEmpty(dispArg) {
   if (!dispArg.length) {
     dispArg = ['box'];
-  } else if (dispArg.length === 1 && dispArg[0] === '¦') {
+  } else if (dispArg.length === 1 && dispArg[0] === '|') {
     dispArg.push('box');
   }
   return dispArg;
@@ -230,10 +100,155 @@ function genRecurringDecimal(decimal) {
   return decArray.join('');
 }
 
-function funcToStringMap(func) {
+function parseNumber(num, displayMode) {
+  switch (displayMode) {
+    case 'fraction':
+      return parseNumFractionMode(num);
+
+    case 'decimal':
+      return parseNumDecimalMode(num);
+
+    default:
+    case 'default':
+      return parseNumInputMode(num);
+  }
+}
+
+function parseNumInputMode(num) {
+  if (!num.includes('/')) {
+    return num.toString();
+  } else {
+    num = new Fraction(num);
+    return '\\large \\frac {' + num.n + '} {' + num.d + '}';
+  }
+}
+
+function parseNumFractionMode(num) {
+  if (!num.includes('/') && !num.includes('(')) {
+    num = new Decimal(num);
+    const testFracEl = num.toFraction(1000);
+    const fracEl = num.toFraction();
+    if (fracEl[1].toString() !== '1' && identicalArrays(fracEl, testFracEl)) {
+      return '\\large \\frac {' + fracEl[0] + '} {' + fracEl[1] + '}';
+    } else {
+      return num;
+    }
+  } else {
+    num = new Fraction(num);
+    return '\\large \\frac {' + num.n + '} {' + num.d + '}';
+  }
+}
+
+function parseNumDecimalMode(num) {
+  if (!num.includes('/')) {
+    return num.toString();
+  } else {
+    num = new Fraction(num);
+    num = num.toString();
+    return genRecurringDecimal(num);
+  }
+}
+
+function parseOperator(op) {
+  switch (op) {
+    case '–':
+      return '-';
+
+    case 'x²':
+      return '^{2}';
+
+    case 'x³':
+      return '^{3}';
+
+    case 'x!':
+      return '{!}';
+
+    case '%':
+      return '{\\%}';
+
+    default:
+      return op;
+  }
+}
+
+function parseSymbol(symbol, displayMode) {
+  switch (displayMode) {
+    case 'decimal':
+      return convertFracToDecimal(symbol.evaluate().toString());
+
+    default:
+      return symbol.toString();
+  }
+}
+
+function parseFunc(func) {
+  let arg;
+  let preArg;
+
+  if (func.argument) {
+    arg = prepareArg(func.argument);
+  }
+  if (func.preArgument) {
+    preArg = prepareArg(func.preArgument);
+  }
+
+  switch (func.function) {
+    case 'numerator':
+      return '\\large \\frac {' + parseToTeX(arg) + '}';
+
+    case 'denominator':
+      return '{' + parseToTeX(arg) + '} \\normalsize';
+
+    case '√(x)':
+      return '\\sqrt {' + parseToTeX(arg) + '}';
+
+    case '(':
+      if (safeArgClosed(func)) {
+        return '\\left(' + parseToTeX(arg) + '\\right)';
+      } else {
+        return '(' + parseToTeX(func.argument);
+      }
+
+    case 'base':
+      return parseToTeX(arg);
+
+    case 'exponent':
+      return '^{' + parseToTeX(arg) + '}';
+
+    case 'xⁿ':
+      return preArg + '^{' + parseToTeX(arg) + '}';
+
+    default:
+      if (safeArgClosed(func)) {
+        return (
+          funcToTeXMap(func.function) + '\\left(' + parseToTeX(arg) + '\\right)'
+        );
+      } else if (func !== ')' && func !== 'cArg' && func !== 'box') {
+        return (
+          funcToTeXMap(func.function) + '(' + parseToTeX(func.argument, this)
+        );
+      } else {
+        switch (func) {
+          case ')':
+            return ')';
+
+          case 'box':
+            return '{\\Box}';
+        }
+      }
+  }
+}
+
+function prepareArg(arg) {
+  let updatedArg = arg.filter(x => x !== ')');
+  updatedArg = updatedArg.filter(x => buttonType(x) !== 'cArg');
+  return boxIfArgEmpty(updatedArg);
+}
+
+function funcToTeXMap(func) {
   switch (func) {
     case '|x|':
-      return '\\text {Abs}';
+      return '\\text {Abs}'; // vertical bars would conflict with cursor character
 
     case 'log(x)':
       return '\\log';

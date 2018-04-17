@@ -111,7 +111,7 @@ function checkForDisplay(b) {
 }
 
 function checkForMisc(b) {
-  if (b === 'DEL' || b === 'AC' || b === 'Ans' || b === '=' || b === '¦') {
+  if (b === 'DEL' || b === 'AC' || b === 'Ans' || b === '=' || b === '|') {
     return true;
   } else {
     return false;
