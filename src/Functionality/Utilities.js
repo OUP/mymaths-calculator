@@ -113,7 +113,28 @@ export function splitInputAtCursor(currentState) {
 }
 
 export function cloneState(state) {
-  return JSON.parse(JSON.stringify(state));
+  switch (true) {
+    case state.constructor === String || state.constructor === Number:
+      return state;
+
+    case state.constructor === Array:
+      return cloneArray(state);
+
+    case typeof state.clone === 'function':
+      return state.clone();
+
+    default:
+      return JSON.parse(JSON.stringify(state));
+  }
+}
+
+function cloneArray(arr) {
+  const length = arr.length;
+  const clonedArr = [];
+  for (let i = 0; i < length; i++) {
+    clonedArr.push(cloneState(arr[i]));
+  }
+  return clonedArr;
 }
 
 export function identicalArrays(arr1, arr2) {
