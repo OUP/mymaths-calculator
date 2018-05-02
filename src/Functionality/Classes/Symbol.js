@@ -504,6 +504,12 @@ export class FractionExpression {
     this.denominator = denominator;
   }
 
+  clone() {
+    const numerator = this.numerator.clone();
+    const denominator = this.denominator.clone();
+    return new FractionExpression(numerator, denominator);
+  }
+
   reciprocal() {
     return new FractionExpression(this.denominator, this.numerator);
   }
