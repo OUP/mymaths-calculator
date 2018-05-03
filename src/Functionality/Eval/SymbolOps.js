@@ -51,8 +51,8 @@ export function symbolicOp(v1, operation, v2 = 0) {
 function construct(x) {
   let term, exp;
   const defaultDenom = new Expression(new Term(1));
-  switch (x.constructor) {
-    case String:
+  switch (true) {
+    case x.constructor === String:
       if (x.includes('π')) {
         term = new Term(1, ['π'], [1]);
         exp = new Expression([term]);
@@ -68,8 +68,8 @@ function construct(x) {
       }
       break;
 
-    case Fraction:
-    case Decimal:
+    case checkIfFraction(x):
+    case x.constructor === Decimal:
       term = new Term(x);
       exp = new Expression([term]);
       return new FractionExpression(exp, defaultDenom);
@@ -81,21 +81,12 @@ function construct(x) {
 
 export function funcOnSymbol(func, arg, arg2) {
   arg = construct(arg);
-  if (arg2 !== 'undefined') {
+  if (typeof arg2 !== 'undefined') {
     arg2 = construct(arg2);
   }
   switch (func) {
     case 'numerator':
-      if (arg.constructor === FractionExpression) {
-        return arg.divBy(arg2).simplify();
-      } else if (arg2.constructor === FractionExpression) {
-        return arg2
-          .reciprocal()
-          .times(arg)
-          .simplify();
-      } else {
-        break;
-      }
+      return symbolicOp(arg, '÷', arg2);
 
     case '|x|':
       return arg.abs();
