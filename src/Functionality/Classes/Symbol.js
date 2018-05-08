@@ -176,17 +176,17 @@ export class Term {
       case 'SqrtFractionExpression':
       case 'SqrtExpression':
       case 'SquareRoot':
-        return x.times(this);
+        return x.times(this).simplify();
 
       case 'Expression':
-        return x.termMultiply(this);
+        return x.termMultiply(this).simplify();
 
       case 'Term':
-        return this.termMultiply(x);
+        return this.termMultiply(x).simplify();
 
       default:
         const coef = numericOp(this.coefficient.toString(), '×', x.toString()); //this.coefficient * x;
-        return new Term(coef, this.symbols, this.powers);
+        return new Term(coef, this.symbols, this.powers).simplify();
     }
   }
 
@@ -198,17 +198,23 @@ export class Term {
       case 'SqrtFractionExpression':
       case 'SqrtExpression':
       case 'SquareRoot':
-        return x.reciprocal().times(this);
+        return x
+          .reciprocal()
+          .times(this)
+          .simplify();
 
       case 'Expression':
-        return x.div(this).reciprocal();
+        return x
+          .div(this)
+          .reciprocal()
+          .simplify();
 
       case 'Term':
-        return this.termMultiply(x.reciprocal());
+        return this.termMultiply(x.reciprocal()).simplify();
 
       default:
         const coef = numericOp(this.coefficient.toString(), '/', x.toString()); //this.coefficient / x;
-        return new Term(coef, this.symbols, this.powers);
+        return new Term(coef, this.symbols, this.powers).simplify();
     }
   }
 
@@ -365,17 +371,17 @@ export class Expression {
       case 'SqrtFractionExpression':
       case 'SqrtExpression':
       case 'SquareRoot':
-        return x.times(this);
+        return x.times(this).simplify();
 
       case 'Expression':
-        return this.expressionMultiply(x);
+        return this.expressionMultiply(x).simplify();
 
       case 'Term':
-        return this.termMultiply(x);
+        return this.termMultiply(x).simplify();
 
       default:
         x = new Term(x, [], []);
-        return this.numMultiply(x);
+        return this.numMultiply(x).simplify();
     }
   }
 
@@ -387,17 +393,20 @@ export class Expression {
       case 'SqrtFractionExpression':
       case 'SqrtExpression':
       case 'SquareRoot':
-        return x.reciprocal().times(this);
+        return x
+          .reciprocal()
+          .times(this)
+          .simplify();
 
       case 'Expression':
-        return new FractionExpression(this, x);
+        return new FractionExpression(this, x).simplify();
 
       case 'Term':
-        return this.times(x.reciprocal());
+        return this.times(x.reciprocal()).simplify();
 
       default:
         x = new Term(numericOp('1', '×', x.toString()), [], []);
-        return this.numMultiply(x);
+        return this.numMultiply(x).simplify();
     }
   }
 
@@ -592,22 +601,22 @@ export class FractionExpression {
       case 'SqrtFractionExpression':
       case 'SqrtExpression':
       case 'SquareRoot':
-        return x.times(this);
+        return x.times(this).simplify();
 
       case 'FractionExpression':
         newNumer = this.numerator.times(x.numerator).simplify();
         const newDenom = this.denominator.times(x.denominator).simplify();
-        return new FractionExpression(newNumer, newDenom);
+        return new FractionExpression(newNumer, newDenom).simplify();
 
       default:
         newNumer = this.numerator.times(x);
-        return new FractionExpression(newNumer, this.denominator);
+        return new FractionExpression(newNumer, this.denominator).simplify();
     }
   }
 
   div(x) {
     if (checkNumber(x)) {
-      return this.times(numericOp('1', '÷', x.toString()));
+      return this.times(numericOp('1', '÷', x.toString())).simplify();
     } else {
       x = forceConString(x);
 
@@ -615,10 +624,13 @@ export class FractionExpression {
         case 'SqrtFractionExpression':
         case 'SqrtExpression':
         case 'SquareRoot':
-          return x.reciprocal().times(this);
+          return x
+            .reciprocal()
+            .times(this)
+            .simplify();
 
         default:
-          return this.times(x.reciprocal());
+          return this.times(x.reciprocal()).simplify();
       }
     }
   }
