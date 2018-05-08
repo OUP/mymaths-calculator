@@ -190,7 +190,7 @@ export class Term {
     }
   }
 
-  divBy(x) {
+  div(x) {
     x = forceConString(x);
 
     switch (x.conString()) {
@@ -201,7 +201,7 @@ export class Term {
         return x.reciprocal().times(this);
 
       case 'Expression':
-        return x.divBy(this).reciprocal();
+        return x.div(this).reciprocal();
 
       case 'Term':
         return this.termMultiply(x.reciprocal());
@@ -379,7 +379,7 @@ export class Expression {
     }
   }
 
-  divBy(x) {
+  div(x) {
     x = forceConString(x);
 
     switch (x.conString()) {
@@ -605,7 +605,7 @@ export class FractionExpression {
     }
   }
 
-  divBy(x) {
+  div(x) {
     if (checkNumber(x)) {
       return this.times(numericOp('1', '÷', x.toString()));
     } else {
@@ -857,8 +857,8 @@ function cancelPowers(fracExpression) {
     symbol = firstTerm.symbols[i];
     const factorInAllTerms = getFactorInAllTerms(symbol, allTerms);
     if (factorInAllTerms) {
-      const numerator = fracExpression.numerator.divBy(factorInAllTerms);
-      const denominator = fracExpression.denominator.divBy(factorInAllTerms);
+      const numerator = fracExpression.numerator.div(factorInAllTerms);
+      const denominator = fracExpression.denominator.div(factorInAllTerms);
       fracExpression = new FractionExpression(numerator, denominator);
     }
   }

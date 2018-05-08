@@ -28,10 +28,10 @@ export function symbolicOp(v1, operation, v2 = 0) {
       break; //WiP
 
     case '%':
-      return v1.divBy(100);
+      return v1.div(100);
 
     case '÷':
-      return v1.divBy(v2);
+      return v1.div(v2);
 
     case '×':
       return v1.times(v2);

@@ -105,8 +105,8 @@ export class SquareRoot extends Term {
     return construct(super.times(deconstruct(x))).simplify();
   }
 
-  divBy(x) {
-    return construct(super.divBy(deconstruct(x))).simplify();
+  div(x) {
+    return construct(super.div(deconstruct(x))).simplify();
   }
 
   reciprocal() {
@@ -170,8 +170,8 @@ export class SqrtExpression extends Expression {
     return construct(super.times(deconstruct(x))).simplify();
   }
 
-  divBy(x) {
-    return construct(super.divBy(deconstruct(x))).simplify();
+  div(x) {
+    return construct(super.div(deconstruct(x))).simplify();
   }
 
   reciprocal() {
@@ -239,8 +239,8 @@ export class SqrtFractionExpression extends FractionExpression {
     return construct(super.times(deconstruct(x))).simplify();
   }
 
-  divBy(x) {
-    return construct(super.divBy(deconstruct(x))).simplify();
+  div(x) {
+    return construct(super.div(deconstruct(x))).simplify();
   }
 
   reciprocal() {
