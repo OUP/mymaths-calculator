@@ -41,7 +41,6 @@ export function symbolicOp(v1, operation, v2 = 0) {
       return v1.div(100);
 
     case '÷':
-      console.log(v1, v2);
       return v1.div(v2);
 
     case '×':
