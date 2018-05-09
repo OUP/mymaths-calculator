@@ -1,11 +1,6 @@
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
-import {
-  identicalArrays,
-  cloneState,
-  checkForSymbols,
-  checkIfFraction
-} from '../Utilities';
+import { identicalArrays, cloneState, checkIfFraction } from '../Utilities';
 import { numericOp } from '../Eval/NumericOp';
 import { generateFactors } from '../Eval/GenerateFactors';
 import { substitute } from './Substitute';
@@ -935,9 +930,5 @@ function filterTerm(filterIndex, termsArray) {
 }
 
 function forceConString(x) {
-  if (!checkForSymbols(x)) {
-    return new Term(x.toString());
-  } else {
-    return x;
-  }
+  return typeof x.conString === 'undefined' ? new Term(x.toString()) : x;
 }
