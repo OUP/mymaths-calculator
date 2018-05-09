@@ -18,7 +18,6 @@ export function symbolicOp(v1, operation, v2 = 0) {
      */
     return reversedOrderOp(v1, operation, v2);
   }
-
   v1 = construct(v1);
   if (typeof v2 !== 'undefined') {
     v2 = construct(v2);
@@ -75,6 +74,10 @@ function construct(x) {
         term = new SquareRoot(x);
         exp = new SqrtExpression([term]);
         return new SqrtFractionExpression(exp, defaultDenom);
+      } else if (x.includes('/')) {
+        term = new Term(x);
+        exp = new Expression([term]);
+        return new FractionExpression(exp, defaultDenom).simplify();
       }
       break;
 
