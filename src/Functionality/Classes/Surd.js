@@ -10,6 +10,7 @@ import {
 } from '../Utilities';
 import { makeString } from '../ButtonType';
 import { generateFactors } from '../Eval/GenerateFactors';
+import { substitute } from './Substitute';
 
 export class SquareRoot extends Term {
   constructor(constructionParameter) {
@@ -82,9 +83,16 @@ export class SquareRoot extends Term {
 
   simplify() {
     let currentSqrt = new SquareRoot(super.simplify());
+    const sym = currentSqrt.symbols[0];
+    if (sym === 'π') {
+      console.log(sym);
+    }
     currentSqrt = removeSqrtPowers(currentSqrt);
     if (currentSqrt.constructor === SquareRoot) {
       currentSqrt = combineSqrts(currentSqrt);
+      if (sym === 'π') {
+        console.log(currentSqrt.symbols[0]);
+      }
       if (currentSqrt.constructor === SquareRoot) {
         return pullOutSquareFactors(currentSqrt);
       }
@@ -331,7 +339,12 @@ function getSqrtArgs(sqrt) {
   const sqrtArgs = [];
   const sqrts = sqrt.symbols;
   for (let i = 0; i < sqrts.length; i++) {
-    sqrtArgs.push(sqrts[i].slice(1));
+    if (sqrts[i].includes('√')) {
+      sqrtArgs.push(sqrts[i].slice(1));
+    } else {
+      const subValue = substitute(sqrts[i]);
+      sqrtArgs.push(numericOp(subValue, '×', subValue));
+    }
   }
   return sqrtArgs;
 }
