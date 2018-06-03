@@ -45,10 +45,10 @@ export class SquareRoot extends Term {
     if (simplified.symbols.length) {
       switch (simplified.coefficient.toString()) {
         case '1':
-          return `\\sqrt ${simplified.symbols[0].slice(1)}`;
+          return `\\sqrt {${simplified.symbols[0].slice(1)}}`;
 
         case '-1':
-          return `-\\sqrt ${simplified.symbols[0].slice(1)}`;
+          return `-\\sqrt {${simplified.symbols[0].slice(1)}}`;
 
         case '0':
           return '0';
@@ -56,7 +56,7 @@ export class SquareRoot extends Term {
         default:
           return `${
             simplified.coefficient
-          } \\sqrt ${simplified.symbols[0].slice(1)}`;
+          } \\sqrt {${simplified.symbols[0].slice(1)}}`;
       }
     } else {
       return makeString(simplified.coefficient);
