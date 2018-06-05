@@ -83,16 +83,9 @@ export class SquareRoot extends Term {
 
   simplify() {
     let currentSqrt = new SquareRoot(super.simplify());
-    const sym = currentSqrt.symbols[0];
-    if (sym === 'π') {
-      console.log(sym);
-    }
     currentSqrt = removeSqrtPowers(currentSqrt);
     if (currentSqrt.constructor === SquareRoot) {
       currentSqrt = combineSqrts(currentSqrt);
-      if (sym === 'π') {
-        console.log(currentSqrt.symbols[0]);
-      }
       if (currentSqrt.constructor === SquareRoot) {
         return pullOutSquareFactors(currentSqrt);
       }
