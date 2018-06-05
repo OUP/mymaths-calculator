@@ -118,7 +118,9 @@ export class Term {
         i--;
       }
     }
-    return new Term(this.coefficient, wipSymbols, wipPowers);
+    return this.coefficient.toString() !== '0'
+      ? new Term(this.coefficient, wipSymbols, wipPowers)
+      : new Term('0');
   }
 
   plus(x) {
