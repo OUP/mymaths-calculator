@@ -212,7 +212,15 @@ export class SqrtFractionExpression extends FractionExpression {
   }
 
   simplify() {
-    return construct(super.simplify());
+    const simplified = construct(super.simplify());
+    const denominatorLength = simplified.denominator.terms.length;
+    if (denominatorLength === 1) {
+      return simpleSqrtSimplify(simplified);
+    } else if (denominatorLength === 2) {
+      return diffOfSquaresSqrtSimplify(simplified);
+    } else {
+      return simplified;
+    }
   }
 
   conString() {
@@ -431,4 +439,28 @@ function nonIntSqrtPowerToCoef(sqrt, index, power) {
 
 function intPower(baseStr, exponentStr) {
   return accurateFunc('base', baseStr, exponentStr);
+}
+
+function simpleSqrtSimplify(sqrtFracExp) {
+  const denominatorSymbol = sqrtFracExp.denominator.terms[0].symbols[0];
+  if (symbolHasSqrt(denominatorSymbol)) {
+    const multiplier = new SquareRoot(denominatorSymbol);
+    const newNumerator = sqrtFracExp.numerator.times(multiplier);
+    const newDenominator = sqrtFracExp.denominator.times(multiplier);
+    return new SqrtFractionExpression(newNumerator, newDenominator);
+  } else {
+    return sqrtFracExp;
+  }
+}
+
+function diffOfSquaresSqrtSimplify(sqrtFracExp) {
+  //WiP
+  return sqrtFracExp;
+}
+
+function symbolHasSqrt(symbol) {
+  if (typeof symbol !== 'undefined') {
+    return symbol.includes('√');
+  }
+  return false;
 }
