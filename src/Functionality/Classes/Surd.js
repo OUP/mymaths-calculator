@@ -454,13 +454,26 @@ function simpleSqrtSimplify(sqrtFracExp) {
 }
 
 function diffOfSquaresSqrtSimplify(sqrtFracExp) {
-  //WiP
+  const denominatorTerm0 = sqrtFracExp.denominator.terms[0];
+  const denominatorTerm1 = sqrtFracExp.denominator.terms[1];
+  if (
+    canUseDiffOfSquaresSimplify(
+      denominatorTerm0.symbols[0],
+      denominatorTerm1.symbols[0]
+    )
+  ) {
+    const multiplier = denominatorTerm0.minus(denominatorTerm1);
+    const newNumerator = sqrtFracExp.numerator.times(multiplier);
+    const newDenominator = sqrtFracExp.denominator.times(multiplier);
+    return new SqrtFractionExpression(newNumerator, newDenominator);
+  }
   return sqrtFracExp;
 }
 
 function symbolHasSqrt(symbol) {
-  if (typeof symbol !== 'undefined') {
-    return symbol.includes('√');
-  }
-  return false;
+  return typeof symbol !== 'undefined' ? symbol.includes('√') : false;
+}
+
+function canUseDiffOfSquaresSimplify(term0, term1) {
+  return symbolHasSqrt(term0) || symbolHasSqrt(term1);
 }
