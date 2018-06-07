@@ -57,7 +57,7 @@ function parseNumFractionMode(num) {
     }
   } else {
     num = new Fraction(num);
-    return genFraction(num.n, num.d);
+    return genFraction(num);
   }
 }
 
@@ -147,10 +147,17 @@ function funcToTeXMap(func) {
   }
 }
 
-const genFraction = (numerator, denominator) =>
-  `${funcToTeXMap('fraction')}
-  { ${numerator} } { ${denominator} }
+function genFraction({ n, s, d }) {
+  if (s === 1) {
+    return `${funcToTeXMap('fraction')}
+  { ${n} } { ${d} }
   \\normalsize`;
+  } else {
+    return `${funcToTeXMap('fraction')}
+    { -${n} } { ${d} }
+    \\normalsize`;
+  }
+}
 
 function genRecurringDecimal(decimal) {
   const decArray = decimal.split('');
