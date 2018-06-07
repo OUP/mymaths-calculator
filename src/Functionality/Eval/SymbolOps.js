@@ -8,6 +8,7 @@ import {
   SqrtExpression,
   SqrtFractionExpression
 } from '../Classes/Surd';
+import processValue from './ProcessValue';
 
 export function symbolicOp(v1, operation, v2 = 0) {
   if (needToReverseOrder(v1, operation, v2)) {
@@ -23,38 +24,48 @@ export function symbolicOp(v1, operation, v2 = 0) {
     v2 = construct(v2);
   }
 
+  let result;
+
   switch (operation) {
     case 'xⁿ':
       const v2Val = v2.evaluate();
       const v2ValStr = v2Val.toString();
       if (!checkIfFraction(v2ValStr) && !v2ValStr.includes('.')) {
-        return symbolPow(v1, v2Val);
+        result = symbolPow(v1, v2Val);
       } else {
-        return numericOp(v1.evaluate(), 'xⁿ', v2Val);
+        result = numericOp(v1.evaluate(), 'xⁿ', v2Val);
       }
+      break;
 
     case 'x!':
       break; //WiP
 
     case '%':
-      return v1.div(100);
+      result = v1.div(100);
+      break;
 
     case '÷':
-      return v1.div(v2);
+      result = v1.div(v2);
+      break;
 
     case '×':
-      return v1.times(v2);
+      result = v1.times(v2);
+      break;
 
     case '–':
-      return v1.minus(v2);
+      result = v1.minus(v2);
+      break;
 
     case '+':
-      return v1.plus(v2).simplify();
+      result = v1.plus(v2).simplify();
+      break;
 
     default:
       console.error("Don't know how to do the operation " + operation);
-      return ['error'];
+      result = ['error'];
+      break;
   }
+  return processValue(result);
 }
 
 function construct(x) {
@@ -97,43 +108,59 @@ export function funcOnSymbol(func, arg, arg2) {
   if (typeof arg2 !== 'undefined') {
     arg2 = construct(arg2);
   }
+
+  let result;
+
   switch (func) {
     case 'numerator':
-      return symbolicOp(arg, '÷', arg2);
+      result = symbolicOp(arg, '÷', arg2);
+      break;
 
     case '|x|':
-      return arg.abs();
+      result = arg.abs();
+      break;
 
     case 'log(x)':
-      return arg.log(10);
+      result = arg.log(10);
+      break;
 
     case 'ln(x)':
-      return arg.ln();
+      result = arg.ln();
+      break;
 
     case '√(x)':
-      return arg.sqrt();
+      result = arg.sqrt();
+      break;
 
     case 'sin(x)':
-      return symbolTrig('sin', arg);
+      result = symbolTrig('sin', arg);
+      break;
 
     case 'cos(x)':
-      return symbolTrig('cos', arg);
+      result = symbolTrig('cos', arg);
+      break;
 
     case 'tan(x)':
-      return symbolTrig('tan', arg);
+      result = symbolTrig('tan', arg);
+      break;
 
     case 'sin⁻¹':
-      return arg.asin();
+      result = arg.asin();
+      break;
 
     case 'cos⁻¹':
-      return arg.acos();
+      result = arg.acos();
+      break;
 
     case 'tan⁻¹':
-      return arg.atan();
+      result = arg.atan();
+      break;
 
     case '(':
-      return arg;
+      result = arg;
+      break;
   }
+  return processValue(result);
 }
 
 function needToReverseOrder(v1, operation, v2) {
