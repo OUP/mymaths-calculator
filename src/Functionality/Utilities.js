@@ -157,6 +157,7 @@ export function checkForSymbols(val) {
       case valString.includes('π'):
       case valString.includes('√'):
       case valString.includes('\\sqrt'):
+      case valString.includes('\\frac'):
         return true;
     }
   }
