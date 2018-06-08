@@ -57,7 +57,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
       break;
 
     case '+':
-      result = v1.plus(v2).simplify();
+      result = v1.plus(v2);
       break;
 
     default:
@@ -65,7 +65,10 @@ export function symbolicOp(v1, operation, v2 = 0) {
       result = ['error'];
       break;
   }
-  return processValue(result);
+  if (typeof result.simplify === 'function') {
+    result = result.simplify();
+  }
+  return processValue(safeSimplify(result));
 }
 
 function construct(x) {
@@ -160,7 +163,7 @@ export function funcOnSymbol(func, arg, arg2) {
       result = arg;
       break;
   }
-  return processValue(result);
+  return processValue(safeSimplify(result));
 }
 
 function needToReverseOrder(v1, operation, v2) {
@@ -500,4 +503,8 @@ function convertFracStringToDecimal(fracString) {
   } else {
     return new Decimal(fracString);
   }
+}
+
+function safeSimplify(value) {
+  return typeof value.simplify === 'function' ? value.simplify() : value;
 }
