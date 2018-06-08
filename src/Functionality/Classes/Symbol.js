@@ -577,9 +577,6 @@ export class FractionExpression {
         return x.timesMinusOne().plus(this);
 
       case 'FractionExpression':
-        const a = this.numerator.times(x.denominator);
-        const b = x.numerator.times(this.denominator);
-        console.log(a.minus(b).simplify());
         newNumer = this.numerator
           .times(x.denominator)
           .minus(x.numerator.times(this.denominator))
