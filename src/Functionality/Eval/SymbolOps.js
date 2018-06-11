@@ -11,14 +11,6 @@ import {
 import processValue from './ProcessValue';
 
 export function symbolicOp(v1, operation, v2 = 0) {
-  if (needToReverseOrder(v1, operation, v2)) {
-    /**
-     * This is necessary because the methods from fraction.js
-     * and decimal.js can't take the calculator's symbolic and
-     * square root classes as parameters
-     */
-    return reversedOrderOp(v1, operation, v2);
-  }
   v1 = construct(v1);
   if (typeof v2 !== 'undefined') {
     v2 = construct(v2);
@@ -164,43 +156,6 @@ export function funcOnSymbol(func, arg, arg2) {
       break;
   }
   return processValue(safeSimplify(result));
-}
-
-function needToReverseOrder(v1, operation, v2) {
-  switch (operation) {
-    case '+':
-    case '–':
-    case '×':
-    case '÷':
-      return (
-        typeof v1.conString === 'undefined' &&
-        typeof v2.conString === 'function'
-      );
-    /**
-     * conString is a method which exists on symbols and
-     * square roots but not on fractions and decimals
-     */
-
-    default:
-      return false;
-  }
-}
-
-function reversedOrderOp(v1, operation, v2) {
-  //v1 and v2 are still in the original order in params
-  switch (operation) {
-    case '+':
-      return symbolicOp(v2, '+', v1);
-
-    case '–':
-      return symbolicOp(v2.timesMinusOne(), '+', v1);
-
-    case '×':
-      return symbolicOp(v2, '×', v1);
-
-    case '÷':
-      return symbolicOp(v2.reciprocal(), '×', v1);
-  }
 }
 
 function symbolPow(base, exponent) {
