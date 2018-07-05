@@ -906,16 +906,14 @@ function filterZeroes(expression) {
     return expression;
   }
 
-  const coefficients = [];
-  for (let i = 0; i < terms.length; i++) {
-    coefficients.push(terms[i].coefficient.toString());
-  }
+  let coefficients = initCoefficients(terms);
 
   let index;
   for (let i = 0; i < coefficients.length; i++) {
     index = coefficients.indexOf('0');
     if (index >= 0 && terms.length > 1) {
       terms = filterTerm(index, terms);
+      coefficients = initCoefficients(terms);
     }
   }
   return new Expression(terms);
@@ -933,4 +931,21 @@ function filterTerm(filterIndex, termsArray) {
 
 function forceConString(x) {
   return typeof x.conString === 'undefined' ? new Term(x.toString()) : x;
+}
+
+function initCoefficients(terms) {
+  const coefficients = [];
+  for (let i = 0; i < terms.length; i++) {
+    coefficients.push(terms[i].coefficient.toString());
+  }
+  return coefficients;
+}
+
+export function expressionFactory(value) {
+  let numerator;
+  value.toString().includes('π')
+    ? (numerator = new Expression([new Term(1, ['π'], [1])]))
+    : (numerator = new Expression([new Term(value)]));
+  const denominator = new Expression([new Term(1)]);
+  return new FractionExpression(numerator, denominator);
 }
