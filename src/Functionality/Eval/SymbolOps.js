@@ -57,9 +57,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
       result = ['error'];
       break;
   }
-  if (typeof result.simplify === 'function') {
-    result = result.simplify();
-  }
+
   return processValue(safeSimplify(result));
 }
 
