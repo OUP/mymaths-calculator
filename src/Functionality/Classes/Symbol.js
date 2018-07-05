@@ -537,8 +537,8 @@ export class FractionExpression {
 
   timesMinusOne() {
     return new FractionExpression(
-      this.denominator.timesMinusOne(),
-      this.numerator
+      this.numerator.timesMinusOne(),
+      this.denominator
     );
   }
 
