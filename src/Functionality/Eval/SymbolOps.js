@@ -228,7 +228,8 @@ function reversedOrderOp(v1, operation, v2) {
 }
 
 function checkForSubstitution(func, arg) {
-  const specialCaseFunc = isTrigFunc(func) || isFraction(func);
+  const specialCaseFunc =
+    isTrigFunc(func) || isFraction(func) || isIdentity(func);
   const canSubstituteArg = typeof arg.conString === 'function';
   return !specialCaseFunc && canSubstituteArg;
 }
@@ -246,4 +247,8 @@ function isTrigFunc(func) {
 
 function isFraction(func) {
   return func === 'numerator';
+}
+
+function isIdentity(func) {
+  return func === '(' || func === '|x|';
 }
