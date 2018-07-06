@@ -31,6 +31,7 @@ export class SquareRoot extends Term {
         break;
 
       case Term:
+      case SquareRoot:
         const term = constructionParameter;
         super(term.coefficient, term.symbols, term.powers);
         break;
@@ -128,6 +129,7 @@ export class SqrtExpression extends Expression {
         break;
 
       case Expression:
+      case SqrtExpression:
         terms = constructionParameter.terms;
         break;
 
@@ -195,7 +197,9 @@ export class SqrtFractionExpression extends FractionExpression {
         denominator = constructionParameters[1];
         break;
 
-      case 1: //this is the case with a FractionExpression as constructor param
+      case 1:
+        //this is the case with a FractionExpression
+        //or SqrtFractionExpression as constructor param
         numerator = constructionParameters[0].numerator;
         denominator = constructionParameters[0].denominator;
         break;
@@ -476,4 +480,13 @@ function symbolHasSqrt(symbol) {
 
 function canUseDiffOfSquaresSimplify(term0, term1) {
   return symbolHasSqrt(term0) || symbolHasSqrt(term1);
+}
+
+export function sqrtFactory(value) {
+  let numerator;
+  value.toString().includes('√')
+    ? (numerator = new SqrtExpression([new SquareRoot(value)]))
+    : (numerator = new Expression([new Term(value)]));
+  const denominator = new Expression([new Term(1)]);
+  return new SqrtFractionExpression(numerator, denominator);
 }
