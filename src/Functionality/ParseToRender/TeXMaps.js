@@ -51,7 +51,7 @@ function parseNumFractionMode(num) {
     const testFracEl = num.toFraction(1000);
     const fracEl = num.toFraction();
     if (fracEl[1].toString() !== '1' && identicalArrays(fracEl, testFracEl)) {
-      return genFraction(fracEl[0], fracEl[1]);
+      return genFraction(new Fraction(fracEl[0].div(fracEl[1]).toString()));
     } else {
       return num;
     }
