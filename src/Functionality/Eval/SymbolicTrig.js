@@ -2,11 +2,7 @@ import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 import { numericOp } from './NumericOp';
 import { identicalArrays, checkIfFraction } from '../Utilities';
-import {
-  SquareRoot,
-  SqrtExpression,
-  SqrtFractionExpression
-} from '../Classes/Surd';
+import { sqrtFactory } from '../Classes/Surd';
 
 export default function symbolicTrig(trigFunc, arg) {
   if (isMultipleOfPi(arg)) {
@@ -88,27 +84,21 @@ function generateDecimal(value) {
 
 function trigWithPi(trigFunc, arg) {
   const coefficient = setCoefficient(arg);
-  let result;
 
   switch (trigFunc) {
     case 'sin':
-      result = sinWithPi(coefficient);
-      break;
+      return sinWithPi(coefficient);
 
     case 'cos':
-      result = cosWithPi(coefficient);
-      break;
+      return cosWithPi(coefficient);
 
     case 'tan':
-      result = tanWithPi(coefficient);
-      break;
+      return tanWithPi(coefficient);
 
     default:
       console.warn('trig breakdown');
-      result = 0;
-      break;
+      return 0;
   }
-  return result.constructor === String ? result : sqrtFractionFactory(result);
 }
 
 function setCoefficient(arg) {
@@ -137,13 +127,13 @@ function sinWithPi(coefStr) {
     case '1/4':
     case '0.75':
     case '3/4':
-      return { numeratorString: '√2', denominatorString: '2' };
+      return sqrtFactory('√2').div(2);
 
     case '0.(3)':
     case '1/3':
     case '2/3':
     case '0.(6)':
-      return '√3/2';
+      return sqrtFactory('√3').div(2);
 
     case '0.5':
     case '1/2':
@@ -159,13 +149,17 @@ function sinWithPi(coefStr) {
     case '5/4':
     case '1.75':
     case '7/4':
-      return '-√2/2';
+      return sqrtFactory('√2')
+        .div(2)
+        .timesMinusOne();
 
     case '1.(3)':
     case '4/3':
     case '5/3':
     case '1.(6)':
-      return '-√3/2';
+      return sqrtFactory('√3')
+        .div(2)
+        .timesMinusOne();
 
     case '1.5':
     case '3/2':
@@ -187,13 +181,13 @@ function cosWithPi(coefStr) {
     case '0.1(6)':
     case '11/6':
     case '1.8(3)':
-      return '√3/2';
+      return sqrtFactory('√3').div(2);
 
     case '0.25':
     case '1/4':
     case '1.75':
     case '7/4':
-      return '√2/2';
+      return sqrtFactory('√2').div(2);
 
     case '0.(3)':
     case '1/3':
@@ -217,13 +211,17 @@ function cosWithPi(coefStr) {
     case '3/4':
     case '1.25':
     case '5/4':
-      return '-√2/2';
+      return sqrtFactory('√2')
+        .div(2)
+        .timesMinusOne();
 
     case '0.8(3)':
     case '5/6':
     case '1.1(6)':
     case '7/6':
-      return '-√3/2';
+      return sqrtFactory('√3')
+        .div(2)
+        .timesMinusOne();
 
     case '1':
       return '-1';
@@ -245,7 +243,7 @@ function tanWithPi(coefStr) {
     case '0.1(6)':
     case '7/6':
     case '1.1(6)':
-      return '√3/3';
+      return sqrtFactory('√3').div(3);
 
     case '0.25':
     case '1/4':
@@ -257,7 +255,7 @@ function tanWithPi(coefStr) {
     case '1/3':
     case '4/3':
     case '1.(3)':
-      return '√3';
+      return sqrtFactory('√3');
 
     case '0.5':
     case '1/2':
@@ -269,7 +267,7 @@ function tanWithPi(coefStr) {
     case '0.(6)':
     case '5/3':
     case '1.(6)':
-      return '-√3';
+      return sqrtFactory('√3').timesMinusOne();
 
     case '0.75':
     case '3/4':
@@ -281,7 +279,9 @@ function tanWithPi(coefStr) {
     case '5/6':
     case '1.8(3)':
     case '11/6':
-      return '-√3/3';
+      return sqrtFactory('√3')
+        .div(3)
+        .timesMinusOne();
 
     default:
       const coef = convertFracStringToDecimal(coefStr);
@@ -296,12 +296,4 @@ function convertFracStringToDecimal(fracString) {
   } else {
     return new Decimal(fracString);
   }
-}
-
-function sqrtFractionFactory({ numeratorString, denominatorString }) {
-  const numeratorSqrt = new SqrtExpression([new SquareRoot(numeratorString)]);
-  const denominatorSqrt = new SqrtExpression([
-    new SquareRoot(denominatorString)
-  ]);
-  return new SqrtFractionExpression(numeratorSqrt, denominatorSqrt);
 }
