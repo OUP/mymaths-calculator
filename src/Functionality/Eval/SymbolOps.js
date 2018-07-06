@@ -254,7 +254,6 @@ function isIdentity(func) {
 }
 
 function symbolicMod(arg) {
-  console.log(convertFracToDecimal(arg.evaluate()));
   return convertFracToDecimal(arg.evaluate()).greaterThanOrEqualTo(0)
     ? arg
     : arg.timesMinusOne();
