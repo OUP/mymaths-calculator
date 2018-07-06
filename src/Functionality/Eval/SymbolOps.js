@@ -122,7 +122,7 @@ export function funcOnSymbol(func, arg, arg2) {
       break;
 
     case '|x|':
-      result = arg.abs();
+      result = symbolicMod(arg);
       break;
 
     case 'log(x)':
@@ -251,4 +251,11 @@ function isFraction(func) {
 
 function isIdentity(func) {
   return func === '(' || func === '|x|';
+}
+
+function symbolicMod(arg) {
+  console.log(convertFracToDecimal(arg.evaluate()));
+  return convertFracToDecimal(arg.evaluate()).greaterThanOrEqualTo(0)
+    ? arg
+    : arg.timesMinusOne();
 }
