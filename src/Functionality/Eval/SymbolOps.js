@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js/decimal';
 import { FractionExpression, Term, Expression } from '../Classes/Symbol';
 import { numericOp } from './NumericOp';
-import { checkIfFraction } from '../Utilities';
+import { checkIfFraction, convertFracToDecimal } from '../Utilities';
 import {
   SquareRoot,
   SqrtExpression,
@@ -112,6 +112,10 @@ export function funcOnSymbol(func, arg, arg2) {
 
   let result;
 
+  if (checkForSubstitution(func, arg)) {
+    arg = convertFracToDecimal(arg.evaluate());
+  }
+
   switch (func) {
     case 'numerator':
       result = symbolicOp(arg, '÷', arg2);
@@ -221,4 +225,21 @@ function reversedOrderOp(v1, operation, v2) {
     case '÷':
       return symbolicOp(v2.reciprocal(), '×', v1);
   }
+}
+
+function checkForSubstitution(func, arg) {
+  const specialCaseFunc = isTrigFunc(func);
+  const canSubstituteArg = typeof arg.conString === 'function';
+  return !specialCaseFunc && canSubstituteArg;
+}
+
+function isTrigFunc(func) {
+  return (
+    func === 'sin(x)' ||
+    func === 'cos(x)' ||
+    func === 'tan(x)' ||
+    func === 'sin⁻¹' ||
+    func === 'cos⁻¹' ||
+    func === 'tan⁻¹'
+  );
 }
