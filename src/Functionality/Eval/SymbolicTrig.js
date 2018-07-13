@@ -65,7 +65,7 @@ function standardTrigFunc(trigFunc, arg) {
   }
 }
 
-function generateDecimal(value) {
+export function generateDecimal(value) {
   switch (value.constructor) {
     case String:
       return convertFracStringToDecimal(value);

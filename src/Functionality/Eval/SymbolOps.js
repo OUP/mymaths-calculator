@@ -9,6 +9,7 @@ import {
 } from '../Classes/Surd';
 import processValue from './ProcessValue';
 import symbolicTrig from './SymbolicTrig';
+import inverseTrig from './InverseTrig';
 
 export function symbolicOp(v1, operation, v2 = 0) {
   if (needToReverseOrder(v1, operation, v2)) {
@@ -150,15 +151,15 @@ export function funcOnSymbol(func, arg, arg2) {
       break;
 
     case 'sin⁻¹':
-      result = arg.asin();
+      result = inverseTrig('sin⁻¹', arg);
       break;
 
     case 'cos⁻¹':
-      result = arg.acos();
+      result = inverseTrig('cos⁻¹', arg);
       break;
 
     case 'tan⁻¹':
-      result = arg.atan();
+      result = inverseTrig('tan⁻¹', arg);
       break;
 
     case '(':
