@@ -167,9 +167,10 @@ export function checkForSymbols(val) {
 //v is a string 'n/d'
 export function convertFracToDecimal(v) {
   const f = new Fraction(v);
+  const vs = new Decimal(f.s);
   const vn = new Decimal(f.n);
   const vd = new Decimal(f.d);
-  return vn.dividedBy(vd);
+  return vs.times(vn).dividedBy(vd);
 }
 
 export function removeElement(array, index) {
