@@ -42,9 +42,6 @@ function pressButton(button, currentState) {
 function isCompositeButton(button) {
   switch (button) {
     case '×10ⁿ':
-    case 'x²':
-    case 'x³':
-    case 'x⁻¹':
       return true;
 
     default:
@@ -56,15 +53,6 @@ function pressCompositeButton(button, currentState) {
   switch (button) {
     case '×10ⁿ':
       return pressPow10(currentState);
-
-    case 'x²':
-      return pressXSquared(currentState);
-
-    case 'x³':
-      return pressXCubed(currentState);
-
-    case 'x⁻¹':
-      return pressReciprocal(currentState);
   }
 }
 
@@ -73,20 +61,4 @@ function pressPow10(currentState) {
   currentState = pressButton('1', currentState);
   currentState = pressButton('0', currentState);
   return pressInput('xⁿ', 'operator', currentState);
-}
-
-function pressXSquared(currentState) {
-  currentState = pressInput('xⁿ', 'operator', currentState);
-  return pressInput('2', 'number', currentState);
-}
-
-function pressXCubed(currentState) {
-  currentState = pressInput('xⁿ', 'operator', currentState);
-  return pressInput('3', 'number', currentState);
-}
-
-function pressReciprocal(currentState) {
-  currentState = pressInput('xⁿ', 'operator', currentState);
-  currentState = pressInput('-', 'number', currentState);
-  return pressInput('1', 'number', currentState);
 }
