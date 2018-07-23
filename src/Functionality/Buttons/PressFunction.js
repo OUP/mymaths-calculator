@@ -51,25 +51,18 @@ function funcType(button) {
 function pressCloseBracket(currentState) {
   currentState.inputValue.push(')');
   currentState.cursorPosition++;
-  return currentState;
+  return;
 }
 
 function pressArgAfter(button, currentState) {
   currentState.cursorPosition++;
   currentState.functionKey++;
-  currentState.inputValue.push({
-    type: 'function',
-    function: button,
-    argument: [],
-    parts: 1,
-    key: currentState.functionKey
-    //Key used to destroy hidden characters that go with the function if the function is deleted
-  });
+  const inputValue = currentState.inputValue;
+  inputValue.push(funcButtonFactory(button, currentState.functionKey));
   if (button === '√(x)' || button === 'xⁿ') {
-    currentState.inputValue.push('cArg' + currentState.functionKey);
+    inputValue.push('cArg' + currentState.functionKey);
   }
-
-  return currentState;
+  return;
 }
 
 function pressArgBothSides(button, currentState) {
@@ -77,44 +70,48 @@ function pressArgBothSides(button, currentState) {
   if (button === 'frac') {
     pressFrac(currentState);
   }
-  return currentState;
+  return;
 }
 
 function pressArgIncluded(button, currentState) {
   currentState.functionKey++;
-  currentState.inputValue.push({
-    type: 'function',
-    function: noArg(button),
-    argument: [],
-    parts: 1,
-    key: currentState.functionKey
-    //Key used to destroy hidden characters that go with the function if the function is deleted
-  });
-  pushIncludedArg(currentState.inputValue, button);
+  const inputValue = currentState.inputValue;
+  inputValue.push(funcButtonFactory(noArg(button), currentState.functionKey));
+  pushIncludedArg(inputValue, button);
   updateCursorPosition(currentState, button);
-  currentState.inputValue.push('cArg' + currentState.functionKey);
-  return currentState;
+  inputValue.push('cArg' + currentState.functionKey);
+  return;
 }
 
 function pressFrac(currentState) {
   currentState.functionKey++;
-  currentState.inputValue.push({
-    type: 'function',
-    function: 'numerator',
-    argument: [],
-    parts: 2,
-    key: currentState.functionKey
-    //Key used to destroy hidden characters that go with the function if the function is deleted
-  });
-  currentState.inputValue.push('cArg' + currentState.functionKey);
-  currentState.inputValue.push({
-    type: 'function',
-    function: 'denominator',
-    argument: [],
-    key: currentState.functionKey
-  });
-  currentState.inputValue.push('cArg' + currentState.functionKey);
+  const inputValue = currentState.inputValue;
+  inputValue.push(funcButtonFactory('numerator', currentState.functionKey));
+  inputValue.push('cArg' + currentState.functionKey);
+  inputValue.push(funcButtonFactory('denominator', currentState.functionKey));
+  inputValue.push('cArg' + currentState.functionKey);
   return;
+}
+
+function funcButtonFactory(func, functionKey) {
+  return {
+    type: 'function',
+    function: func,
+    argument: [],
+    parts: funcParts(func),
+    key: functionKey
+    //key used to destroy hidden characters that go with the function if the function is deleted
+  };
+}
+
+function funcParts(func) {
+  switch (func) {
+    case 'numerator':
+      return 2;
+
+    default:
+      return 1;
+  }
 }
 
 function noArg(button) {
