@@ -93,7 +93,10 @@ function parseOperator(op) {
 function parseSymbol(symbol, displayMode) {
   switch (displayMode) {
     case 'decimal':
-      return convertFracToDecimal(symbol.evaluate().toString());
+      return symbol === 'π'
+        ? Math.PI
+        : convertFracToDecimal(symbol.evaluate().toString());
+    //string 'π' does not have an evaluate() method
 
     default:
       return symbol.toString();
