@@ -78,6 +78,7 @@ function parseFunc(func) {
   switch (func.function) {
     case 'numerator':
     case '√(x)':
+    case 'xⁿ':
       return `${TeX.func(func.function)} ${parseToTeX(arg)}`;
 
     case 'denominator':

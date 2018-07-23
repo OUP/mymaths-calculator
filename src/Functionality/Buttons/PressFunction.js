@@ -28,7 +28,8 @@ function funcType(button) {
     button === 'tan(x)' ||
     button === 'sin⁻¹' ||
     button === 'cos⁻¹' ||
-    button === 'tan⁻¹'
+    button === 'tan⁻¹' ||
+    button === 'xⁿ'
   ) {
     return 'argAfter';
   } else if (button === 'frac') {
@@ -55,7 +56,7 @@ function pressArgAfter(button, currentState) {
     key: currentState.functionKey
     //Key used to destroy hidden characters that go with the function if the function is deleted
   });
-  if (button === '√(x)') {
+  if (button === '√(x)' || button === 'xⁿ') {
     currentState.inputValue.push('cArg' + currentState.functionKey);
   }
 

@@ -85,6 +85,13 @@ function checkFunctionOp(opEl) {
 }
 
 function doFunction(inputArray, position) {
+  funcIsNotPow(inputArray[position].value.function)
+    ? replaceFuncWithFuncVal(inputArray, position)
+    : replacePowwithPowOperator(inputArray, position);
+  return;
+}
+
+function replaceFuncWithFuncVal(inputArray, position) {
   const output = {
     value: funcEval(inputArray, position),
     priority: 0,
@@ -105,4 +112,23 @@ function funcEval(inputArray, funcIndex) {
   } else {
     return accurateFunc(func, arg);
   }
+}
+
+function replacePowwithPowOperator(inputArray, position) {
+  const power = {
+    value: calcEval(inputArray[position].value.argument),
+    priority: 0,
+    type: 'number'
+  };
+  const op = {
+    value: 'xⁿ',
+    priority: 2,
+    type: 'operator'
+  };
+  inputArray.splice(position, 1, op, power);
+  return;
+}
+
+function funcIsNotPow(func) {
+  return func !== 'xⁿ';
 }

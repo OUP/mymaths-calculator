@@ -112,6 +112,9 @@ function funcToTeXMap(func) {
     case '|x|':
       return '\\text {Abs}'; // vertical bars would conflict with cursor character
 
+    case 'xⁿ':
+      return '^';
+
     case 'log(x)':
       return '\\log';
 
