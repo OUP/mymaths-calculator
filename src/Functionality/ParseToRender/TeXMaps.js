@@ -148,6 +148,9 @@ function funcToTeXMap(func) {
     case ')':
       return ')';
 
+    case 'eⁿ':
+      return 'e^';
+
     default:
       return func;
   }

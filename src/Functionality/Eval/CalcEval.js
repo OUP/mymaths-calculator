@@ -120,15 +120,25 @@ function replacePowwithPowOperator(inputArray, position) {
     priority: 0,
     type: 'number'
   };
+  const func = inputArray[position].value.function;
   const op = {
     value: 'xⁿ',
     priority: 2,
     type: 'operator'
   };
-  inputArray.splice(position, 1, op, power);
+  if (func === 'xⁿ') {
+    inputArray.splice(position, 1, op, power);
+  } else if (func === 'eⁿ') {
+    const e = {
+      value: Math.E,
+      priority: 0,
+      type: 'number'
+    };
+    inputArray.splice(position, 1, e, op, power);
+  }
   return;
 }
 
 function funcIsNotPow(func) {
-  return func !== 'xⁿ';
+  return func !== 'xⁿ' && func !== 'eⁿ';
 }

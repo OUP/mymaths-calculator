@@ -33,6 +33,7 @@ function funcType(button) {
     case 'cos⁻¹':
     case 'tan⁻¹':
     case 'xⁿ':
+    case 'eⁿ':
       return 'argAfter';
 
     case 'frac':
@@ -59,7 +60,7 @@ function pressArgAfter(button, currentState) {
   currentState.functionKey++;
   const inputValue = currentState.inputValue;
   inputValue.push(funcButtonFactory(button, currentState.functionKey));
-  if (button === '√(x)' || button === 'xⁿ') {
+  if (button === '√(x)' || button === 'xⁿ' || button === 'eⁿ') {
     inputValue.push('cArg' + currentState.functionKey);
   }
   return;
