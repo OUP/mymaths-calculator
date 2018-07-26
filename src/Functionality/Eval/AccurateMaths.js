@@ -126,6 +126,6 @@ export function accPower(base, exponent) {
     return base.toPower(exponent);
   } else {
     //case with -ve power
-    return new Fraction('1/' + base.toPower(exponent.abs()).toString());
+    return new Fraction(1).div(base.toPower(exponent.abs()).toString());
   }
 }
