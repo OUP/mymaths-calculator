@@ -10,7 +10,7 @@ export function accurateOp(v1, operation, v2 = 0) {
   v2 = initOp(v2, operation);
   switch (operation) {
     case 'xⁿ':
-      return v1.toPower(v2);
+      return accPower(v1, v2);
 
     case 'x!':
       return factorial(v1);
