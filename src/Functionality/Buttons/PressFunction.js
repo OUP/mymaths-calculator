@@ -11,6 +11,9 @@ export function pressFunction(button, currentState) {
     case 'argIncluded':
       return pressArgIncluded(button, currentState);
 
+    case 'twoArgs':
+      return pressTwoArgs(button, currentState);
+
     case ')':
       return pressCloseBracket(currentState);
 
@@ -38,6 +41,9 @@ function funcType(button) {
 
     case 'frac':
       return 'argBothSides';
+
+    case 'logₐ(x)':
+      return 'twoArgs';
 
     case 'x²':
     case 'x³':
@@ -84,6 +90,16 @@ function pressArgIncluded(button, currentState) {
   return;
 }
 
+function pressTwoArgs(button, currentState) {
+  currentState.cursorPosition++;
+  currentState.functionKey++;
+  const inputValue = currentState.inputValue;
+  inputValue.push(funcButtonFactory(button, currentState.functionKey));
+  inputValue.push('cArg' + currentState.functionKey);
+  inputValue.push(funcButtonFactory('(', currentState.functionKey));
+  inputValue.push(')');
+}
+
 function pressFrac(currentState) {
   currentState.functionKey++;
   const inputValue = currentState.inputValue;
@@ -108,6 +124,7 @@ function funcButtonFactory(func, functionKey) {
 function funcParts(func) {
   switch (func) {
     case 'numerator':
+    case 'logₐ(x)':
       return 2;
 
     default:

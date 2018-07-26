@@ -148,6 +148,9 @@ function funcToTeXMap(func) {
     case ')':
       return ')';
 
+    case 'logₐ(x)':
+      return '\\log_';
+
     case 'eⁿ':
       return 'e^';
 

@@ -100,6 +100,9 @@ export function accurateFunc(func, arg, arg2) {
       case 'tan⁻¹':
         return arg.atan();
 
+      case 'logₐ(x)':
+        return arg2.log(arg);
+
       case '(':
         return arg;
     }

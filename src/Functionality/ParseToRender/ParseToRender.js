@@ -79,6 +79,7 @@ function parseFunc(func) {
     case 'numerator':
     case '√(x)':
     case 'xⁿ':
+    case 'logₐ(x)':
     case 'eⁿ':
       return `${TeX.func(func.function)} ${parseToTeX(arg)}`;
 
