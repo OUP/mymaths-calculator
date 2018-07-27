@@ -31,6 +31,11 @@ function parseNumber(num, displayMode) {
     case 'decimal':
       return parseNumDecimalMode(num);
 
+    case 'ENG0':
+    case 'ENG1':
+    case 'ENG2':
+      return parseNumENGMode(num, displayMode);
+
     default:
     case 'default':
       return parseNumInputMode(num);
@@ -70,6 +75,10 @@ function parseNumDecimalMode(num) {
     num = num.toString();
     return genRecurringDecimal(num);
   }
+}
+
+function parseNumENGMode(num, displayMode) {
+  return '-';
 }
 
 function parseOperator(op) {
