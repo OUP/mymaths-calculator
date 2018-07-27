@@ -15,6 +15,7 @@ const TeX = {
   openBracket: '\\left(',
   closeBracket: '\\right)',
   ans: '\\text {Ans}',
+  ran: '\\text {Ran\\#}',
   cursor: '{\\text{|}}',
   box: '{\\Box}',
   error: '\\text{TeX error}'

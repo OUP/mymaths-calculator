@@ -104,7 +104,12 @@ function parseDefaultFunc(func, arg) {
       ${TeX.openBracket}
       ${parseToTeX(arg)}
       ${TeX.closeBracket}`;
-  } else if (func !== ')' && func !== 'cArg' && func !== 'box') {
+  } else if (
+    func !== ')' &&
+    func !== 'cArg' &&
+    func !== 'box' &&
+    func !== 'Ran#'
+  ) {
     return `${TeX.func(func.function)} ( ${parseToTeX(func.argument, this)}`;
   } else {
     switch (func) {
@@ -113,6 +118,9 @@ function parseDefaultFunc(func, arg) {
 
       case 'box':
         return TeX.box;
+
+      case 'Ran#':
+        return TeX.ran;
     }
   }
 }

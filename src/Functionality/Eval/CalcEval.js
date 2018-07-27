@@ -3,6 +3,7 @@ import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
+import getRan from './GetRan';
 import processValue from './ProcessValue';
 
 //Do the calculation on pressing =
@@ -12,7 +13,7 @@ export function calcEval(inputValue, oldOutput = '0') {
     return oldOutput.toString();
   }
   inputValue = initOutputArray(inputValue);
-  inputValue = replaceAns(inputValue, oldOutput);
+  inputValue = replaceAnsAndRan(inputValue, oldOutput);
   inputValue = assembleNumbers(inputValue);
   inputValue = assembleArguments(inputValue);
   inputValue = filterCloseBrackets(inputValue);
@@ -37,14 +38,16 @@ function filterCloseBrackets(inputArray) {
   return inputArray;
 }
 
-function replaceAns(inputArray, oldOutput) {
-  const ansReplaced = inputArray;
+function replaceAnsAndRan(inputArray, oldOutput) {
+  const replaced = inputArray;
   for (let i = 0; i < inputArray.length; i++) {
-    if (ansReplaced[i] === 'Ans') {
-      ansReplaced[i] = oldOutput[0];
+    if (replaced[i] === 'Ans') {
+      replaced[i] = oldOutput[0];
+    } else if (replaced[i] === 'Ran#') {
+      replaced[i] = getRan();
     }
   }
-  return ansReplaced;
+  return replaced;
 }
 
 function doAllOps(inputArray) {

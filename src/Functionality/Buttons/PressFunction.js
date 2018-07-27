@@ -14,6 +14,9 @@ export function pressFunction(button, currentState) {
     case 'twoArgs':
       return pressTwoArgs(button, currentState);
 
+    case 'noArg':
+      return pressNoArg(button, currentState);
+
     case ')':
       return pressCloseBracket(currentState);
 
@@ -44,6 +47,9 @@ function funcType(button) {
 
     case 'logₐ(x)':
       return 'twoArgs';
+
+    case 'Ran#':
+      return 'noArg';
 
     case 'x²':
     case 'x³':
@@ -98,6 +104,12 @@ function pressTwoArgs(button, currentState) {
   inputValue.push('cArg' + currentState.functionKey);
   inputValue.push(funcButtonFactory('(', currentState.functionKey));
   inputValue.push(')');
+}
+
+function pressNoArg(button, currentState) {
+  currentState.cursorPosition++;
+  currentState.inputValue.push(button);
+  return;
 }
 
 function pressFrac(currentState) {
