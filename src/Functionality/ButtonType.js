@@ -67,7 +67,9 @@ function checkForOperator(b) {
     b === '÷' ||
     b === '×10ⁿ' ||
     b === 'x!' ||
-    b === '%'
+    b === '%' ||
+    b === 'nCr' ||
+    b === 'nPr'
   ) {
     return true;
   } else {

@@ -95,6 +95,12 @@ function parseOperator(op) {
     case '%':
       return '{\\%}';
 
+    case 'nCr':
+      return '\\text{C}';
+
+    case 'nPr':
+      return '\\text{P}';
+
     default:
       return op;
   }
