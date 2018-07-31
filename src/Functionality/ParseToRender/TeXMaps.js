@@ -78,7 +78,16 @@ function parseNumDecimalMode(num) {
 }
 
 function parseNumENGMode(num, displayMode) {
-  return '-';
+  switch (displayMode) {
+    case 'ENG0':
+      return `${new Decimal(num).div(1000).toString()} × 10^{3}`;
+
+    case 'ENG1':
+      return `${new Decimal(num).div(1000000).toString()} × 10^{6}`;
+
+    case 'ENG2':
+      return `${new Decimal(num).div(1000000000).toString()} × 10^{9}`;
+  }
 }
 
 function parseOperator(op) {
