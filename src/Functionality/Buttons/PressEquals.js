@@ -11,6 +11,7 @@ export function pressEquals(currentState) {
   if (decideToStore(currentState)) {
     currentState.storedInputs.push(currentState.inputValue);
   }
+  currentState.displayMode = 'fraction';
   return currentState;
 }
 

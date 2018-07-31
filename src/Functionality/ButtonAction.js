@@ -16,7 +16,6 @@ export function buttonAction(button, currentState) {
       return pressInput(button, bType, currentState);
 
     case '=':
-      currentState.displayMode = 'fraction';
       return pressEquals(currentState);
 
     case 'DEL':
