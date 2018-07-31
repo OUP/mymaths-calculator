@@ -22,7 +22,7 @@ export function findNextOp(inputArray) {
   let i;
   let j;
 
-  for (i = 1; i <= 6; i++) {
+  for (i = 1; i <= 7; i++) {
     for (j = 0; j < prioritisedArray.length; j++) {
       if (prioritisedArray[j].priority === i) {
         output.array = prioritisedArray;
@@ -67,20 +67,26 @@ export function opPriority(element) {
         return 2;
       //Strictly should be 4 but setting it to 2 is an auto-correct
 
-      case '÷':
+      case 'nPr':
         return 3;
 
+      case 'nCr':
+        return 3;
+
+      case '÷':
+        return 4;
+
       case '×':
-        return 4;
-
-      case '×10ⁿ':
-        return 4;
-
-      case '–':
         return 5;
 
-      case '+':
+      case '×10ⁿ':
+        return 5;
+
+      case '–':
         return 6;
+
+      case '+':
+        return 7;
 
       default:
         console.error("Don't know the priority of " + element.value);

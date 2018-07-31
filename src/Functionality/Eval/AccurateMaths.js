@@ -31,6 +31,12 @@ export function accurateOp(v1, operation, v2 = 0) {
     case '+':
       return v1.add(v2);
 
+    case 'nPr':
+      return nPr(v1, v2);
+
+    case 'nCr':
+      return nCr(v1, v2);
+
     default:
       console.error("Don't know how to do the operation " + operation);
       return ['error'];
@@ -131,4 +137,16 @@ export function accPower(base, exponent) {
     //case with -ve power
     return new Fraction(1).div(base.toPower(exponent.abs()).toString());
   }
+}
+
+function nPr(n, r) {
+  return accurateOp(
+    accurateOp(n, 'x!'),
+    '÷',
+    accurateOp(accurateOp(n, '–', r), 'x!')
+  );
+}
+
+function nCr(n, r) {
+  return accurateOp(accurateOp(n, 'nPr', r), '÷', accurateOp(r, 'x!'));
 }
