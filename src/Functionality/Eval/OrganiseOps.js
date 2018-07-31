@@ -60,15 +60,6 @@ export function opPriority(element) {
       case 'xⁿ':
         return 2;
 
-      case 'x²':
-        return 2;
-
-      case 'x³':
-        return 2;
-
-      case 'x⁻¹':
-        return 2;
-
       case 'x!':
         return 2;
 
