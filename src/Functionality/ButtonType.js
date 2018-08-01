@@ -50,8 +50,8 @@ function checkForNumber(b) {
     b === parseFloat(b).toString() ||
     b.includes('.') ||
     b.includes('/') ||
-    b === '(-)' ||
-    b === '-'
+    b.includes('(-)') ||
+    b.includes('-')
   ) {
     return true;
   } else {
