@@ -60,5 +60,5 @@ function pressPow10(currentState) {
   currentState = pressButton('×', currentState);
   currentState = pressButton('1', currentState);
   currentState = pressButton('0', currentState);
-  return pressInput('xⁿ', 'operator', currentState);
+  return pressInput('xⁿ', 'function', currentState);
 }
