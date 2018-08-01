@@ -78,15 +78,22 @@ function parseNumDecimalMode(num) {
 }
 
 function parseNumENGMode(num, displayMode) {
+  const eng0Val = engMaxPow10(num);
   switch (displayMode) {
     case 'ENG0':
-      return `${new Decimal(num).div(1000).toString()} × 10^{3}`;
+      return `${new Decimal(num)
+        .div(Math.pow(10, eng0Val))
+        .toString()} × 10^{${eng0Val.toString()}}`;
 
     case 'ENG1':
-      return `${new Decimal(num).div(1000000).toString()} × 10^{6}`;
+      return `${new Decimal(num)
+        .div(Math.pow(10, eng0Val - 3))
+        .toString()} × 10^{${(eng0Val - 3).toString()}}`;
 
     case 'ENG2':
-      return `${new Decimal(num).div(1000000000).toString()} × 10^{9}`;
+      return `${new Decimal(num)
+        .div(Math.pow(10, eng0Val - 6))
+        .toString()} × 10^{${(eng0Val - 6).toString()}}`;
   }
 }
 
@@ -210,4 +217,9 @@ function genRecurringDecimal(decimal) {
     }
   }
   return decArray.join('');
+}
+
+function engMaxPow10(num) {
+  const pow10 = Math.floor(Math.log10(parseFloat(num)));
+  return pow10 - pow10 % 3;
 }
