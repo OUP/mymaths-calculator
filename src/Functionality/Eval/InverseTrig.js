@@ -1,33 +1,59 @@
-import { generateDecimal } from './SymbolicTrig';
-import Decimal from 'decimal.js/decimal';
+import { checkIfFraction, convertFracToDecimal } from '../Utilities';
 
 export default function inverseTrig(trigFunc, arg) {
-  return specialCaseValue(trigFunc, arg)
-    ? specialCaseInvTrig(trigFunc, arg)
-    : standardInvTrig(trigFunc, arg);
+  if (specialCaseValue(trigFunc, arg)) {
+    return specialCaseInvTrig(trigFunc, arg);
+  } else {
+    return standardInvTrig(trigFunc, arg);
+  }
 }
 
 function specialCaseValue(trigFunc, arg) {
-  switch (trigFunc) {
-    case 'sin⁻¹':
-      return sinSpecialCaseValue(arg);
-
-    case 'cos⁻¹':
-      return cosSpecialCaseValue(arg);
-
-    case 'tan⁻¹':
-      return tanSpecialCaseValue(arg);
+  switch (arg.toString()) {
+    case '-1':
+    case '0':
+    case '1':
+    case '-0.5':
+    case '0.5':
+      return true;
 
     default:
-      return 0;
+      break;
+  }
+
+  switch (trigFunc) {
+    case 'sin⁻¹':
+    case 'cos⁻¹':
+      return specialCaseAsinAcos(arg);
+
+    case 'tan⁻¹':
+      return specialCaseATan(arg);
+
+    default:
+      return false;
   }
 }
 
-function standardInvTrig(trigFunc, arg) {
-  if (arg.constructor !== Decimal) {
-    arg = generateDecimal(arg);
+function specialCaseAsinAcos(arg) {
+  switch (arg) {
+    default:
+      return false;
   }
+}
 
+function specialCaseATan(arg) {
+  switch (arg) {
+    default:
+      return false;
+  }
+}
+
+function specialCaseInvTrig(trigFunc, arg) {}
+
+function standardInvTrig(trigFunc, arg) {
+  if (checkIfFraction(arg)) {
+    arg = convertFracToDecimal(arg);
+  }
   switch (trigFunc) {
     case 'sin⁻¹':
       return arg.asin();
@@ -39,83 +65,6 @@ function standardInvTrig(trigFunc, arg) {
       return arg.atan();
 
     default:
-      console.warn('invalid trigFunc');
-      return '0';
-  }
-}
-
-function specialCaseInvTrig(trigFunc, arg) {
-  switch (trigFunc) {
-    case 'sin⁻¹':
-      return asinSpecialCase(arg);
-
-    case 'cos⁻¹':
-      return acosSpecialCase(arg);
-
-    case 'tan⁻¹':
-      return atanSpecialCase(arg);
-
-    default:
       return 0;
-  }
-}
-
-function sinSpecialCaseValue(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function cosSpecialCaseValue(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function tanSpecialCaseValue(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function asinSpecialCase(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function acosSpecialCase(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
-  }
-}
-
-function atanSpecialCase(arg) {
-  switch (arg) {
-    case '0':
-      return true;
-
-    default:
-      return false;
   }
 }

@@ -3,6 +3,7 @@ import Decimal from 'decimal.js/decimal';
 import buttonType from '../ButtonType';
 import { funcOnSymbol } from './SymbolOps';
 import { checkForSymbols, checkIfFraction } from '../Utilities';
+import inverseTrig from './InverseTrig';
 const Fraction = require('fraction.js');
 
 export function accurateOp(v1, operation, v2 = 0) {
@@ -98,13 +99,9 @@ export function accurateFunc(func, arg, arg2) {
         return arg.tan();
 
       case 'sin⁻¹':
-        return arg.asin();
-
       case 'cos⁻¹':
-        return arg.acos();
-
       case 'tan⁻¹':
-        return arg.atan();
+        return inverseTrig(func, arg);
 
       case 'logₐ(x)':
         return arg2.log(arg);
