@@ -1,12 +1,6 @@
-import Decimal from 'decimal.js/decimal';
-import { FractionExpression, Term, Expression } from '../Classes/Symbol';
 import { numericOp } from './NumericOp';
 import { checkIfFraction, convertFracToDecimal } from '../Utilities';
-import {
-  SquareRoot,
-  SqrtExpression,
-  SqrtFractionExpression
-} from '../Classes/Surd';
+import construct from './Construct';
 import processValue from './ProcessValue';
 import symbolicTrig from './SymbolicTrig';
 import inverseTrig from './InverseTrig';
@@ -68,41 +62,6 @@ export function symbolicOp(v1, operation, v2 = 0) {
   }
 
   return processValue(safeSimplify(result));
-}
-
-function construct(x) {
-  let term, exp;
-  const defaultDenom = new Expression(new Term(1));
-  switch (true) {
-    case x.constructor === String:
-      if (x.includes('π')) {
-        term = new Term(1, ['π'], [1]);
-        exp = new Expression([term]);
-        return new FractionExpression(exp, defaultDenom);
-      } else if (parseFloat(x).toString() === x) {
-        term = new Term(parseFloat(x));
-        exp = new Expression([term]);
-        return new FractionExpression(exp, defaultDenom);
-      } else if (x.includes('√')) {
-        term = new SquareRoot(x);
-        exp = new SqrtExpression([term]);
-        return new SqrtFractionExpression(exp, defaultDenom);
-      } else if (x.includes('/')) {
-        term = new Term(x);
-        exp = new Expression([term]);
-        return new FractionExpression(exp, defaultDenom).simplify();
-      }
-      break;
-
-    case checkIfFraction(x):
-    case x.constructor === Decimal:
-      term = new Term(x);
-      exp = new Expression([term]);
-      return new FractionExpression(exp, defaultDenom);
-
-    default:
-      return x;
-  }
 }
 
 export function funcOnSymbol(func, arg, arg2) {
