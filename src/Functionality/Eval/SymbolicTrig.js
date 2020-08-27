@@ -1,8 +1,9 @@
 import Decimal from 'decimal.js/decimal';
 const Fraction = require('fraction.js');
 import { numericOp } from './NumericOp';
-import { identicalArrays, checkIfFraction } from '../Utilities';
+import { identicalArrays } from '../Utilities';
 import { sqrtFactory } from '../Classes/Surd';
+import { generateDecimal, convertFracStringToDecimal } from './GenerateDecimal';
 
 export default function symbolicTrig(trigFunc, arg) {
   if (isMultipleOfPi(arg)) {
@@ -62,23 +63,6 @@ function standardTrigFunc(trigFunc, arg) {
     default:
       console.warn('invalid trigFunc');
       return '0';
-  }
-}
-
-export function generateDecimal(value) {
-  switch (value.constructor) {
-    case String:
-      return convertFracStringToDecimal(value);
-
-    case Fraction:
-      return convertFracStringToDecimal(value.toString());
-
-    case Decimal:
-      return value;
-
-    case Number:
-    default:
-      return new Decimal(value);
   }
 }
 
@@ -286,14 +270,5 @@ function tanWithPi(coefStr) {
     default:
       const coef = convertFracStringToDecimal(coefStr);
       return standardTrigFunc('tan', coef.times(Math.PI));
-  }
-}
-
-function convertFracStringToDecimal(fracString) {
-  if (checkIfFraction(fracString)) {
-    const fraction = new Fraction(fracString);
-    return new Decimal(fraction.n).div(fraction.d).times(fraction.s);
-  } else {
-    return new Decimal(fracString);
   }
 }

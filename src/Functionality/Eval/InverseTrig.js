@@ -1,11 +1,13 @@
-import { checkIfFraction, convertFracToDecimal } from '../Utilities';
 import construct from './Construct';
+import { generateDecimal } from './GenerateDecimal';
 
 export default function inverseTrig(trigFunc, arg) {
   if (specialCaseArg(trigFunc, arg)) {
     return specialCaseInvTrig(trigFunc, arg);
   } else {
-    return standardInvTrig(trigFunc, arg);
+    const newArg = generateDecimal(arg);
+    console.log('newArg', newArg);
+    return standardInvTrig(trigFunc, newArg);
   }
 }
 
@@ -36,6 +38,7 @@ function specialCaseArg(trigFunc, arg) {
 }
 
 function specialCaseArgAsinAcos(arg) {
+  console.log(arg.toString());
   switch (arg) {
     default:
       return false;
@@ -110,9 +113,6 @@ function specialCaseValAcos(arg) {
 }
 
 function standardInvTrig(trigFunc, arg) {
-  if (checkIfFraction(arg)) {
-    arg = convertFracToDecimal(arg);
-  }
   switch (trigFunc) {
     case 'sin⁻¹':
       return arg.asin();
