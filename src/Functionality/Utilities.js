@@ -144,7 +144,8 @@ export function identicalArrays(arr1, arr2) {
 export function checkIfFraction(val) {
   //val can be undefined
   if (val) {
-    return makeString(val).includes('/');
+    const valStr = makeString(val);
+    return valStr.includes('/') || valStr.includes('(');
   }
   return false;
 }
