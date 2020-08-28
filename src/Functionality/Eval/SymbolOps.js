@@ -2,7 +2,7 @@ import { numericOp } from './NumericOp';
 import { checkIfFraction, convertFracToDecimal } from '../Utilities';
 import construct from './Construct';
 import processValue from './ProcessValue';
-import symbolicTrig from './SymbolicTrig';
+import trig from './Trig';
 import inverseTrig from './InverseTrig';
 
 export function symbolicOp(v1, operation, v2 = 0) {
@@ -98,15 +98,15 @@ export function funcOnSymbol(func, arg, arg2) {
       break;
 
     case 'sin(x)':
-      result = symbolicTrig('sin', arg);
+      result = trig('sin', arg);
       break;
 
     case 'cos(x)':
-      result = symbolicTrig('cos', arg);
+      result = trig('cos', arg);
       break;
 
     case 'tan(x)':
-      result = symbolicTrig('tan', arg);
+      result = trig('tan', arg);
       break;
 
     case 'sin⁻¹':

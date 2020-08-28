@@ -5,7 +5,7 @@ import { identicalArrays } from '../Utilities';
 import { sqrtFactory } from '../Classes/Surd';
 import { generateDecimal, convertFracStringToDecimal } from './GenerateDecimal';
 
-export default function symbolicTrig(trigFunc, arg) {
+export default function trig(trigFunc, arg) {
   if (isMultipleOfPi(arg)) {
     return trigWithPi(trigFunc, arg);
   } else {
