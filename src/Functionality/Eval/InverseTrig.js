@@ -6,12 +6,15 @@ export default function inverseTrig(trigFunc, arg) {
     return specialCaseInvTrig(trigFunc, arg);
   } else {
     const newArg = generateDecimal(arg);
-    console.log('newArg', newArg);
     return standardInvTrig(trigFunc, newArg);
   }
 }
 
 function specialCaseArg(trigFunc, arg) {
+  if (arg.simplify) {
+    arg = arg.simplify();
+  }
+
   switch (arg.toString()) {
     case '-1':
     case '0':
@@ -38,8 +41,13 @@ function specialCaseArg(trigFunc, arg) {
 }
 
 function specialCaseArgAsinAcos(arg) {
-  console.log(arg.toString());
-  switch (arg) {
+  switch (arg.toString()) {
+    case '\\frac{\\sqrt {2}} {2}':
+    case '\\frac{-\\sqrt {2}} {2}':
+    case '\\frac{\\sqrt {3}} {2}':
+    case '\\frac{-\\sqrt {3}} {2}':
+      return true;
+
     default:
       return false;
   }
@@ -65,9 +73,7 @@ function specialCaseInvTrig(trigFunc, arg) {
 function specialCaseValAsin(arg) {
   switch (arg.toString()) {
     case '-1':
-      return construct('π')
-        .times(-1)
-        .div(2);
+      return construct('π').div(-2);
 
     case '0':
       return 0;
@@ -76,12 +82,22 @@ function specialCaseValAsin(arg) {
       return construct('π').div(2);
 
     case '-0.5':
-      return construct('π')
-        .times(-1)
-        .div(6);
+      return construct('π').div(-6);
 
     case '0.5':
       return construct('π').div(6);
+
+    case '\\frac{\\sqrt {2}} {2}':
+      return construct('π').div(4);
+
+    case '\\frac{-\\sqrt {2}} {2}':
+      return construct('π').div(-4);
+
+    case '\\frac{\\sqrt {3}} {2}':
+      return construct('π').div(3);
+
+    case '\\frac{-\\sqrt {3}} {2}':
+      return construct('π').div(-3);
 
     default:
       return 0;
@@ -106,6 +122,22 @@ function specialCaseValAcos(arg) {
 
     case '0.5':
       return construct('π').div(3);
+
+    case '\\frac{\\sqrt {2}} {2}':
+      return construct('π').div(4);
+
+    case '\\frac{-\\sqrt {2}} {2}':
+      return construct('π')
+        .times(3)
+        .div(4);
+
+    case '\\frac{\\sqrt {3}} {2}':
+      return construct('π').div(6);
+
+    case '\\frac{-\\sqrt {3}} {2}':
+      return construct('π')
+        .times(5)
+        .div(6);
 
     default:
       return 0;
