@@ -9,12 +9,13 @@ export default function trig(trigFunc, arg) {
   if (isMultipleOfPi(arg)) {
     return trigWithPi(trigFunc, arg);
   } else {
-    return standardTrigFunc(trigFunc, arg.evaluate());
+    return standardTrigFunc(trigFunc, arg);
   }
 }
 
 function isMultipleOfPi(arg) {
   if (
+    arg.denominator &&
     numeratorIsMultipleOfPi(arg.numerator) &&
     denominatorIsConstant(arg.denominator)
   ) {
@@ -47,6 +48,9 @@ function denominatorIsConstant(denominator) {
 }
 
 function standardTrigFunc(trigFunc, arg) {
+  if (arg.evaluate) {
+    arg = arg.evaluate();
+  }
   if (arg.constructor !== Decimal) {
     arg = generateDecimal(arg);
   }
