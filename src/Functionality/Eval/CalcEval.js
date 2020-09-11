@@ -1,5 +1,6 @@
 import buttonType from '../ButtonType';
 import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
+import insertImplicitOps from './InsertImplicitOps';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
@@ -17,6 +18,7 @@ export function calcEval(inputValue, oldOutput = '0') {
   inputValue = assembleNumbers(inputValue);
   inputValue = assembleArguments(inputValue);
   inputValue = filterCloseBrackets(inputValue);
+  inputValue = insertImplicitOps(inputValue);
   inputValue = doAllOps(inputValue);
   handleEmptyOutput(inputValue);
   return processValue(inputValue[0].value);
