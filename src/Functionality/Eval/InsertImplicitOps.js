@@ -33,6 +33,10 @@ function detectNumber(possibleNumber) {
 }
 
 function detectFunction(possibleMultiplicand) {
-  return Boolean(possibleMultiplicand.type);
+  return (
+    possibleMultiplicand.function &&
+    possibleMultiplicand.function !== 'numerator' &&
+    possibleMultiplicand.function !== 'denominator'
+  );
   // existence of type property indicates a function
 }
