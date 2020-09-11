@@ -14,21 +14,25 @@ function insertAllImplicitMultiplications(inputArray) {
 
 function detectImplicitMultiplication(inputArray, index) {
   return (
-    detectNumber(inputArray[index]) && detectMultiplicand(inputArray[index + 1])
+    detectMultiplicationTerm(inputArray[index]) &&
+    detectMultiplicationTerm(inputArray[index + 1])
   );
+}
+
+function detectMultiplicationTerm(el) {
+  return detectNumber(el) || detectFunction(el) || el === 'π';
 }
 
 function insertImplicitMultiplication(inputArray, index) {
   inputArray.splice(index + 1, 0, '×');
   return inputArray;
-  //return inputArray.splice(index, 0, '×');
 }
 
 function detectNumber(possibleNumber) {
   return possibleNumber === parseFloat(possibleNumber).toString();
 }
 
-function detectMultiplicand(possibleMultiplicand) {
+function detectFunction(possibleMultiplicand) {
   return Boolean(possibleMultiplicand.type);
   // existence of type property indicates a function
 }
