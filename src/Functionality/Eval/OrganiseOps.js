@@ -57,36 +57,39 @@ export function opPriority(element) {
     return 0;
   } else {
     switch (element.value) {
-      case 'xⁿ':
+      case 'mixedFraction':
         return 2;
+
+      case 'xⁿ':
+        return 3;
 
       case 'x!':
-        return 2;
+        return 3;
 
       case '%':
-        return 2;
+        return 3;
       //Strictly should be 4 but setting it to 2 is an auto-correct
 
       case 'nPr':
-        return 3;
-
-      case 'nCr':
-        return 3;
-
-      case '÷':
         return 4;
 
+      case 'nCr':
+        return 4;
+
+      case '÷':
+        return 5;
+
       case '×':
-        return 5;
-
-      case '×10ⁿ':
-        return 5;
-
-      case '–':
         return 6;
 
-      case '+':
+      case '×10ⁿ':
+        return 6;
+
+      case '–':
         return 7;
+
+      case '+':
+        return 8;
 
       default:
         console.error("Don't know the priority of " + element.value);

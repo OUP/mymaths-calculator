@@ -69,7 +69,8 @@ function checkForOperator(b) {
     b === 'x!' ||
     b === '%' ||
     b === 'nCr' ||
-    b === 'nPr'
+    b === 'nPr' ||
+    b === 'mixedFraction'
   ) {
     return true;
   } else {

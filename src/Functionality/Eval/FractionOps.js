@@ -22,6 +22,7 @@ export function fractionOp(v1, operation, v2 = 0) {
       return fracSubtract(v1, v2);
 
     case '+':
+    case 'mixedFraction':
       return fracAdd(v1, v2);
 
     default:
