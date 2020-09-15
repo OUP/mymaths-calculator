@@ -103,7 +103,7 @@ function checkForMode(b) {
 }
 
 function checkForDisplay(b) {
-  if (b === 'S⇔D' || b === 'ENG') {
+  if (b === 'S⇔D' || b === 'ENG' || b === 'mx⇔fr') {
     return true;
   } else {
     return false;

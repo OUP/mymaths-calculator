@@ -31,6 +31,9 @@ function parseNumber(num, displayMode) {
     case 'decimal':
       return parseNumDecimalMode(num);
 
+    case 'mixed':
+      return parseNumMixedMode(num);
+
     case 'ENG0':
     case 'ENG1':
     case 'ENG2':
@@ -94,6 +97,24 @@ function parseNumENGMode(num, displayMode) {
       return `${new Decimal(num)
         .div(Math.pow(10, eng0Val - 6))
         .toString()} × 10^{${(eng0Val - 6).toString()}}`;
+  }
+}
+
+function parseNumMixedMode(num) {
+  if (!checkIfFraction(num) && !num.includes('(')) {
+    num = new Decimal(num);
+    const testFracEl = num.toFraction(1000);
+    const fracEl = num.toFraction();
+    if (fracEl[1].toString() !== '1' && identicalArrays(fracEl, testFracEl)) {
+      return genMixedFraction(
+        new Fraction(fracEl[0].div(fracEl[1]).toString())
+      );
+    } else {
+      return num;
+    }
+  } else {
+    num = new Fraction(num);
+    return genMixedFraction(num);
   }
 }
 
@@ -200,6 +221,27 @@ function genFraction({ n, s, d }) {
     return `${funcToTeXMap('fraction')}
     { -${n} } { ${d} }
     \\normalsize`;
+  }
+}
+
+function genMixedFraction({ n, s, d }) {
+  const integer = Math.floor(n / d);
+  const numerator = n - integer * d;
+  if (s === 1) {
+    return (
+      integer +
+      `${funcToTeXMap('fraction')}
+  { ${numerator} } { ${d} }
+  \\normalsize`
+    );
+  } else {
+    const negInteger = integer * -1;
+    return (
+      negInteger +
+      `${funcToTeXMap('fraction')}
+    { ${numerator} } { ${d} }
+    \\normalsize`
+    );
   }
 }
 

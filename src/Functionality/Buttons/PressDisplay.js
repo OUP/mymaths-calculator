@@ -11,6 +11,14 @@ export function pressDisplay(button, currentState) {
       }
       break;
 
+    case 'mx⇔fr':
+      if (currentState.displayMode !== 'mixed') {
+        currentState.displayMode = 'mixed';
+      } else {
+        currentState.displayMode = 'fraction';
+      }
+      break;
+
     case 'ENG':
       pressENG(currentState);
       break;
