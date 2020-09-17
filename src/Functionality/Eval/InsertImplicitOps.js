@@ -52,7 +52,8 @@ function detectFunction(possibleMultiplicand) {
   return (
     possibleMultiplicand.function &&
     possibleMultiplicand.function !== 'numerator' &&
-    possibleMultiplicand.function !== 'denominator'
+    possibleMultiplicand.function !== 'denominator' &&
+    possibleMultiplicand.function !== 'xⁿ'
   );
   // existence of type property indicates a function
 }
