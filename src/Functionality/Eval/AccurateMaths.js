@@ -114,7 +114,7 @@ export function accurateFunc(func, arg, arg2) {
 }
 
 const factorial = function recur(v1, index = 1, result = 1) {
-  if (v1.round().eq(v1)) {
+  if (v1.gte(0) && v1.round().eq(v1)) {
     index = new Decimal(index.toString());
     result = index.times(result);
     if (index.lt(v1)) {
