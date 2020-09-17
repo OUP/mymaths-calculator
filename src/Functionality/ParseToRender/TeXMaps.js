@@ -62,7 +62,7 @@ function parseNumFractionMode(num) {
     if (fracEl[1].toString() !== '1' && identicalArrays(fracEl, testFracEl)) {
       return genFraction(new Fraction(fracEl[0].div(fracEl[1]).toString()));
     } else {
-      return num;
+      return reduceDecimal(num);
     }
   } else {
     num = new Fraction(num);
@@ -70,9 +70,13 @@ function parseNumFractionMode(num) {
   }
 }
 
+function reduceDecimal(num) {
+  return new Decimal(new Decimal(num).toPrecision(10)).times(1);
+}
+
 function parseNumDecimalMode(num) {
   if (!checkIfFraction(num)) {
-    return num.toString();
+    return reduceDecimal(num);
   } else {
     num = new Fraction(num);
     num = num.toString();
@@ -110,7 +114,7 @@ function parseNumMixedMode(num) {
         new Fraction(fracEl[0].div(fracEl[1]).toString())
       );
     } else {
-      return num;
+      return reduceDecimal(num);
     }
   } else {
     num = new Fraction(num);
