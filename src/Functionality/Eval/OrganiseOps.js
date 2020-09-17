@@ -22,7 +22,7 @@ export function findNextOp(inputArray) {
   let i;
   let j;
 
-  for (i = 1; i <= 7; i++) {
+  for (i = 1; i <= 8; i++) {
     for (j = 0; j < prioritisedArray.length; j++) {
       if (prioritisedArray[j].priority === i) {
         output.array = prioritisedArray;
