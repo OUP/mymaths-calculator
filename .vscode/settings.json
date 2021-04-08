@@ -1,0 +1,6 @@
+{
+  "prettier.singleQuote": true,
+  "prettier.prettierPath": "./node_modules/prettier",
+  "prettier.enableDebugLogs": true,
+  "prettier.arrowParens": "avoid"
+}

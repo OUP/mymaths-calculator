@@ -267,5 +267,5 @@ function genRecurringDecimal(decimal) {
 
 function engMaxPow10(num) {
   const pow10 = Math.floor(Math.log10(parseFloat(num)));
-  return pow10 >= 0 ? pow10 - pow10 % 3 : pow10 - pow10 % 3 - 3;
+  return pow10 >= 0 ? pow10 - (pow10 % 3) : pow10 - (pow10 % 3) - 3;
 }
