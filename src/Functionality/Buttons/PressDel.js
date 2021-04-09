@@ -20,28 +20,22 @@ export const pressDel = function recur(currentState) {
 };
 
 function hiddenCharCheck(currentState) {
-  return (
-    buttonType(currentState.inputValue[currentState.inputValue.length - 1]) ===
-      'cArg' ||
-    buttonType(currentState.inputValue[currentState.inputValue.length - 1]) ===
-      'oArg'
-  );
+  const char = currentState.inputValue[currentState.inputValue.length - 1];
+  const isHiddenChar = cOrO => buttonType(char) === hiddenChar(cOrO);
+  return isHiddenChar('c') || isHiddenChar('o');
 }
 
 function safeCheckKey(el) {
-  if (el) {
-    if (el.key) {
-      return true;
-    }
-  }
-  return false;
+  return el && el.key;
 }
 
 function destroyHiddenChars(currentState, functionKey) {
-  currentState.inputValue = currentState.inputValue.filter(
-    x => x !== 'cArg' + functionKey
-  );
-  currentState.inputValue = currentState.inputValue.filter(
-    x => x !== 'oArg' + functionKey
-  );
+  const key = cOrO => hiddenChar(cOrO) + functionKey;
+  currentState.inputValue = currentState.inputValue
+    .filter(x => x !== key('c'))
+    .filter(x => x !== key('o'));
+}
+
+function hiddenChar(cOrO) {
+  return cOrO + 'Arg';
 }
