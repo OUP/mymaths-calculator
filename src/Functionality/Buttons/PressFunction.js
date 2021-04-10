@@ -115,10 +115,12 @@ function pressNoArg(button, currentState) {
 function pressFrac(currentState) {
   currentState.functionKey++;
   const inputValue = currentState.inputValue;
-  inputValue.push(funcButtonFactory('numerator', currentState.functionKey));
-  inputValue.push('cArg' + currentState.functionKey);
-  inputValue.push(funcButtonFactory('denominator', currentState.functionKey));
-  inputValue.push('cArg' + currentState.functionKey);
+  const pushFractionPart = part => {
+    inputValue.push(funcButtonFactory(part, currentState.functionKey));
+    inputValue.push('cArg' + currentState.functionKey);
+  };
+  pushFractionPart('numerator');
+  pushFractionPart('denominator');
   return;
 }
 

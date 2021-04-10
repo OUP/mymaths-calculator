@@ -11,6 +11,9 @@ export const pressDel = function recur(currentState) {
     if (safeCheckKey(deleted)) {
       destroyHiddenChars(currentState, deleted.key);
     }
+    if (isFraction(deleted)) {
+      destroyCorrespondingFraction(currentState, deleted.key);
+    }
   }
   if (currentState.cursorPosition > 0) {
     currentState.cursorPosition--;
@@ -29,6 +32,10 @@ function safeCheckKey(el) {
   return el && el.key;
 }
 
+function isFraction(el) {
+  return el.function === 'numerator' || el.function === 'denominator';
+}
+
 function destroyHiddenChars(currentState, functionKey) {
   const key = cOrO => hiddenChar(cOrO) + functionKey;
   currentState.inputValue = currentState.inputValue
@@ -38,4 +45,10 @@ function destroyHiddenChars(currentState, functionKey) {
 
 function hiddenChar(cOrO) {
   return cOrO + 'Arg';
+}
+
+function destroyCorrespondingFraction(currentState, functionKey) {
+  currentState.inputValue = currentState.inputValue.filter(
+    x => !x.key || x.key !== functionKey
+  );
 }
