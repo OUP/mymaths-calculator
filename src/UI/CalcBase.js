@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
 import './CalcBase.css';
 import ButtonsGrid from './ButtonsGrid';
 import {
@@ -25,29 +24,27 @@ class CalcBase extends Component {
 
   render() {
     return (
-      <Draggable>
-        <div className="CalcBase">
-          <div id="Input" className="InputDisplay" />
-          <div className="OutputDisplay">
-            <div id="Output" className="OutputText" />
-          </div>
-          <ButtonsGrid
-            press={this.press}
-            shift={this.state.shift}
-            position="top"
-          />
-          <ButtonsGrid
-            press={this.press}
-            shift={this.state.shift}
-            position="middle"
-          />
-          <ButtonsGrid
-            press={this.press}
-            shift={this.state.shift}
-            position="bottom"
-          />
+      <div className="CalcBase">
+        <div id="Input" className="InputDisplay" />
+        <div className="OutputDisplay">
+          <div id="Output" className="OutputText" />
         </div>
-      </Draggable>
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="top"
+        />
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="middle"
+        />
+        <ButtonsGrid
+          press={this.press}
+          shift={this.state.shift}
+          position="bottom"
+        />
+      </div>
     );
   }
 }
