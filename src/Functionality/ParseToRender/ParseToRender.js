@@ -62,6 +62,9 @@ function parseElToTeX(el) {
     case '|':
       return TeX.cursor;
 
+    case 'error':
+      return TeX.error(el);
+
     default:
       console.error('unexpected character', el);
       return TeX.error;

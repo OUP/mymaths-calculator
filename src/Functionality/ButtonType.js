@@ -32,6 +32,9 @@ export default function buttonType(b) {
     case checkForNull(b):
       return null;
 
+    case checkForError(b):
+      return 'error';
+
     default:
       return 'function';
   }
@@ -139,6 +142,12 @@ function checkForNull(b) {
     return true;
   } else {
     return false;
+  }
+}
+
+function checkForError(b) {
+  if (b.includes('error')) {
+    return true;
   }
 }
 

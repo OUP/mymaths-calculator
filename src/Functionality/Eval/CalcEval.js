@@ -6,6 +6,7 @@ import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';
 import getRan from './GetRan';
 import processValue from './ProcessValue';
+import handleError from './handleError';
 
 //Do the calculation on pressing =
 export function calcEval(inputValue, oldOutput = '0') {
@@ -13,15 +14,20 @@ export function calcEval(inputValue, oldOutput = '0') {
     //Don't remove the old output if there's nothing to execute
     return oldOutput.toString();
   }
-  inputValue = initOutputArray(inputValue);
-  inputValue = replaceAnsAndRan(inputValue, oldOutput);
-  inputValue = assembleNumbers(inputValue);
-  inputValue = assembleArguments(inputValue);
-  inputValue = filterCloseBrackets(inputValue);
-  inputValue = insertImplicitOps(inputValue);
-  inputValue = doAllOps(inputValue);
-  handleEmptyOutput(inputValue);
-  return processValue(inputValue[0].value);
+  try {
+    inputValue = initOutputArray(inputValue);
+    inputValue = replaceAnsAndRan(inputValue, oldOutput);
+    inputValue = assembleNumbers(inputValue);
+    inputValue = assembleArguments(inputValue);
+    inputValue = filterCloseBrackets(inputValue);
+    inputValue = insertImplicitOps(inputValue);
+    inputValue = doAllOps(inputValue);
+    handleEmptyOutput(inputValue);
+    return processValue(inputValue[0].value);
+  } catch (error) {
+    console.log(error.name);
+    return handleError(error);
+  }
 }
 
 function initOutputArray(inputArray) {

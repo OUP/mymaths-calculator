@@ -12,13 +12,13 @@ const TeX = {
   operator: parseOperator,
   symbol: parseSymbol,
   func: funcToTeXMap,
+  error: parseError,
   openBracket: '\\left(',
   closeBracket: '\\right)',
   ans: '\\text {Ans}',
   ran: '\\text {Ran\\#}',
   cursor: '{\\text{|}}',
-  box: '{\\Box}',
-  error: '\\text{TeX error}'
+  box: '{\\Box}'
 };
 
 export default TeX;
@@ -158,6 +158,10 @@ function parseSymbol(symbol, displayMode) {
     default:
       return symbol.toString();
   }
+}
+
+function parseError(error) {
+  return `\\text{${error}}`;
 }
 
 function funcToTeXMap(func) {
