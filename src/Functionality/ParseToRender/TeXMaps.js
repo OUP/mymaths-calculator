@@ -1,11 +1,8 @@
 //See https://khan.github.io/KaTeX/function-support.html for reference
 const Fraction = require('fraction.js');
 import Decimal from 'decimal.js/decimal';
-import {
-  convertFracToDecimal,
-  identicalArrays,
-  checkIfFraction
-} from '../Utilities';
+import { identicalArrays, checkIfFraction, reduceDecimal } from '../Utilities';
+import parseSymbol from './parseSymbol';
 
 const TeX = {
   number: parseNumber,
@@ -68,10 +65,6 @@ function parseNumFractionMode(num) {
     num = new Fraction(num);
     return genFraction(num);
   }
-}
-
-function reduceDecimal(num) {
-  return new Decimal(new Decimal(num).toPrecision(10)).times(1);
 }
 
 function parseNumDecimalMode(num) {
@@ -144,19 +137,6 @@ function parseOperator(op) {
 
     default:
       return op;
-  }
-}
-
-function parseSymbol(symbol, displayMode) {
-  switch (displayMode) {
-    case 'decimal':
-      return symbol === 'π'
-        ? Math.PI
-        : convertFracToDecimal(symbol.evaluate().toString());
-    //string 'π' does not have an evaluate() method
-
-    default:
-      return symbol.toString();
   }
 }
 

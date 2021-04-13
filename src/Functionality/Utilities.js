@@ -181,3 +181,7 @@ export function removeElement(array, index) {
   }
   return newArray;
 }
+
+export function reduceDecimal(num) {
+  return new Decimal(new Decimal(num).toPrecision(10)).times(1);
+}
