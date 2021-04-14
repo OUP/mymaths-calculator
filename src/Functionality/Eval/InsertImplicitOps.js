@@ -23,15 +23,13 @@ function insertAllImplicitMultiplications(inputArray) {
 }
 
 function detectImplicitAddition(inputArray, index) {
-  return (
-    detectNumber(inputArray[index]) && detectFraction(inputArray[index + 1])
-  );
+  return isMixedInternalFraction(inputArray, index);
 }
 
 function detectImplicitMultiplication(inputArray, index) {
   return (
     twoMultiplicationTerms(inputArray, index) &&
-    !internalFraction(inputArray, index)
+    !isInternalFraction(inputArray, index)
   );
 }
 
@@ -46,10 +44,23 @@ function detectMultiplicationTerm(el) {
   return detectNumber(el) || detectFunction(el) || el === 'π';
 }
 
-function internalFraction(inputArray, index) {
+function isInternalFraction(inputArray, index) {
+  return (
+    isUnmixedInternalFraction(inputArray, index) ||
+    isMixedInternalFraction(inputArray, index)
+  );
+}
+
+function isUnmixedInternalFraction(inputArray, index) {
   return (
     detectNumerator(inputArray[index]) &&
     detectDenominator(inputArray[index + 1])
+  );
+}
+
+function isMixedInternalFraction(inputArray, index) {
+  return (
+    detectNumber(inputArray[index]) && detectNumerator(inputArray[index + 1])
   );
 }
 
