@@ -30,6 +30,13 @@ function detectImplicitAddition(inputArray, index) {
 
 function detectImplicitMultiplication(inputArray, index) {
   return (
+    twoMultiplicationTerms(inputArray, index) &&
+    !internalFraction(inputArray, index)
+  );
+}
+
+function twoMultiplicationTerms(inputArray, index) {
+  return (
     detectMultiplicationTerm(inputArray[index]) &&
     detectMultiplicationTerm(inputArray[index + 1])
   );
@@ -37,6 +44,13 @@ function detectImplicitMultiplication(inputArray, index) {
 
 function detectMultiplicationTerm(el) {
   return detectNumber(el) || detectFunction(el) || el === 'π';
+}
+
+function internalFraction(inputArray, index) {
+  return (
+    detectNumerator(inputArray[index]) &&
+    detectDenominator(inputArray[index + 1])
+  );
 }
 
 function insertImplicitOp(inputArray, index, op) {
@@ -50,14 +64,21 @@ function detectNumber(possibleNumber) {
 
 function detectFunction(possibleMultiplicand) {
   return (
-    possibleMultiplicand.function &&
-    possibleMultiplicand.function !== 'numerator' &&
-    possibleMultiplicand.function !== 'denominator' &&
-    possibleMultiplicand.function !== 'xⁿ'
+    possibleMultiplicand.function && possibleMultiplicand.function !== 'xⁿ'
   );
   // existence of type property indicates a function
 }
 
-function detectFraction(possibleFraction) {
-  return possibleFraction.function && possibleFraction.function === 'numerator';
+function detectNumerator(possibleFraction) {
+  return detectFraction(possibleFraction, 'numerator');
+}
+
+function detectDenominator(possibleFraction) {
+  return detectFraction(possibleFraction, 'denominator');
+}
+
+function detectFraction(possibleFraction, fractionPart) {
+  return (
+    possibleFraction.function && possibleFraction.function === fractionPart
+  );
 }
