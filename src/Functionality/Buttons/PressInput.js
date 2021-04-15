@@ -1,3 +1,4 @@
+import buttonType from '../ButtonType';
 import { splitInputAtCursor } from '../Utilities';
 import { pressFunction } from './PressFunction';
 
@@ -30,13 +31,13 @@ export const pressInput = function recur(button, bType, currentState) {
 };
 
 function pressButton(button, currentState) {
-  if (!isCompositeButton(button)) {
-    currentState.inputValue.push(button.toString());
-    currentState.cursorPosition++;
-    return currentState;
-  } else {
-    return pressCompositeButton(button, currentState);
-  }
+  currentState = needToInsertAns(button, currentState)
+    ? insertAns(currentState)
+    : currentState;
+
+  return !isCompositeButton(button)
+    ? pressNonCompositeButton(button, currentState)
+    : pressCompositeButton(button, currentState);
 }
 
 function isCompositeButton(button) {
@@ -47,6 +48,12 @@ function isCompositeButton(button) {
     default:
       return false;
   }
+}
+
+function pressNonCompositeButton(button, currentState) {
+  currentState.inputValue.push(button.toString());
+  currentState.cursorPosition++;
+  return currentState;
 }
 
 function pressCompositeButton(button, currentState) {
@@ -61,4 +68,14 @@ function pressPow10(currentState) {
   currentState = pressButton('1', currentState);
   currentState = pressButton('0', currentState);
   return pressInput('xⁿ', 'function', currentState);
+}
+
+function needToInsertAns(button, currentState) {
+  return (
+    buttonType(button) === 'operator' && currentState.inputValue.length === 0
+  );
+}
+
+function insertAns(currentState) {
+  return pressButton('Ans', currentState);
 }
