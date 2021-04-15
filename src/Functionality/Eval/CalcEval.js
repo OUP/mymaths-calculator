@@ -1,6 +1,6 @@
 import buttonType from '../ButtonType';
 import { assembleArguments, assembleNumbers, cloneState } from '../Utilities';
-import insertImplicitOps from './InsertImplicitOps';
+import insertImplicitOps from './InsertImplicitOps/InsertImplicitOps';
 import { moreOpsToDo, findNextOp } from './OrganiseOps';
 import { doArithmeticOp } from './DoArithmeticOp';
 import { accurateFunc } from './AccurateMaths';

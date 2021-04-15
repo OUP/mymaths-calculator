@@ -1,11 +1,7 @@
 import buttonType from '../ButtonType';
 
 export function moreOpsToDo(inputArray) {
-  if (inputArray.length > 1 || inputArray[0].argument) {
-    return true;
-  } else {
-    return false;
-  }
+  return inputArray.length > 1 || inputArray[0].argument;
 }
 
 export function findNextOp(inputArray) {
