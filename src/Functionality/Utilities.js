@@ -185,3 +185,9 @@ export function removeElement(array, index) {
 export function reduceDecimal(num) {
   return new Decimal(new Decimal(num).toPrecision(10)).times(1);
 }
+
+export function isInteger(possibleInteger) {
+  return (
+    parseInt(possibleInteger, 10).toString() === possibleInteger.toString()
+  );
+}

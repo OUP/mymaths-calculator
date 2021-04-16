@@ -2,7 +2,7 @@
 import Decimal from 'decimal.js/decimal';
 import buttonType from '../ButtonType';
 import { funcOnSymbol } from './SymbolOps';
-import { checkForSymbols, checkIfFraction } from '../Utilities';
+import { checkForSymbols, checkIfFraction, isInteger } from '../Utilities';
 import trig from './Trig';
 import inverseTrig from './InverseTrig';
 const Fraction = require('fraction.js');
@@ -88,7 +88,8 @@ export function accurateFunc(func, arg, arg2) {
         return arg.ln();
 
       case '√(x)':
-        return `√${arg}`;
+        const sqrt = Math.sqrt(arg);
+        return isInteger(sqrt) ? sqrt : `√${arg}`;
 
       case 'sin(x)':
         return trig('sin', arg);
