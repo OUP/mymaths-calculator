@@ -54,7 +54,7 @@
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.3.1",
     "jest": "^26.6.3",
     "prettier": "^1.10.2",
-    "webpack-dev-server": "2.9.4"
+    "webpack-dev-server": "3.1.11"
   },
   "scripts": {
     "start": "node scripts/start.js",
