@@ -154,6 +154,7 @@ function funcToTeXMap(func) {
       return '\\text {Abs}'; // vertical bars would conflict with cursor character
 
     case 'xⁿ':
+    case 'root':
       return '^';
 
     case 'log(x)':
@@ -163,6 +164,7 @@ function funcToTeXMap(func) {
       return '\\ln';
 
     case '√(x)':
+    case 'base':
       return '\\sqrt';
 
     case 'sin(x)':
