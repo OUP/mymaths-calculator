@@ -15,7 +15,7 @@ export function pressMode(button, currentState) {
           currentState.inputValue,
           currentState.cursorPosition
         );
-        if (func === 'numerator' || func === 'denominator' || func === 'base') {
+        if (hasInaccessibleChar(func)) {
           pressMode('⬅', currentState);
         }
       } else {
@@ -30,7 +30,7 @@ export function pressMode(button, currentState) {
           currentState.inputValue,
           currentState.cursorPosition
         );
-        if (func === 'denominator' || func === 'base' || func === 'exponent') {
+        if (hasInaccessibleChar(func)) {
           pressMode('➡', currentState);
         }
       } else {
@@ -91,4 +91,14 @@ function safeGetFunction(arr, index) {
     }
   }
   return false;
+}
+
+function hasInaccessibleChar(func) {
+  return (
+    func === 'numerator' ||
+    func === 'denominator' ||
+    func === 'base' ||
+    func === 'root' ||
+    func === 'rootBase'
+  );
 }
