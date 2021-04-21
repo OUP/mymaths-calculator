@@ -11,8 +11,8 @@ export const pressDel = function recur(currentState) {
     if (safeCheckKey(deleted)) {
       destroyHiddenChars(currentState, deleted.key);
     }
-    if (isFraction(deleted)) {
-      destroyCorrespondingFraction(currentState, deleted.key);
+    if (isPairedFunc(deleted)) {
+      destroyCorrespondingFunc(currentState, deleted.key);
     }
   }
   if (currentState.cursorPosition > 0) {
@@ -32,8 +32,16 @@ function safeCheckKey(el) {
   return el && el.key;
 }
 
+function isPairedFunc(el) {
+  return isFraction(el) || isNthRoot(el);
+}
+
 function isFraction(el) {
   return el.function === 'numerator' || el.function === 'denominator';
+}
+
+function isNthRoot(el) {
+  return el.function === 'root' || el.function === 'base';
 }
 
 function destroyHiddenChars(currentState, functionKey) {
@@ -47,7 +55,7 @@ function hiddenChar(cOrO) {
   return cOrO + 'Arg';
 }
 
-function destroyCorrespondingFraction(currentState, functionKey) {
+function destroyCorrespondingFunc(currentState, functionKey) {
   currentState.inputValue = currentState.inputValue.filter(
     x => !x.key || x.key !== functionKey
   );
