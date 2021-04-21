@@ -47,3 +47,15 @@ export function detectFraction(possibleFraction, fractionPart) {
     possibleFraction.function && possibleFraction.function === fractionPart
   );
 }
+
+export function isInternalRoot(inputArray, index) {
+  return detectRoot(inputArray[index]) && detectRootBase(inputArray[index + 1]);
+}
+
+function detectRoot(possibleRoot) {
+  return possibleRoot.function && possibleRoot.function === 'root';
+}
+
+function detectRootBase(possibleRoot) {
+  return possibleRoot.function && possibleRoot.function === 'rootBase';
+}

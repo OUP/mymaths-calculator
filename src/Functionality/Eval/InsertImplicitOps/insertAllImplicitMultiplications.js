@@ -1,6 +1,7 @@
 import {
   insertImplicitOp,
   isInternalFraction,
+  isInternalRoot,
   detectNumber,
   detectFunction
 } from './implicitOpsUtilities';
@@ -17,7 +18,8 @@ export default function insertAllImplicitMultiplications(inputArray) {
 function detectImplicitMultiplication(inputArray, index) {
   return (
     twoMultiplicationTerms(inputArray, index) &&
-    !isInternalFraction(inputArray, index)
+    !isInternalFraction(inputArray, index) &&
+    !isInternalRoot(inputArray, index)
   );
 }
 
