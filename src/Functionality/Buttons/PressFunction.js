@@ -104,7 +104,7 @@ function funcParts(button) {
       return ['numerator', 'denominator'];
 
     case 'ⁿ√(x)':
-      return ['root', 'base'];
+      return ['root', 'rootBase'];
   }
 }
 
@@ -149,6 +149,7 @@ function numOfFuncParts(func) {
   switch (func) {
     case 'numerator':
     case 'logₐ(x)':
+    case 'root':
       return 2;
 
     default:

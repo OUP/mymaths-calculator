@@ -164,7 +164,7 @@ function funcToTeXMap(func) {
       return '\\ln';
 
     case '√(x)':
-    case 'base':
+    case 'rootBase':
       return '\\sqrt';
 
     case 'sin(x)':

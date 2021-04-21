@@ -85,7 +85,7 @@ function parseFunc(func) {
     case 'logₐ(x)':
     case 'eⁿ':
     case 'root':
-    case 'base':
+    case 'rootBase':
       return `${TeX.func(func.function)} ${parseToTeX(arg)}`;
 
     case 'denominator':

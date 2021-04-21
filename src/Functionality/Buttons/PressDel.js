@@ -41,7 +41,7 @@ function isFraction(el) {
 }
 
 function isNthRoot(el) {
-  return el.function === 'root' || el.function === 'base';
+  return el.function === 'root' || el.function === 'rootBase';
 }
 
 function destroyHiddenChars(currentState, functionKey) {
