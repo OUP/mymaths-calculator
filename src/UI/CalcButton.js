@@ -119,6 +119,9 @@ function nameToLabelMap(name) {
     case '√(x)':
       return '{\\sqrt {\\Box}}';
 
+    case 'ⁿ√(x)':
+      return '{{}^\\Box \\sqrt {\\Box}}';
+
     case 'sin(x)':
       return '{\\text{sin}}';
 
