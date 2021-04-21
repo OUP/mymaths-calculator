@@ -43,6 +43,7 @@ function funcType(button) {
       return 'argAfter';
 
     case 'frac':
+    case 'ⁿ√(x)':
       return 'argBothSides';
 
     case 'logₐ(x)':
@@ -79,11 +80,32 @@ function pressArgAfter(button, currentState) {
 }
 
 function pressArgBothSides(button, currentState) {
+  currentState.functionKey++;
   currentState.cursorPosition++;
-  if (button === 'frac') {
-    pressFrac(currentState);
-  }
+  const inputValue = currentState.inputValue;
+  const pushFuncPart = part => {
+    inputValue.push(funcButtonFactory(part, currentState.functionKey));
+    inputValue.push('cArg' + currentState.functionKey);
+  };
+  pushFuncParts(button, pushFuncPart);
   return;
+}
+
+function pushFuncParts(button, pushFuncPart) {
+  const parts = funcParts(button);
+  pushFuncPart(parts[0]);
+  pushFuncPart(parts[1]);
+  return;
+}
+
+function funcParts(button) {
+  switch (button) {
+    case 'frac':
+      return ['numerator', 'denominator'];
+
+    case 'ⁿ√(x)':
+      return ['root', 'base'];
+  }
 }
 
 function pressArgIncluded(button, currentState) {
@@ -112,30 +134,18 @@ function pressNoArg(button, currentState) {
   return;
 }
 
-function pressFrac(currentState) {
-  currentState.functionKey++;
-  const inputValue = currentState.inputValue;
-  const pushFractionPart = part => {
-    inputValue.push(funcButtonFactory(part, currentState.functionKey));
-    inputValue.push('cArg' + currentState.functionKey);
-  };
-  pushFractionPart('numerator');
-  pushFractionPart('denominator');
-  return;
-}
-
 function funcButtonFactory(func, functionKey) {
   return {
     type: 'function',
     function: func,
     argument: [],
-    parts: funcParts(func),
+    parts: numOfFuncParts(func),
     key: functionKey
     //key used to destroy hidden characters that go with the function if the function is deleted
   };
 }
 
-function funcParts(func) {
+function numOfFuncParts(func) {
   switch (func) {
     case 'numerator':
     case 'logₐ(x)':
