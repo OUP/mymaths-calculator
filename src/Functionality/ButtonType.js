@@ -50,7 +50,7 @@ function safeToString(b) {
 
 function checkForNumber(b) {
   if (
-    b === parseFloat(b).toString() ||
+    /^\d+$/.test(b) ||
     b.includes('.') ||
     b.includes('/') ||
     b.includes('(-)') ||
