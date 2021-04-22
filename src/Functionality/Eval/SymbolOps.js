@@ -97,6 +97,10 @@ export function funcOnSymbol(func, arg, arg2) {
       result = arg.sqrt();
       break;
 
+    case 'root':
+      result = nthRoot(arg, arg2);
+      break;
+
     case 'sin(x)':
       result = trig('sin', arg);
       break;
@@ -217,4 +221,9 @@ function symbolicMod(arg) {
   return convertFracToDecimal(arg.evaluate()).greaterThanOrEqualTo(0)
     ? arg
     : arg.timesMinusOne();
+}
+
+function nthRoot(n, rootBase) {
+  const exponent = numericOp(1, '÷', n);
+  return symbolicOp(rootBase, 'xⁿ', exponent);
 }
