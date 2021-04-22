@@ -2,6 +2,7 @@
 import Decimal from 'decimal.js/decimal';
 import buttonType from '../ButtonType';
 import { funcOnSymbol } from './SymbolOps';
+import { fractionOp } from './FractionOps';
 import { checkForSymbols, checkIfFraction, isInteger } from '../Utilities';
 import trig from './Trig';
 import inverseTrig from './InverseTrig';
@@ -91,6 +92,9 @@ export function accurateFunc(func, arg, arg2) {
         const sqrt = Math.sqrt(arg);
         return isInteger(sqrt) ? sqrt : `√${arg}`;
 
+      case 'root':
+        return nthRoot(arg, arg2);
+
       case 'sin(x)':
         return trig('sin', arg);
 
@@ -148,4 +152,9 @@ function nPr(n, r) {
 
 function nCr(n, r) {
   return accurateOp(accurateOp(n, 'nPr', r), '÷', accurateOp(r, 'x!'));
+}
+
+function nthRoot(n, rootBase) {
+  const exponent = accurateOp(1, '÷', n);
+  return fractionOp(rootBase.toString(), 'xⁿ', exponent);
 }
