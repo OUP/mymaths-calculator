@@ -95,7 +95,7 @@ function cArgCheck(argArray) {
 
 export function splitInputAtCursor(currentState) {
   const inputValue = currentState.inputValue;
-  const cursorPosition = currentState.cursorPosition;
+  const cursorPosition = setCursorPosition(currentState);
   const start = inputValue.slice(0, cursorPosition);
   const end = inputValue.slice(cursorPosition);
   let arg;
@@ -190,4 +190,13 @@ export function isInteger(possibleInteger) {
   return (
     parseInt(possibleInteger, 10).toString() === possibleInteger.toString()
   );
+}
+
+function setCursorPosition(currentState) {
+  const cursorPosition =
+    currentState.cursorPosition > -1
+      ? currentState.cursorPosition
+      : currentState.inputValue.length;
+  currentState.cursorPosition = cursorPosition;
+  return cursorPosition;
 }
