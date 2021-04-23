@@ -33,7 +33,8 @@ function safeCheckKey(el) {
 }
 
 function isPairedFunc(el) {
-  return isFraction(el) || isNthRoot(el);
+  const funcExists = Boolean(el && el.function);
+  return funcExists && (isFraction(el) || isNthRoot(el));
 }
 
 function isFraction(el) {
