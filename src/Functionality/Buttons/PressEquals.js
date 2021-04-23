@@ -1,9 +1,8 @@
 import { calcEval } from '../Eval/CalcEval';
+import handleError from '../Eval/handleError';
 
 export function pressEquals(currentState) {
-  currentState.outputValue = [
-    calcEval(currentState.inputValue, currentState.outputValue)
-  ];
+  evalResult(currentState);
   currentState.storePosition = -1;
   currentState.cursorPosition = -1;
   currentState.shift = false;
@@ -13,6 +12,18 @@ export function pressEquals(currentState) {
   }
   currentState.displayMode = 'fraction';
   return currentState;
+}
+
+function evalResult(currentState) {
+  try {
+    currentState.outputValue = [
+      calcEval(currentState.inputValue, currentState.outputValue)
+    ];
+  } catch (error) {
+    console.log(error.name);
+    currentState.outputValue = [handleError(error)];
+  }
+  return;
 }
 
 function decideToStore(currentState) {
