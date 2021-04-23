@@ -12,29 +12,41 @@ import { Term } from '../Classes/Symbol';
 export default function processValue(value) {
   //Decides between decimal and fraction and formats appropriately
   const valStr = makeString(value);
-  if (!checkIfFraction(valStr) && !checkForSymbols(valStr)) {
-    return new Decimal(valStr).toString();
-  } else {
-    switch (true) {
-      case valStr.includes('√') && valStr === value:
-        return squareRootFactory(valStr);
 
-      case checkIfExpression(value):
-        return processExpression(value);
+  switch (true) {
+    case isNumber(valStr):
+      return processNumber(valStr);
 
-      default:
-        return value;
-    }
+    case isSqrt(valStr, value):
+      return processSquareRoot(valStr);
+
+    case isExpression(value):
+      return processExpression(value);
+
+    default:
+      return value;
   }
 }
 
-function squareRootFactory(str) {
+function isNumber(valStr) {
+  return !checkIfFraction(valStr) && !checkForSymbols(valStr);
+}
+
+function processNumber(valStr) {
+  return new Decimal(valStr).toString();
+}
+
+function isSqrt(valStr, value) {
+  return valStr.includes('√') && valStr === value;
+}
+
+function processSquareRoot(str) {
   const numerator = new SqrtExpression([new SquareRoot(str)]);
   const one = new SqrtExpression([new Term('1')]);
   return new SqrtFractionExpression(numerator, one);
 }
 
-function checkIfExpression(value) {
+function isExpression(value) {
   return (
     typeof value.numerator !== 'undefined' && value.denominator !== 'undefined'
   );
