@@ -36,6 +36,12 @@ export function genButtonsGrid(context, position) {
             press={context.press}
             shift={context.props.shift}
           />
+          <ButtonsColumn
+            position="top"
+            column="5"
+            press={context.press}
+            shift={context.props.shift}
+          />
         </div>
       );
 

@@ -15,15 +15,18 @@ function unshiftedGrid(position, column) {
           return ['shift'];
 
         case '1':
-          return ['⬅'];
+          return ['mode'];
 
         case '2':
-          return ['➡'];
+          return ['⬅'];
 
         case '3':
-          return ['⬆'];
+          return ['➡'];
 
         case '4':
+          return ['⬆'];
+
+        case '5':
           return ['⬇'];
 
         default:
@@ -95,15 +98,18 @@ function shiftedGrid(position, column) {
           return ['shift'];
 
         case '1':
-          return ['⬅'];
+          return ['mode'];
 
         case '2':
-          return ['➡'];
+          return ['⬅'];
 
         case '3':
-          return ['⬆'];
+          return ['➡'];
 
         case '4':
+          return ['⬆'];
+
+        case '5':
           return ['⬇'];
 
         default:

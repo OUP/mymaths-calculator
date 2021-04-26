@@ -62,10 +62,10 @@
 .ModeButton {
     background-color: #66db00;
     height: 30px;
-    width: 65px;
+    width: 58px;
     cursor: pointer;
-    margin: 5px;
-    font-size: 18px;
+    margin: 2px;
+    font-size: 13.5px;
     border-radius: 5px;
 }
 
@@ -77,10 +77,10 @@
 .ShiftModeButton {
     background-color: #db0066;
     height: 30px;
-    width: 65px;
+    width: 58px;
     cursor: pointer;
-    margin: 5px;
-    font-size: 18px;
+    margin: 2px;
+    font-size: 13.5px;
     border-radius: 5px;
     color: white;
 }

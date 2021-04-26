@@ -98,11 +98,14 @@ function checkForSqrt(b) {
 }
 
 function checkForMode(b) {
-  if (b === 'shift' || b === '⬅' || b === '➡' || b === '⬆' || b === '⬇') {
-    return true;
-  } else {
-    return false;
-  }
+  return (
+    b === 'shift' ||
+    b === 'mode' ||
+    b === '⬅' ||
+    b === '➡' ||
+    b === '⬆' ||
+    b === '⬇'
+  );
 }
 
 function checkForDisplay(b) {
