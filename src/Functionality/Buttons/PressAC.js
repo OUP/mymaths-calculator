@@ -4,6 +4,7 @@ export function pressAC(currentState) {
   currentState.cursorPosition = -1;
   currentState.storePosition = -1;
   currentState.shift = false;
+  currentState.mode = false;
   currentState.functionKey = 0;
   currentState.displayMode = 'fraction';
   return currentState;

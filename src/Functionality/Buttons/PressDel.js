@@ -19,6 +19,7 @@ export const pressDel = function recur(currentState) {
     currentState.cursorPosition--;
   }
   currentState.shift = false;
+  currentState.mode = false;
   return currentState;
 };
 

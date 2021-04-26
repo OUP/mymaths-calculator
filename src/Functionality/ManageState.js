@@ -9,6 +9,7 @@ export function updateState(context, button) {
 export function initialiseInternalState(context) {
   context.state = {
     shift: false,
+    mode: false,
     inputValue: [],
     outputValue: ['0'],
     cursorPosition: 0,

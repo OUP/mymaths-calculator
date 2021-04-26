@@ -11,12 +11,14 @@ export function genButtonsGrid(context, position) {
             column="0"
             press={context.press}
             shift={context.props.shift}
+            mode={context.props.mode}
           />
           <ButtonsColumn
             position="top"
             column="1"
             press={context.press}
             shift={context.props.shift}
+            mode={context.props.mode}
           />
           <ButtonsColumn
             position="top"

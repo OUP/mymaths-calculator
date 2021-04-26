@@ -1,11 +1,8 @@
 export function pressMode(button, currentState) {
   switch (button) {
     case 'shift':
-      if (currentState.shift === false) {
-        currentState.shift = true;
-      } else {
-        currentState.shift = false;
-      }
+    case 'mode':
+      invertProperty(currentState, button);
       break;
 
     case '⬅':
@@ -101,4 +98,10 @@ function hasInaccessibleChar(func) {
     func === 'root' ||
     func === 'rootBase'
   );
+}
+
+function invertProperty(currentState, property) {
+  const currentValue = Boolean(currentState[property]);
+  currentState[property] = !currentValue;
+  return;
 }

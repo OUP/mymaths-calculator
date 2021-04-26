@@ -14,14 +14,20 @@ class ButtonsGrid extends Component {
   }
 
   render() {
-    return genButtonsGrid(this, this.props.position, this.props.shift);
+    return genButtonsGrid(
+      this,
+      this.props.position,
+      this.props.shift,
+      this.props.mode
+    );
   }
 }
 
 ButtonsGrid.propTypes = {
   press: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
-  shift: PropTypes.bool
+  shift: PropTypes.bool,
+  mode: PropTypes.bool
 };
 
 export default ButtonsGrid;

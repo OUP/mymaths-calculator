@@ -25,7 +25,11 @@ class CalcButton extends Component {
     return (
       <div>
         <button
-          className={buttonStyle(this.props.name, this.props.shift)}
+          className={buttonStyle(
+            this.props.name,
+            this.props.shift,
+            this.props.mode
+          )}
           onClick={this.press}
           id={this.props.name}
         >
@@ -39,10 +43,11 @@ class CalcButton extends Component {
 CalcButton.propTypes = {
   press: PropTypes.func.isRequired,
   name: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  shift: PropTypes.bool
+  shift: PropTypes.bool,
+  mode: PropTypes.bool
 };
 
-function buttonStyle(button, shift = false) {
+function buttonStyle(button, shift = false, mode = false) {
   const type = buttonType(button);
   let style;
   if (type === 'AC' || button === 'DEL') {

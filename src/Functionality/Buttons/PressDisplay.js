@@ -28,6 +28,7 @@ export function pressDisplay(button, currentState) {
   }
 
   currentState.shift = false;
+  currentState.mode = false;
   return currentState;
 }
 

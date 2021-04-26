@@ -32,16 +32,19 @@ class CalcBase extends Component {
         <ButtonsGrid
           press={this.press}
           shift={this.state.shift}
+          mode={this.state.mode}
           position="top"
         />
         <ButtonsGrid
           press={this.press}
           shift={this.state.shift}
+          mode={this.state.mode}
           position="middle"
         />
         <ButtonsGrid
           press={this.press}
           shift={this.state.shift}
+          mode={this.state.mode}
           position="bottom"
         />
       </div>

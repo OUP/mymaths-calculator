@@ -16,7 +16,8 @@ class ButtonsColumn extends Component {
     return generateButtons(
       this.props.position,
       this.props.column,
-      this.props.shift
+      this.props.shift,
+      this.props.mode
     );
   }
 
@@ -27,6 +28,7 @@ class ButtonsColumn extends Component {
         name={name}
         press={this.press}
         shift={this.props.shift}
+        mode={this.props.mode}
       />
     ));
   }
@@ -44,7 +46,8 @@ ButtonsColumn.propTypes = {
   press: PropTypes.func.isRequired,
   position: PropTypes.string.isRequired,
   column: PropTypes.string.isRequired,
-  shift: PropTypes.bool
+  shift: PropTypes.bool,
+  mode: PropTypes.bool
 };
 
 export default ButtonsColumn;
