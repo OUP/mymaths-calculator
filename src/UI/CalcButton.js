@@ -73,13 +73,15 @@ function buttonStyle(button, shift = false, mode = false) {
     style = 'StandardButton';
   } else if (type === 'mode') {
     style = 'ModeButton';
+  } else if (button === 'deg' || button === 'rad') {
+    style = 'ShiftSmallButton';
   } else {
     style = 'SmallButton';
   }
 
   if (shift === false) {
     return style;
-  } else if (style === 'SmallButton' || button === 'shift') {
+  } else if (isShiftedStyle(style, button)) {
     return 'Shift' + style;
   } else {
     return style;
@@ -179,6 +181,10 @@ function nameToLabelMap(name) {
 
 function hasTeX(name) {
   return name.includes && nameToLabelMap(name).includes('{');
+}
+
+function isShiftedStyle(style, button) {
+  return style === 'SmallButton' || button === 'shift';
 }
 
 export default CalcButton;
