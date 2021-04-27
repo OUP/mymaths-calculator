@@ -104,7 +104,9 @@ function checkForMode(b) {
     b === '⬅' ||
     b === '➡' ||
     b === '⬆' ||
-    b === '⬇'
+    b === '⬇' ||
+    b === 'deg' ||
+    b === 'rad'
   );
 }
 
