@@ -1,3 +1,5 @@
+import moveCursor from './moveCursor';
+
 export function pressMode(button, currentState) {
   switch (button) {
     case 'shift':
@@ -6,33 +8,8 @@ export function pressMode(button, currentState) {
       break;
 
     case '⬅':
-      if (currentState.cursorPosition > 0) {
-        currentState.cursorPosition--;
-        const func = safeGetFunction(
-          currentState.inputValue,
-          currentState.cursorPosition
-        );
-        if (hasInaccessibleChar(func)) {
-          pressMode('⬅', currentState);
-        }
-      } else {
-        currentState.cursorPosition = currentState.inputValue.length;
-      }
-      break;
-
     case '➡':
-      if (currentState.cursorPosition < currentState.inputValue.length) {
-        currentState.cursorPosition++;
-        const func = safeGetFunction(
-          currentState.inputValue,
-          currentState.cursorPosition
-        );
-        if (hasInaccessibleChar(func)) {
-          pressMode('➡', currentState);
-        }
-      } else {
-        currentState.cursorPosition = 0;
-      }
+      moveCursor(button, currentState);
       break;
 
     case '⬆':
@@ -76,28 +53,6 @@ export function pressMode(button, currentState) {
       break;
   }
   return currentState;
-}
-
-function safeGetFunction(arr, index) {
-  if (arr) {
-    if (arr[index]) {
-      const func = arr[index].function;
-      if (func) {
-        return func;
-      }
-    }
-  }
-  return false;
-}
-
-function hasInaccessibleChar(func) {
-  return (
-    func === 'numerator' ||
-    func === 'denominator' ||
-    func === 'base' ||
-    func === 'root' ||
-    func === 'rootBase'
-  );
 }
 
 function invertProperty(currentState, property) {
