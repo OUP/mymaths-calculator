@@ -10,6 +10,7 @@ export function initialiseInternalState(context) {
   context.state = {
     shift: false,
     mode: false,
+    angleMode: 'deg',
     inputValue: [],
     outputValue: ['0'],
     cursorPosition: 0,

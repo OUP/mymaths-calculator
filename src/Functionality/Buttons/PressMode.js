@@ -18,6 +18,11 @@ export function pressMode(button, currentState) {
       navigateHistory(button, currentState);
       break;
 
+    case 'deg':
+    case 'rad':
+      setAngleMode(button, currentState);
+      break;
+
     default:
       console.error(button + ' is WIP');
       break;
@@ -28,5 +33,11 @@ export function pressMode(button, currentState) {
 function invertProperty(currentState, property) {
   const currentValue = Boolean(currentState[property]);
   currentState[property] = !currentValue;
+  return;
+}
+
+function setAngleMode(button, currentState) {
+  currentState.angleMode = button;
+  currentState.mode = false;
   return;
 }
