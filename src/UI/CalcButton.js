@@ -71,9 +71,9 @@ function buttonStyle(button, shift = false, mode = false) {
     type === '='
   ) {
     style = 'StandardButton';
-  } else if (type === 'mode') {
+  } else if (isModeStyleButton(button, type)) {
     style = 'ModeButton';
-  } else if (button === 'deg' || button === 'rad') {
+  } else if (isAngleModeButton(button)) {
     style = 'ShiftSmallButton';
   } else {
     style = 'SmallButton';
@@ -86,6 +86,18 @@ function buttonStyle(button, shift = false, mode = false) {
   } else {
     return style;
   }
+}
+
+function isModeStyleButton(button, type) {
+  return isModeButton(type) && !isAngleModeButton(button);
+}
+
+function isAngleModeButton(button) {
+  return button === 'deg' || button === 'rad';
+}
+
+function isModeButton(type) {
+  return type === 'mode';
 }
 
 function nameToLabelMap(name) {
