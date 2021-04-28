@@ -95,7 +95,7 @@ function specialValueTan(floatArg) {
 
     case 90:
     case 270:
-      throw 'Maths error';
+      throw { name: 'Maths error' };
   }
 }
 
