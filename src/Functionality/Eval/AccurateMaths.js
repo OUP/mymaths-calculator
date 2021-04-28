@@ -66,11 +66,11 @@ function initOp(v, operation) {
   }
 }
 
-export function accurateFunc(func, arg, arg2) {
+export function accurateFunc(func, arg, angleMode, arg2) {
   arg = initOp(arg, func);
   arg2 = initOp(arg2, func);
   if (checkForSymbols(arg) || checkForSymbols(arg2)) {
-    return funcOnSymbol(func, arg, arg2);
+    return funcOnSymbol(func, arg, angleMode, arg2);
   } else {
     switch (func) {
       case 'numerator':
@@ -96,18 +96,18 @@ export function accurateFunc(func, arg, arg2) {
         return nthRoot(arg, arg2);
 
       case 'sin(x)':
-        return trig('sin', arg);
+        return trig('sin', angleMode, arg);
 
       case 'cos(x)':
-        return trig('cos', arg);
+        return trig('cos', angleMode, arg);
 
       case 'tan(x)':
-        return trig('tan', arg);
+        return trig('tan', angleMode, arg);
 
       case 'sin⁻¹':
       case 'cos⁻¹':
       case 'tan⁻¹':
-        return inverseTrig(func, arg);
+        return inverseTrig(func, angleMode, arg);
 
       case 'logₐ(x)':
         return arg2.log(arg);

@@ -18,7 +18,11 @@ export function pressEquals(currentState) {
 function evalResult(currentState) {
   try {
     currentState.outputValue = [
-      calcEval(currentState.inputValue, currentState.outputValue)
+      calcEval(
+        currentState.inputValue,
+        currentState.outputValue,
+        currentState.angleMode
+      )
     ];
   } catch (error) {
     console.log(error.name);

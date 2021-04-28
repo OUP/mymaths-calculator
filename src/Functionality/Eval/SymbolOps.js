@@ -64,7 +64,7 @@ export function symbolicOp(v1, operation, v2 = 0) {
   return processValue(safeSimplify(result));
 }
 
-export function funcOnSymbol(func, arg, arg2) {
+export function funcOnSymbol(func, arg, angleMode, arg2) {
   arg = construct(arg);
   if (typeof arg2 !== 'undefined') {
     arg2 = construct(arg2);
@@ -102,27 +102,27 @@ export function funcOnSymbol(func, arg, arg2) {
       break;
 
     case 'sin(x)':
-      result = trig('sin', arg);
+      result = trig('sin', angleMode, arg);
       break;
 
     case 'cos(x)':
-      result = trig('cos', arg);
+      result = trig('cos', angleMode, arg);
       break;
 
     case 'tan(x)':
-      result = trig('tan', arg);
+      result = trig('tan', angleMode, arg);
       break;
 
     case 'sin⁻¹':
-      result = inverseTrig('sin⁻¹', arg);
+      result = inverseTrig('sin⁻¹', angleMode, arg);
       break;
 
     case 'cos⁻¹':
-      result = inverseTrig('cos⁻¹', arg);
+      result = inverseTrig('cos⁻¹', angleMode, arg);
       break;
 
     case 'tan⁻¹':
-      result = inverseTrig('tan⁻¹', arg);
+      result = inverseTrig('tan⁻¹', angleMode, arg);
       break;
 
     case '(':

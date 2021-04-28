@@ -442,7 +442,7 @@ function nonIntSqrtPowerToCoef(sqrt, index, power) {
 }
 
 function intPower(baseStr, exponentStr) {
-  return accurateFunc('base', baseStr, exponentStr);
+  return accurateFunc('base', baseStr, '', exponentStr);
 }
 
 function simpleSqrtSimplify(sqrtFracExp) {
