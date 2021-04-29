@@ -1,5 +1,6 @@
 import { generateDecimal } from './GenerateDecimal';
 import specialCaseArg from './inverseTrigSpecialCaseArg';
+import radInverseTrig from './radInverseTrig';
 
 export default function degInverseTrig(trigFunc, arg) {
   if (specialCaseArg(trigFunc, arg)) {
@@ -120,5 +121,10 @@ function specialCaseValAtan(arg) {
 }
 
 function standardInvTrig(trigFunc, arg) {
-  return 0;
+  const radValue = radInverseTrig(trigFunc, arg);
+  return radToDegrees(radValue);
+}
+
+function radToDegrees(radValue) {
+  return radValue.times(180).div(Math.PI);
 }
