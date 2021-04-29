@@ -1,4 +1,7 @@
+import Decimal from 'decimal.js/decimal';
 import { sqrtFactory } from '../Classes/Surd';
+import { generateDecimal } from './GenerateDecimal';
+import radTrig from './radTrig';
 
 export default function degTrig(trigFunc, arg) {
   const floatArg = parseFloat(arg.toString());
@@ -150,4 +153,13 @@ function specialValueTan(floatArg) {
   }
 }
 
-function standardTrigFunc(trigFunc, arg) {}
+function standardTrigFunc(trigFunc, arg) {
+  if (arg.evaluate) {
+    arg = arg.evaluate();
+  }
+  if (arg.constructor !== Decimal) {
+    arg = generateDecimal(arg);
+  }
+  const radArg = arg.times(Math.PI).div(180);
+  return radTrig(trigFunc, radArg);
+}
