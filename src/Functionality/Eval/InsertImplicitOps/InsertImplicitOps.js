@@ -1,10 +1,10 @@
 import insertAllImplicitAdditions from './insertAllImplicitAdditions';
 import insertAllImplicitMultiplications from './insertAllImplicitMultiplications';
-import handleNegativesWithSymbols from './handleNegativesWithSymbols';
+import handleUnaryNegatives from './handleNegativesWithSymbols';
 
 export default function insertImplicitOps(inputArray) {
   inputArray = insertAllImplicitAdditions(inputArray);
   inputArray = insertAllImplicitMultiplications(inputArray);
-  inputArray = handleNegativesWithSymbols(inputArray);
+  inputArray = handleUnaryNegatives(inputArray);
   return inputArray;
 }
