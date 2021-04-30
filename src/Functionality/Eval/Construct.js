@@ -41,7 +41,7 @@ function constructString(str, defaultDenom) {
     case isFractionString(str):
       return constructFractionString(str, defaultDenom);
 
-    case isNumericStr(str):
+    default:
       return constructDefaultString(str, defaultDenom);
   }
 }
@@ -62,10 +62,6 @@ function isSqrtString(str) {
 
 function isFractionString(str) {
   return str.includes('/');
-}
-
-function isNumericStr(str) {
-  return parseFloat(str).toString() === str;
 }
 
 function constructPiString(defaultDenom) {
