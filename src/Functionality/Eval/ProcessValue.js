@@ -10,22 +10,27 @@ import {
 import { Term } from '../Classes/Symbol';
 
 export default function processValue(value) {
+  const reduced = reduceValue(value);
   //Decides between decimal and fraction and formats appropriately
-  const valStr = makeString(value);
+  const valStr = makeString(reduced);
 
   switch (true) {
     case isNumber(valStr):
       return processNumber(valStr);
 
-    case isSqrt(valStr, value):
+    case isSqrt(valStr, reduced):
       return processSquareRoot(valStr);
 
-    case isExpression(value):
-      return processExpression(value);
+    case isExpression(reduced):
+      return processExpression(reduced);
 
     default:
       return value;
   }
+}
+
+function reduceValue(value) {
+  return typeof value.value === 'undefined' ? value : value.value;
 }
 
 function isNumber(valStr) {
