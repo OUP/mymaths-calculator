@@ -11,7 +11,7 @@ export function substitute(symbolsArray) {
 function symbolValue(symbol) {
   switch (true) {
     case symbol === 'π':
-      return Math.PI;
+      return new Decimal('3.14159265358979323846264338327950288');
 
     case symbol.includes('√'):
       const arg = new Decimal(symbol.slice(1));
