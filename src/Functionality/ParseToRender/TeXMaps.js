@@ -121,7 +121,7 @@ function parseOperator(op) {
       return '-';
 
     case 'xⁿ':
-      return '^';
+      return '{}^';
 
     case 'x!':
       return '{!}';
@@ -155,7 +155,7 @@ function funcToTeXMap(func) {
 
     case 'xⁿ':
     case 'root':
-      return '^';
+      return '{}^';
 
     case 'log(x)':
       return '\\log';
