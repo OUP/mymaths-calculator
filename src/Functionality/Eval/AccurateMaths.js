@@ -133,13 +133,37 @@ const factorial = function recur(v1, index = 1, result = 1) {
 };
 
 export function accPower(base, exponent) {
-  if (!exponent.toString().includes('-')) {
-    //case with +ve power
+  return isPosExponent(exponent)
+    ? posPower(base, exponent)
+    : negPower(base, exponent);
+}
+
+function isPosExponent(exponent) {
+  return !exponent.toString().includes('-');
+}
+
+function posPower(base, exponent) {
+  if (isValidPower(base, exponent)) {
     return base.toPower(exponent);
   } else {
-    //case with -ve power
-    return new Fraction(1).div(base.toPower(exponent.abs()).toString());
+    throw { name: 'Maths error' };
   }
+}
+
+function negPower(base, exponent) {
+  if (isValidPower(base, exponent)) {
+    return new Fraction(1).div(base.toPower(exponent.abs()).toString());
+  } else {
+    throw { name: 'Maths error' };
+  }
+}
+
+function isValidPower(base, exponent) {
+  return isNonzero(base) || isNonzero(exponent);
+}
+
+function isNonzero(val) {
+  return parseFloat(val.toString()) !== 0;
 }
 
 function nPr(n, r) {
